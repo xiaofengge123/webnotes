@@ -190,10 +190,353 @@ Webpack 是一个前端资源加载/打包工具。它将根据模块的依赖�
   * 模块化
   * 打包
 * [webpack官网](http://webpack.github.io/)
-* []()
+* [webpack 中文文档](https://www.webpackjs.com/)
+* 使用教程：
+  * [webpack入门教程](http://www.runoob.com/w3cnote/webpack-tutorial.html)
+  * [入门 Webpack，看这篇就够了](https://segmentfault.com/a/1190000006178770)
 
-## git
+### webpack 开发配置
 
-## source tree
+```javascript
+// webpack.config.js
+const path = require('path')
+const webpack = require('webpack')
+const htmlWebpackPlugin = require('html-webpack-plugin')
+
+// 导入配置文件
+const { productConfig, productName } = require('./config')
+
+module.exports = {
+  // 入口
+  // entry: path.join(__dirname, './src/main.js'),
+  entry: path.join(__dirname, productConfig[productName].entry),
+  // entry:['babel-polyfill',path.join(__dirname, productConfig[productName].entry)],
+
+  // 出口
+  output: {
+    // 输出文件目录
+    path: path.join(__dirname, productConfig[productName].output),
+    // 输出文件名称
+    filename: 'bundle.js'
+  },
+
+  // 有利于开发期间定位错误信息
+  devtool: 'eval-source-map',
+
+  // webpack-dev-server
+  devServer: {
+    // 自动打开浏览器
+    open: true,
+    // 端口号
+    port: 3000,
+  },
+
+  // 用来处理非JS的静态资源
+  module: {
+    rules: [
+      // 添加浏览器私有前缀postcss-loader
+      // 需要postcss.config.js配置文件，也需要postcss-loader和autoprefixer
+      { test: /\.css$/, use: ["style-loader", "css-loader", "postcss-loader"] ,exclude: /node_modules|lib/ },
+      { test: /\.(sass|scss)$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
+      { test: /\.less$/,use:["style-loader!css-loader!less-loader"] },
+      { 
+        test: /\.(png|jpg|jpeg|gif|svg)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            // limit 就是阀值，值的单位：字节(byte)
+            limit: 8192
+          }
+        } 
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2|otf)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            // limit 就是阀值，值的单位：字节(byte)
+            limit: 8192
+          }
+        }
+      },
+
+      // 处理ES6或者更高级的JS语法：
+      { test: /\.js$/, use: 'babel-loader', exclude: /node_modules|lib/ },
+
+      // 处理 Vue单文件组件
+      { test: /\.vue$/, use: 'vue-loader' },
+
+      // 让 html-loader 来处理HTML页面，此时，页面就会被webpack处理了
+      { test: /\.html$/, use: 'html-loader' }
+    ]
+  },
+
+  plugins: [
+    new htmlWebpackPlugin({
+      template: path.join(__dirname, productConfig[productName].html)
+    })
+  ]
+}
+
+```
+
+### webpack 打包配置
+
+```javascript
+// webpack.prod.js
+const path = require('path')
+const webpack = require('webpack')
+const htmlWebpackPlugin = require('html-webpack-plugin')
+
+// 自动删除目录的包
+const cleanWebpackPlugin = require('clean-webpack-plugin')
+// 分离 css 到独立的文件中
+const ExtractTextPlugin = require("extract-text-webpack-plugin")
+// 压缩 css 资源文件
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+// 导入配置文件
+const {productConfig,productName} = require('./config')
+
+module.exports = {
+  // 入口
+  entry: {
+    // 我们写的js代码的入口
+    // app: path.join(__dirname, './src/main.js'),
+    app: path.join(__dirname, productConfig[productName].entry),
+    // 第三方js文件的入口
+    vendor: ['vue', 'vuex', 'vue-router', 'axios']
+  },
+
+  // 出口
+  output: {
+    // 输出文件目录
+    // path: path.join(__dirname, './dist'),
+    path: path.join(__dirname,productConfig[productName].output ),
+    // 修改出口js文件名称格式
+    // js 表示将生成的js文件放到js目录中
+    // [name] 表示入口entry中配置的文件名称
+    filename: 'js/[name].[chunkhash].js',
+    // 设置公共路径，用来解决CSS中引用字体路径的bug
+    publicPath: '/',
+    // 指定 代码分离 后的每个js文件的名称和文件路径
+    chunkFilename: 'js/[name].[chunkhash].js',
+  },
+
+  // postcss-loader 处理CSS浏览器私有前缀
+  // 用来处理非JS的静态资源
+  module: {
+    rules: [
+      { 
+        test: /\.css$/, 
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use:["css-loader","postcss-loader"],
+        })
+      },
+      { 
+        test: /\.(sass|scss)$/, 
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: ['css-loader', 'sass-loader']
+        })
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            // limit 就是阀值，值的单位：字节(byte)
+            limit: 7168,
+
+            // images 表示将图片打包的images文件夹中
+            // [hash:10] 表示采用hash命名方式，并且名称长度为：10个字母
+            // [ext] 表示保留图片原始的后缀名称
+            name: 'images/[hash:10].[ext]'
+          }
+        }
+      },
+
+      {
+        test: /\.(eot|svg|ttf|woff|woff2|otf)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            // limit 就是阀值，值的单位：字节(byte)
+            limit: 8192,
+            name: 'fonts/[hash:7].[ext]'
+          }
+        }
+      },
+
+      // 处理ES6或者更高级的JS语法：
+      { test: /\.js$/, use: 'babel-loader', exclude: /node_modules|lib/ },
+
+      // 处理 Vue单文件组件
+      { test: /\.vue$/, use: 'vue-loader' },
+
+      // 让 html-loader 来处理HTML页面，此时，页面就会被webpack处理了
+      { test: /\.html$/, use: 'html-loader' }
+    ]
+  },
+
+  plugins: [
+    new htmlWebpackPlugin({
+      template: path.join(__dirname, productConfig[productName].html),
+
+      // 压缩HTML
+      minify: {
+        // 移除空白
+        collapseWhitespace: true,
+        // 移除注释
+        removeComments: true,
+        // 移除属性中的双引号
+        removeAttributeQuotes: true
+      }
+    }),
+
+    new cleanWebpackPlugin([productConfig[productName].output]),
+
+    // 抽离第三方包
+    new webpack.optimize.CommonsChunkPlugin({
+      // 将 entry 中指定的 ['vue', 'vue-router', 'axios'] 打包到名为 vendor 的js文件中
+      // 第三方包入口名称，对应 entry 中的 vendor 属性
+      name: 'vendor',
+    }),
+
+    // 压缩JS代码
+    new webpack.optimize.UglifyJsPlugin({
+      // 压缩
+      compress: {
+        // 移除警告
+        warnings: false
+      }
+    }),
+
+    // 指定环境为生产环境：vue会根据这一项启用压缩后的vue文件
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+
+    // 通过插件抽离 css (参数)
+    new ExtractTextPlugin('css/style.css'),
+    // 抽离css 的辅助压缩插件
+    new OptimizeCssAssetsPlugin(),
+  ]
+}
+
+```
+
+### config 配置文件
+
+```javascript
+// 导出配置文件
+module.exports = {
+    productName:'demo',//指定当前的项目名称
+    // 当前的项目配置：
+    // entry： 入口
+    // output：出口
+    // html： html文件位置
+    productConfig:{
+        demo:{
+            entry:'./src/demo/main.js',
+            output:'./dist/demo',
+            html:'./src/demo/index.html',
+        },
+    }
+}
+```
+
+* **通过配置config.js文件，可以运行开发多个项目，互不干扰**
+
+## Git
+
+Git是目前世界上最先进的分布式版本控制系统（没有之一）
+
+* [官方网站](https://git-scm.com/)
+* [下载地址](https://git-scm.com/)
+* 版本
+  - Windows
+  - Mac OS
+  - Linux
+* 使用教程：
+  * [廖雪峰Git使用教程](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000)
+  * [Git入门教程](http://www.runoob.com/git/git-tutorial.html)
+
+## SVN
+
+Apache Subversion 通常被缩写成 SVN，是一个开放源代码的版本控制系统
+
+* [官方网站](https://subversion.apache.org/)
+* [下载地址](http://subversion.apache.org/packages.html)
+* 版本
+  - Windows
+  - Mac OS
+  - Linux
+  - 等等，非常多
+* 使用教程：
+  * [SVN入门教程](http://www.runoob.com/svn/svn-tutorial.html)
+  * [SVN入门图解教程 — 超详细](http://www.cnblogs.com/Renyi-Fan/p/9201937.html)    **推荐**
 
 ## http-server
+
+* **http-server 是一个简单的零配置命令行HTTP服务器, 基于 nodeJs**
+
+
+* 只需要进入指定的目录，运行http-server命令，即可以当前目录为网站根目录开启一个服务器，非常方便快捷
+* **安装** (全局安装加 -g) : 
+
+```bash
+ npm install http-server 
+```
+
+* **运行网站**
+
+在站点目录下开启命令行输入
+
+```
+ http-server
+ 可以通过 -p 指定端口
+```
+
+* 访问: 
+
+
+* http://localhost:8080
+* http://127.0.0.1:8080
+
+参数配置：
+
+```bash
+-p 端口号 (默认 8080)
+
+-a IP 地址 (默认 0.0.0.0)
+
+-d 显示目录列表 (默认 'True')
+
+-i 显示 autoIndex (默认 'True')
+
+-e or --ext 如果没有提供默认的文件扩展名(默认 'html')
+
+-s or --silent 禁止日志信息输出
+
+--cors 启用 CORS via the Access-Control-Allow-Origin header
+
+-o 在开始服务后打开浏览器
+-c 为 cache-control max-age header 设置Cache time(秒) , e.g. -c10 for 10 seconds (defaults to '3600'). 禁用 caching, 则使用 -c-1.
+-U 或 --utc 使用UTC time 格式化log消息
+
+-P or --proxy Proxies all requests which can't be resolved locally to the given url. e.g.: -P http://someurl.com
+
+-S or --ssl 启用 https
+
+-C or --cert ssl cert 文件路径 (default: cert.pem)
+
+-K or --key Path to ssl key file (default: key.pem).
+
+-r or --robots Provide a /robots.txt (whose content defaults to 'User-agent: *\nDisallow: /')
+
+-h or --help 打印以上列表并退出
+```
+
