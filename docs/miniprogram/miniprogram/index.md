@@ -49,14 +49,16 @@
   * 无需注册
   * 用完即走
 
-## 小程序优点
+##小程序优缺点
+
+### 小程序优点
 
 * 无需安装，用完即走
 * 微信支持，流量巨大
 * 比公众号优势明显
 * 与传统App相比，开发成本，获客成本都低，并且市场广阔，传统App市场基本饱和
 
-## 局限性
+### 局限性
 
 * **小程序不能分享朋友圈**：
   * 可以分享到聊天、群里，但是达不到朋友圈可以无限级的扩散的病毒式营销的效果
@@ -65,7 +67,10 @@
 * 发布审核机制
 
 
-## 开发之前就必须指定的坑
+## 开发须知
+
+### 开发之前就必须指定的坑
+
 * 小程序名称可以由中文、数字、英文。长度在3-20个字符之间，一个中文字等于2个字符
 * 小程序和公众号不是一个账号，需要单独注册
 * 小程序名称在帐号信息设置时完成，请谨慎设置，一旦设置暂不支持修改
@@ -76,7 +81,8 @@
 * 一个小程序账号只有一个管理员（可修改），可以绑定10位开发者
 * 一个应用同时只能打开5个页面，当已经打开了5个页面之后，wx.navigateTo不能正常打开新页面，**请避免多层级的交互方式**
 
-## 开发的局限性
+### 开发的局限性
+
 * 代码包限制：1M -- 2M
 * 上架审核：官方：1-3天，实际：3天起步的可能性很大
 * 审核机制：
@@ -100,11 +106,14 @@
 小程序不是web，类似于web（对前端开发人员友好）
 :::
 
-## 体验小程序
+## 第一个小程序
+
+### 体验小程序
 
 [官方体验demo]( https://developers.weixin.qq.com/miniprogram/dev/demo.html)
 
-## 注册账号
+### 注册账号
+
 * [微信公众平台](https://mp.weixin.qq.com/)
 * 注册流程
   * 填写帐号信息
@@ -116,13 +125,13 @@
   * 未被微信开放平台注册
   * 未被个人微信号绑定
 
-## 开发工具
+### 开发工具
 
 * [开发者工具下载](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
   * 包含window macOS 版本
 * [开发者工具使用](https://developers.weixin.qq.com/miniprogram/dev/devtools/devtools.html)
 
-## 创建小程序
+### 创建小程序
 
 <img width="300" src="http://bmob-cdn-4908.b0.upaiyun.com/2018/08/16/b775e051401cdb5180019e211d261a27.png">
 
@@ -133,7 +142,7 @@
 * 建立普通快速启动模板：初始化项目基本结构（空的项目目录中才有这个提示）
 * 点击编译菜单，运行QuickStart项目
 
-## 微信开发者工具
+### 微信开发者工具
 
 微信开发者工具mac版本截图：
 
@@ -780,7 +789,7 @@ https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=J
 
 * **同一个微信用户，同一个小程序 storage 上限为 10MB**
 * localStorage 以用户维度隔离，同一台设备上，A 用户无法读取到 B 用户的数据
-*  如果用户储存空间不足，我们会清空最近最久未使用的小程序的本地缓存。我们不建议将关键信息全部存在 localStorage，以防储存空间不足或用户换设备的情况。
+* 如果用户储存空间不足，我们会清空最近最久未使用的小程序的本地缓存。我们不建议将关键信息全部存在 localStorage，以防储存空间不足或用户换设备的情况。
 
 ### 设置缓存
 
@@ -917,3 +926,416 @@ try {
 ```
 
 ## 网络请求
+
+### 网络API列表
+
+| API                  | 说明              |
+| -------------------- | --------------- |
+| wx.request           | 发起网络请求          |
+| wx.uploadFile        | 上传文件            |
+| wx.downloadFile      | 下载文件            |
+| wx.connectSocket     | 创建 WebSocket 连接 |
+| wx.onSocketOpen      | 监听 WebSocket 打开 |
+| wx.onSocketError     | 监听 WebSocket 错误 |
+| wx.sendSocketMessage | 发送 WebSocket 消息 |
+| wx.onSocketMessage   | 接受 WebSocket 消息 |
+| wx.closeSocket       | 关闭 WebSocket 连接 |
+| wx.onSocketClose     | 监听 WebSocket 关闭 |
+
+### 小程序网络API使用说明
+
+#### 服务器域名配置
+
+* 每个微信小程序需要事先设置一个通讯域名，小程序可以跟指定的域名与进行网络通信
+
+#### 配置流程
+
+* 服务器域名请在 `小程序后台-设置-开发设置-服务器域名` 中进行配置
+* 注意事项：
+  * 域名只支持 `https` (`request`、`uploadFile`、`downloadFile`) 和 `wss` (`connectSocket`) 协议；
+  * **域名不能使用 IP 地址或 localhost**
+  * **域名必须经过 ICP 备案**
+  * **出于安全考虑，`api.weixin.qq.com` 不能被配置为服务器域名，相关API也不能在小程序内调用。**开发者应将 appsecret 保存到后台服务器中，通过服务器使用 appsecret 获取 accesstoken，并调用相关 API。
+  * 对于每个接口，分别可以配置**最多 20 个域名**
+
+#### HTTPS 证书
+
+* https证书说明：
+  * 小程序必须使用 HTTPS 请求
+  * 小程序内会对服务器域名使用的 HTTPS 证书进行校验，如果校验失败，则请求不能成功发起。
+  * 由于系统限制，不同平台对于证书要求的严格程度不同。
+  * 为了保证小程序的兼容性，建议开发者按照最高标准进行证书配置，并使用相关工具检查现有证书是否符合要求。
+* https证书要求:
+  * HTTPS 证书必须有效。证书必须被系统信任，部署SSL证书的网站域名必须与证书颁发的域名一致，证书必须在有效期内;
+  * `iOS` 不支持自签名证书;
+  * `iOS` 下证书必须满足苹果 [App Transport Security (ATS)](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33) 的要求;
+  * TLS 必须支持 1.2 及以上版本。部分旧 `Android` 机型还未支持 TLS 1.2，请确保 HTTPS 服务器的 TLS 版本支持1.2及以下版本;
+  * 部分 CA 可能不被操作系统信任，请开发者在选择证书时注意小程序和各系统的相关通告。
+    - [Chrome 56/57 内核对 WoSign、StartCom 证书限制周知](http://developers.weixin.qq.com/blogdetail?action=get_post_info&lang=zh_CN&token=&docid=800026caeb042e45681583652b70910a)
+* **开发期间可以设置不进行域名校检，以便于开发小程序**
+
+#### 关于请求
+
+* 默认超时时间和最大超时时间都是 **60s**
+* `request`、`uploadFile`、`downloadFile` 的最大并发限制是 **10** 个
+* 网络请求的 `referer` header 不可设置。其格式固定为 `https://servicewechat.com/{appid}/{version}/page-frame.html`，其中 `{appid}`为小程序的 appid，`{version}` 为小程序的版本号，版本号为 `0` 表示为开发版、体验版以及审核版本，版本号为 `devtools` 表示为开发者工具，其余为正式版本。
+* 小程序进入后台运行后（非置顶聊天），如果 **5s** 内网络请求没有结束，会回调错误信息 `fail interrupted`；在回到前台之前，网络请求接口调用都会无法调用。
+
+#### 关于服务器返回
+
+* 返回值编码：
+  * 建议服务器返回值使用 **UTF-8** 编码。对于非 UTF-8 编码，小程序会尝试进行转换，但是会有转换失败的可能。
+  * 小程序会自动对 BOM 头进行过滤。
+* 回调：
+  * **只要成功接收到服务器返回，无论statusCode是多少，都会进入success回调。**
+  * **请开发者根据业务逻辑对返回值进行判断。**
+
+### wx.request
+
+发起网络请求，基本上这个请求包含了我们大部分的请求操作了，所以介绍的比较详细
+
+#### OBJECT参数说明
+
+| 参数名          | 类型                        | 必填   | 默认值  | 说明                                       | 最低版本                                     |
+| ------------ | ------------------------- | ---- | ---- | ---------------------------------------- | ---------------------------------------- |
+| url          | String                    | 是    |      | 开发者服务器接口地址                               |                                          |
+| data         | Object/String/ArrayBuffer | 否    |      | 请求的参数                                    |                                          |
+| header       | Object                    | 否    |      | 设置请求的 header，header 中不能设置 Referer。       |                                          |
+| method       | String                    | 否    | GET  | （**需大写**）有效值：OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT |                                          |
+| dataType     | String                    | 否    | json | 如果设为json，会尝试对返回的数据做一次 JSON.parse         |                                          |
+| responseType | String                    | 否    | text | 设置响应的数据类型。合法值：text、arraybuffer           | [1.7.0](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html) |
+| success      | Function                  | 否    |      | 收到开发者服务成功返回的回调函数                         |                                          |
+| fail         | Function                  | 否    |      | 接口调用失败的回调函数                              |                                          |
+| complete     | Function                  | 否    |      | 接口调用结束的回调函数（调用成功、失败都会执行）                 |                                          |
+
+#### success返回参数说明
+
+| 参数         | 类型                        | 说明                             | 最低版本                                     |
+| ---------- | ------------------------- | ------------------------------ | ---------------------------------------- |
+| data       | Object/String/ArrayBuffer | 开发者服务器返回的数据                    |                                          |
+| statusCode | Number                    | 开发者服务器返回的 HTTP 状态码             |                                          |
+| header     | Object                    | 开发者服务器返回的 HTTP Response Header | [1.2.0](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html) |
+
+#### data 数据说明
+
+* 最终发送给服务器的数据是 String 类型，如果传入的 data 不是 String 类型，会被转换成 String 。
+* 转换规则如下：
+  * 对于 `GET` 方法的数据，会将数据转换成 query string（encodeURIComponent(k)=encodeURIComponent(v)&encodeURIComponent(k)=encodeURIComponent(v)...）
+  * 对于 `POST` 方法且 `header['content-type']` 为 `application/json` 的数据，会对数据进行 JSON 序列化
+  * 对于 `POST` 方法且 `header['content-type']` 为 `application/x-www-form-urlencoded` 的数据，会将数据转换成 query string （encodeURIComponent(k)=encodeURIComponent(v)&encodeURIComponent(k)=encodeURIComponent(v)...）
+
+```javascript
+wx.request({
+  url: '服务器https地址', 
+  data: {
+     x: '' ,
+     y: ''
+  },
+  method:'POST',
+  header: {
+  	'content-type': 'application/json' // 默认值
+  },
+  success: function(res) {
+    console.log(res.data)
+  }
+})
+```
+
+#### 返回值
+
+* 返回一个 `requestTask` 对象，通过 `requestTask`，可中断请求任务。
+* 基础库 1.4.0 开始支持，低版本需做兼容处理
+
+```javascript
+const requestTask = wx.request({})
+requestTask.abort() // 取消请求任务
+```
+
+## 微信支付
+
+#### requestPayment
+
+发起微信支付
+
+#### 参数说明
+
+| 参数        | 类型       | 必填   | 说明                                       |
+| --------- | -------- | ---- | ---------------------------------------- |
+| timeStamp | String   | 是    | 时间戳从1970年1月1日00:00:00至今的秒数,即当前的时间        |
+| nonceStr  | String   | 是    | 随机字符串，长度为32个字符以下。                        |
+| package   | String   | 是    | 统一下单接口返回的 prepay_id 参数值，提交格式如：prepay_id=*** |
+| signType  | String   | 是    | 签名算法，暂支持 MD5                             |
+| paySign   | String   | 是    | 签名,具体签名方案参见[小程序支付接口文档](https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=7_7&index=3); |
+| success   | Function | 否    | 接口调用成功的回调函数                              |
+| fail      | Function | 否    | 接口调用失败的回调函数                              |
+| complete  | Function | 否    | 接口调用结束的回调函数（调用成功、失败都会执行）                 |
+
+#### 回调结果
+
+| 回调类型    | errMsg                               | 说明                                    |
+| ------- | ------------------------------------ | ------------------------------------- |
+| success | requestPayment:ok                    | 调用支付成功                                |
+| fail    | requestPayment:fail cancel           | 用户取消支付                                |
+| fail    | requestPayment:fail (detail message) | 调用支付失败，其中 detail message 为后台返回的详细失败原因 |
+
+```
+wx.requestPayment({
+   'timeStamp': '',
+   'nonceStr': '',
+   'package': '',
+   'signType': 'MD5',
+   'paySign': '',
+   'success':function(res){
+   },
+   'fail':function(res){
+   },
+   'complete':function(res){
+   }
+})
+```
+
+* 注意：
+  * **6.5.2 及之前版本中，用户取消支付不会触发 fail 回调，只会触发 complete 回调，回调 errMsg 为 'requestPayment:cancel'**
+
+## 设备相关
+
+### 设备信息
+
+微信允许我们的小程序获取设备的相关信息
+
+#### getSystemInfo
+
+获取系统信息
+
+#### getSystemInfoSync
+
+获取系统信息同步接口
+
+#### success返回值说明
+
+| 参数              | 说明                                   | 最低版本                                     |
+| --------------- | ------------------------------------ | ---------------------------------------- |
+| brand           | 手机品牌                                 | [1.5.0](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html) |
+| model           | 手机型号                                 |                                          |
+| pixelRatio      | 设备像素比                                |                                          |
+| screenWidth     | 屏幕宽度                                 | [1.1.0](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html) |
+| screenHeight    | 屏幕高度                                 | [1.1.0](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html) |
+| windowWidth     | 可使用窗口宽度                              |                                          |
+| windowHeight    | 可使用窗口高度                              |                                          |
+| statusBarHeight | 状态栏的高度                               | [1.9.0](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html) |
+| language        | 微信设置的语言                              |                                          |
+| version         | 微信版本号                                |                                          |
+| system          | 操作系统版本                               |                                          |
+| platform        | 客户端平台                                |                                          |
+| fontSizeSetting | 用户字体大小设置。以“我-设置-通用-字体大小”中的设置为准，单位：px | [1.5.0](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html) |
+| SDKVersion      | 客户端基础库版本                             | [1.1.0](https://developers.weixin.qq.com/miniprogram/dev/framework/compatibility.html) |
+
+### 判断API是否可用
+
+#### canIUse
+
+* 判断小程序的API，回调，参数，组件等是否在当前版本可用。
+* **此接口从基础库 1.1.1 版本开始支持。**
+* **String参数说明**：
+  * 调用方式：
+    * 使用`${API}.${method}.${param}.${options}`
+    * 或者`${component}.${attribute}.${option}`方式来调用
+  * `${API}` 代表 API 名字
+  * `${method}` 代表调用方式，有效值为`return`, `success`, `object`, `callback`
+  * `${param}` 代表参数或者返回值
+  * `${options}` 代表参数的可选值
+  * `${component}` 代表组件名字
+  * `${attribute}` 代表组件属性
+  * `${option}` 代表组件属性的可选值
+
+```javascript
+wx.canIUse('openBluetoothAdapter')
+wx.canIUse('getSystemInfoSync.return.screenWidth')
+wx.canIUse('getSystemInfo.success.screenWidth')
+wx.canIUse('showToast.object.image')
+wx.canIUse('onCompassChange.callback.direction')
+wx.canIUse('request.object.method.GET')
+
+wx.canIUse('live-player')
+wx.canIUse('text.selectable')
+wx.canIUse('button.open-type.contact')
+```
+
+### 设备网络类型
+
+微信允许我们通过API来获取设备当前的网络类型
+
+#### getNetworkType
+
+获取网络类型
+
+* 返回值：networkType
+
+```javascript
+wx.getNetworkType({
+  success: function(res) {
+    // 返回网络类型, 有效值：
+    // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+    var networkType = res.networkType
+  }
+})
+```
+
+#### onNetworkStatusChange
+
+* 参数是一个回调函数，注意
+* 监听网络状态变化
+* 基础库 1.1.0 开始支持，低版本需做兼容处理
+
+#### CALLBACK返回参数
+
+| 参数          | 类型      | 说明        |
+| ----------- | ------- | --------- |
+| isConnected | Boolean | 当前是否有网络连接 |
+| networkType | String  | 网络类型      |
+
+#### networkType 有效值
+
+| 值       | 说明               |
+| ------- | ---------------- |
+| wifi    | wifi 网络          |
+| 2g      | 2g 网络            |
+| 3g      | 3g 网络            |
+| 4g      | 4g 网络            |
+| none    | 无网络              |
+| unknown | Android下不常见的网络类型 |
+
+```javascript
+wx.onNetworkStatusChange(function(res) {
+  console.log(res.isConnected)
+  console.log(res.networkType)
+})
+```
+
+### 剪切板
+
+微信允许我们的小程序设置和读取剪切板内容
+
+* 基础库 1.1.0 开始支持，低版本需做兼容处理
+
+#### setClipboardData
+
+* 设置系统剪贴板的内容
+
+```javascript
+wx.setClipboardData({
+  data: 'data',
+  success: function(res) {
+    wx.getClipboardData({
+      success: function(res) {
+        console.log(res.data) // data
+      }
+    })
+  }
+})
+```
+
+#### getClipboardData
+
+获取系统剪贴板内容
+
+```javascript
+wx.getClipboardData({
+  success: function(res){
+    console.log(res.data)
+  }
+})
+```
+
+## 兼容版本处理
+
+### 兼容问题
+
+* 小程序的功能不断的增加，但是旧版本的微信客户端并不支持新功能，所以在使用这些新能力的时候需要做兼容
+* 文档会在组件，API等页面描述中带上各个功能所支持的版本号。
+* 可以通过 `wx.getSystemInfo` 或者 `wx.getSystemInfoSync` 获取到小程序的基础库版本号。
+* 也可以通过 `wx.canIUse` 来判断是否可以在该基础库版本下直接使用对应的API或者组件
+
+### 兼容方式 - 版本比较
+
+* 微信客户端和小程序基础库的版本号风格为 Major.Minor.Patch（主版本号.次版本号.修订号）
+*  开发者可以根据版本号去做兼容
+
+```
+function compareVersion(v1, v2) {
+  v1 = v1.split('.')
+  v2 = v2.split('.')
+  var len = Math.max(v1.length, v2.length)
+
+  while (v1.length < len) {
+    v1.push('0')
+  }
+  while (v2.length < len) {
+    v2.push('0')
+  }
+
+  for (var i = 0; i < len; i++) {
+    var num1 = parseInt(v1[i])
+    var num2 = parseInt(v2[i])
+
+    if (num1 > num2) {
+      return 1
+    } else if (num1 < num2) {
+      return -1
+    }
+  }
+
+  return 0
+}
+
+compareVersion('1.11.0', '1.9.9')
+// 1
+```
+
+### 兼容方式 - 接口
+
+对于新增的 API，可以用以下代码来判断是否支持用户的手机。
+
+```javascript
+if (wx.openBluetoothAdapter) {
+  wx.openBluetoothAdapter()
+} else {
+  // 如果希望用户在最新版本的客户端上体验您的小程序，可以这样子提示
+  wx.showModal({
+    title: '提示',
+    content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+  })
+}
+```
+
+### 兼容方式 - 参数
+
+对于 API 的参数或者返回值有新增的参数，可以判断用以下代码判断。
+
+```javascript
+wx.showModal({
+  success: function(res) {
+    if (wx.canIUse('showModal.cancel')) {
+      console.log(res.cancel)
+    }
+  }
+})
+```
+
+### 兼容方式 - 组件
+
+对于组件，新增的组件或属性在旧版本上不会被处理，不过也不会报错。如果特殊场景需要对旧版本做一些降级处理，可以这样子做。
+
+```javascript
+Page({
+  data: {
+    canIUse: wx.canIUse('cover-view')
+  }
+})
+```
+
+```html
+<video controls="{{!canIUse}}">
+  <cover-view wx:if="{{canIUse}}">play</cover-view>
+</video>
+```
