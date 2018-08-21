@@ -17,16 +17,17 @@ module.exports = {
         // 你可以通过 themeConfig.nav 将链接添加到导航栏中
         nav: [
             {
+                text: '支持我们',
+                items:[
+                    { text:'给我们点赞 -- github', link:'https://github.com/xuefeng666/webnotes'},
+                ],
+            },
+            {
                 text: '友情链接',
                 items:[
-                    { text:'小峰哥', link:'http://www.xuefeng666.com'},
+                    { text:'小峰哥笔记', link:'http://www.xuefeng666.com'},
                 ],
             }
-            // ,
-            // {
-            //     text: '参与我们',
-            //     link: 'https://www.baidu.com'
-            // }
         ],
         // 这里是是侧边栏配置
         sidebar:[
@@ -48,12 +49,19 @@ module.exports = {
                     // ['Web/Vue/','Vue'],
                     ['Web/VueSrc/','Vue源码学习'],
                     // ['Web/webpack/','webpack'],
-                    ['Web/miniprogram/','小程序'],
                     // ['Web/React/','React'],
                     // ['Web/ReactNative/','React Native'],
                     // ['Web/Angular/','Angular'],
                     // ['Web/Electron/','Electron'],
                 ],  
+            },
+            {
+                title: '微信小程序',
+                collapsable:false,
+                children:[
+                    ['miniprogram/','介绍'],
+                    ['miniprogram/miniprogram/','微信小程序'],
+                ], 
             },
             // {
             //     title: 'iOS',
@@ -79,7 +87,7 @@ module.exports = {
                 collapsable:false,
                 children:[
                     ['CentOS/','介绍'],
-                    ['CentOS/notes/','CentOS'],
+                    ['CentOS/CentOS/','CentOS'],
                 ], 
             }
         ],

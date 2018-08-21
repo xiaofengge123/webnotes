@@ -3,9 +3,12 @@
 该部分是小峰哥的测试服务器部署
 
 * **主要包含内容**
-    * nodejs
-    * nginx
+    * CentOS 介绍 
+    * CentOS 常见命令
+    * nvm安装管理nodejs
+    * nginx安装配置
     * git
+
 
 
 **服务器信息** 

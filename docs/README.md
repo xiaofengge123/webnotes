@@ -22,7 +22,31 @@
 
 ### 记录许多用过和学过的知识，方便查阅
 
+### 包含内容：
+* **web**
+    * html（6）
+    * CSS（3）
+    * JavaScript
+    * DOM和BOM
+    * jQuery
+    * jQuery 源码
+    * Nodejs
+    * npm
+    * ES6
+    * Vue
+    * Vue 源码
+    * React
+    * Angular
+    * webpack
 
+* **混合开发**
+    * React Native
+    * ionic
+
+* **微信小程序**
+* **iOS**
+* **Android**
+* **CentOS**
 
 ### 学习资源网站
 * **排名不分先后**

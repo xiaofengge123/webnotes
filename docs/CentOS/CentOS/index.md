@@ -1,5 +1,5 @@
 
-# CentOS
+## CentOS
 ## SSH连接
 ```
 ssh root@服务器ip
