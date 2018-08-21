@@ -38,21 +38,7 @@ module.exports = {
                 children:[
                     ['Web/','介绍'],
                     ['Web/WebSDE/','前端开发环境搭建'],
-                    // ['Web/html/','HTML'],
-                    // ['Web/html5/','HTML5'],
-                    // ['Web/css/','CSS'],
-                    // ['Web/css3/','CSS3'],
-                    // ['Web/javascript/','JavaScript'],
-                    // ['Web/jQuery/','jQuery'],
-                    // ['Web/Node/','Node'],
-                    // ['Web/npm/','npm'],
-                    // ['Web/Vue/','Vue'],
                     ['Web/VueSrc/','Vue源码学习'],
-                    // ['Web/webpack/','webpack'],
-                    // ['Web/React/','React'],
-                    // ['Web/ReactNative/','React Native'],
-                    // ['Web/Angular/','Angular'],
-                    // ['Web/Electron/','Electron'],
                 ],  
             },
             {
@@ -63,25 +49,6 @@ module.exports = {
                     ['miniprogram/miniprogram/','微信小程序'],
                 ], 
             },
-            // {
-            //     title: 'iOS',
-            //     collapsable:false,
-            //     children:[
-            //         ['iOS/','简介'],
-            //         ['iOS/Xcode/','Xcode'],
-            //         ['iOS/C/','C语言'],
-            //         ['iOS/Object-C/','Object'],
-            //         ['iOS/UIKit/','UIKit'],
-            //         ['iOS/NSThread/','NSThread'],
-            //     ]
-            // },
-            // {
-            //     title: 'Android',
-            //     collapsable:false,
-            //     children:[
-            //         ['Android/','简介'],
-            //     ], 
-            // },
             {
                 title: 'CentOS',
                 collapsable:false,

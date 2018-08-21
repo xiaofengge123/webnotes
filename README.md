@@ -1,14 +1,18 @@
 ### 前端小峰哥
-**求知若渴，虚心若愚**
 
-小峰哥的学习笔记，欢迎大家给我们支持点赞
+**座右铭：求知若渴，虚心若愚**
 
 ::: tip
 
+ **[我们的网址：http://www.xuefeng666.com](http://www.xuefeng666.com)**
+
+ **[项目github：https://github.com/xuefeng666/webnotes](https://github.com/xuefeng666/webnotes)**
+
 网站持续更新中......
 
-最新更新时间：2018年08月21日
+最新更新时间：2018年08月17日
 
+**请支持我们给，我们的github点赞！**
 :::
 
 ### 学习交流群
@@ -95,3 +99,6 @@
 **学习笔记的部分内容来源于互联网，如有侵权，请联系我们我们会在第一时间删除！**
 
 **联系我：huangxuefeng999@126.com**
+
+### License
+[MIT](https://opensource.org/licenses/MIT)
