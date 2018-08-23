@@ -36,9 +36,10 @@ module.exports = {
                 title: 'Web前端',
                 collapsable:false,
                 children:[
-                    ['Web/','介绍'],
+                    ['Web/','核心内容'],
                     ['Web/css/','CSS（3）'],
                     ['Web/WebSDE/','前端开发环境搭建'],
+                    ['Web/React/','React'],
                     ['Web/VueSrc/','Vue源码学习'],
                 ],  
             },
