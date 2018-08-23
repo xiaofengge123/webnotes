@@ -1123,6 +1123,191 @@ const requestTask = wx.request({})
 requestTask.abort() // 取消请求任务
 ```
 
+#### Request封装
+
+[参考github](https://github.com/LiangLuDev/wxapp-request)
+
+```javascript
+
+// 缓存地址路径
+const HOST_URI = ""
+// 开发
+const DEV_HOST_URL = ""
+// 线上
+const PROD_HOST_URL = ""
+
+// 使用开发地址
+const BASE_URL = DEV_HOST_URL
+
+/**
+ *  导入api
+ */ 
+var api = require('./api.js')
+
+/**
+ * 网络请求封装
+ * @param url url路径名 例：/books
+ * @param method 请求方式 POST/GET/DELETE等
+ * @param data 请求参数 string类型
+ * @param success  成功回调
+ * @param fail 失败回调
+ */
+function request(url, method, data, success, fail) {
+  
+  if (!fail && !success && typeof data === 'function') {
+    // fail = null;
+    success = data;
+    data = "";
+  } else if (!fail) {
+    if (typeof data === 'function') {
+      fail = success
+      success = data
+      data = ""
+    } else if (typeof data === 'object') {
+      // fail = null
+    } else {
+      console.log("传递参数类型不正确");
+    }
+  }
+
+  wx.showLoading({
+    title: '加载中....',
+  })
+
+  var wxtask = wx.request({
+    url: BASE_URL + url,
+    header: {
+      // 'content-type':'application/json',  //默认 application/json :数据序列化
+      // 'access-token': 'access-token',
+      // 'app-type': 'wx-app'
+      'content-type':'application/x-www-form-urlencoded'
+    },
+    method: method,
+    data: data,
+    success: function (res) {
+      wx.hideLoading()
+      console.log(res)
+      // 成功，执行回调函数success，传数据
+      if (res.statusCode === 200) {
+        success(res.data)
+      }
+      else {
+        //错误请求  wx弹框提示错误信息
+        wx.showToast({
+          title: "请求失败",
+          icon: 'none',
+          duration: 1000
+        })
+        if (fail) {
+          fail(res.data.msg)
+        }  
+      }
+      
+
+    },
+    fail: function (res) {
+      // wx.hideLoading()
+      //错误请求  wx弹框提示错误信息
+      wx.showToast({
+        title: res,
+        icon: 'none',
+        duration: 1000
+      })
+      if (fail) {
+        fail(res)
+      }
+    }
+  })
+  return wxtask;
+}
+
+
+/**
+ * 请求封装-Get
+ * @param url 请求地址
+ * @param data 请求参数
+ * @param success 成功回调
+ * @param fail  失败回调
+ * @constructor
+ *
+ * 返回值为微信请求实例   用于取消请求
+ */
+function Get(url, data, success, fail) {
+  return request(url, "GET", data, success, fail)
+}
+
+
+/**
+ * 请求封装-Post
+ * @param url 请求地址
+ * @param data 请求参数
+ * @param success 成功回调
+ * @param fail  失败回调
+ * @constructor
+ *
+ * 返回值为微信请求实例   用于取消请求
+ */
+function Post(url, data, success, fail) {
+  console.log(data)
+  return request(url, 'POST', data, success, fail)
+}
+
+
+/**
+ * 请求封装-Delete
+ * @param url 请求地址
+ * @param data 请求参数
+ * @param success 成功回调
+ * @param fail  失败回调
+ * @constructor
+ *
+ * 返回值为微信请求实例   用于取消请求
+ */
+function Delete(url, data, success, fail) {
+  return request(url, 'DELETE', data, success, fail)
+}
+
+exports.Get = Get;
+exports.Post = Post;
+exports.Delete = Delete;
+```
+
+#### 调用
+
+```javascript
+//POST/DELETE 请求方式调用方法一样
+ //1、网络请求（没有请求参数，不需要对请求失败情况处理）
+    dev_request.Get('/classify', function (res) {
+        console.log(res);
+    })
+    //2、网络请求（没有请求参数，需要对请求失败情况处理）
+    dev_request.Get('/classify', function (res) {
+        console.log(res);
+    }, function (err) {
+        console.log(err);
+    })
+    //3、网络请求（有请求参数，不需要对请求失败情况处理）
+    var data = {
+        username: 'username',
+        age: 19
+    };
+    dev_request.Get('/classify', data, function (res) {
+        console.log(res);
+    })
+    //4、网络请求（有请求参数，需要对请求失败情况处理）
+    dev_request.Get('/classify', data, function (res) {
+        console.log(res);
+    }, function (err) {
+        console.log(err);
+    })
+    //5、取消网络请求(所有的请求方法均返回requestTask对象，可中断请求任务)
+        var requestTask = dev_request.Get('/classify', function (res) {
+            console.log(res);
+        });
+        //网络请求取消
+        requestTask.abort()
+```
+
 ## 微信支付
 
 #### requestPayment

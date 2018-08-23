@@ -40,6 +40,7 @@ module.exports = {
                     ['Web/css/','CSS（3）'],
                     ['Web/WebSDE/','前端开发环境搭建'],
                     ['Web/React/','React'],
+                    ['Web/Vue/','Vue'],
                     ['Web/VueSrc/','Vue源码学习'],
                 ],  
             },
