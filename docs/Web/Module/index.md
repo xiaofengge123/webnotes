@@ -1,11 +1,13 @@
-## webpack
+## 前端模块化
 
 **主要内容**
 
 * 前端模块化
+* CommandJS
 * AMD
 * CMD
 * UMD
+* ES6
 * webpack
 * webpack开发配置
 * webpack打包配置

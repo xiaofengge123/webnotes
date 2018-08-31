@@ -37,9 +37,9 @@ module.exports = {
                 collapsable:false,
                 children:[
                     ['Web/','核心内容'],
-                    ['Web/css/','CSS（3）'],
                     ['Web/WebSDE/','前端开发环境搭建'],
-                    ['Web/webpack/','webpack'],
+                    ['Web/css/','CSS（3）'],
+                    ['Web/Module/','前端模块化'],
                     ['Web/React/','React'],
                     ['Web/Vue/','Vue'],
                     ['Web/VueSrc/','Vue源码学习'],

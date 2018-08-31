@@ -2,39 +2,17 @@
 
 **座右铭：求知若渴，虚心若愚**
 
-
-::: tip
-
-
- **[我们的网址：http://www.xuefeng666.com](http://www.xuefeng666.com)**
-
- **[项目github：https://github.com/xuefeng666/webnotes](https://github.com/xuefeng666/webnotes)**
-
-网站持续更新中......
-
-最新更新时间：2018年08月23日
-
-**请支持我们，给我们的github点赞！**
-:::
-
 ### 学习交流群
 小峰哥创建的技术交流群，欢迎大家加入
 * 小峰哥前端交流群1：**747075815**
 * iOS开发交流群1：**371918802**
 
-### 关于
-* 关于学习笔记
-    * 整理自己的学习笔记
-    * 记录自己开发中遇到的问题
-* 关于本人
-    * 没啥好说的，底层码农一枚
+**点击下面目录导航，就可以找到对应的部分**
 
-### 记录许多用过和学过的知识，方便查阅
-
-### 包含内容：
 * **web**
-    * html（6）
-    * CSS（3）
+    * [**前端开发环境搭建**](http://www.xuefeng666.com/Web/WebSDE/)
+    * html（5）
+    * [**CSS（3）**](http://www.xuefeng666.com/Web/css/)
     * JavaScript
     * DOM和BOM
     * jQuery
@@ -42,20 +20,22 @@
     * Nodejs
     * npm
     * ES6
-    * Vue
-    * Vue 源码
-    * React
-    * Angular
+    * [**前端模块化**](http://www.xuefeng666.com/Web/Module/#前端模块化)
+    * [**Vue**](http://www.xuefeng666.com/Web/Vue/)
     * webpack
+    * [**Vue 源码**](http://www.xuefeng666.com/Web/VueSrc/#vue源码学习)
+    * [**React**](http://www.xuefeng666.com/Web/React/)
+    * Angular
+    
 
 * **混合开发**
     * React Native
     * ionic
 
-* **微信小程序**
+* [**微信小程序**](http://www.xuefeng666.com/miniprogram/miniprogram/#小程序)
 * **iOS**
 * **Android**
-* **CentOS**
+* [**CentOS**](http://www.xuefeng666.com/CentOS/CentOS/#centos)
 
 ### 学习资源网站
 * **排名不分先后**
@@ -95,7 +75,29 @@
 
 * 以及一部分没来得及整理的网站和个人开发者博客等
 
-#### 非常感谢上述网站及作者的无私分享，非常感谢！！！
+**非常感谢上述网站及作者的无私分享，非常感谢！！！**
+
+### 关于
+* 关于学习笔记
+    * 整理自己的学习笔记
+    * 记录自己开发中遇到的问题
+* 关于本人
+    * 没啥好说的，底层码农一枚
+
+::: tip
+
+
+ **[我们的网址：http://www.xuefeng666.com](http://www.xuefeng666.com)**
+
+ **[项目github：https://github.com/xuefeng666/webnotes](https://github.com/xuefeng666/webnotes)**
+
+网站持续更新中......
+
+最新更新时间：2018年08月23日
+
+**请支持我们，给我们的github点赞！**
+:::
+
 
 ### 声明：
 **学习笔记的部分内容来源于互联网，如有侵权，请联系我们我们会在第一时间删除！**
