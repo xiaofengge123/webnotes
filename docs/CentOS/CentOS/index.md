@@ -1,6 +1,15 @@
 
 ## CentOS
+
+## 学习资源
+* [CentOS官网](https://www.centos.org/)
+* [Linux教程](http://www.runoob.com/linux/linux-tutorial.html)
+
+## Linux
+* 
+
 ## SSH连接
+
 ```
 ssh root@服务器ip
 ```
@@ -92,7 +101,7 @@ npm -v
 * 临时使用
 
 ```bash
-npm --registry https://registry.npm.taobao.org install express
+npm --registry https://registry.npm.taobao.org
 ```
 
 * 持久使用
@@ -124,10 +133,10 @@ cnpm install express
 * 安装nginx的依赖
 
 ```bash
-yum install gcc-c++  
-yum install pcre pcre-devel  
-yum install zlib zlib-devel  
-yum install openssl openssl--devel
+yum -y install gcc-c++  
+yum -y install pcre pcre-devel  
+yum -y install zlib zlib-devel  
+yum -y install openssl openssl--devel
 ```
 
 * 下载

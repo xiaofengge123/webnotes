@@ -3,9 +3,32 @@
 Web软件开发环境（Web Software Development Environment，Web SDE）
 
 程序员到了一家新的公司，上班第一天一般工作都是熟悉安装公司团队开发环境，今天给大家介绍一下，前端基础开发环境的配置。
+
 当然，这里只是说一些必须或者是极大概率用到的，因为每个公司开发环境都可能有一些不一样的地方，我们可以根据实际情况进行相关修改。
 
+## 基本入职须知
+* 安装开发环境
+  * 统一的系统环境
+  * 统一的开发编辑器
+* 代码管理
+  * git
+  * gitlab
+  * svn
+  * source tree
+* 开发规范
+  * 统一的技术框架 
+  * 代码管理规范
+  * 代码编写规范
+  * 开发文档
+* 开发须知
+  * 测试服务器
+  * 接口管理
+  * 公司项目开发部署流程
+  * bug测试修改流程  
+
 ::: tip
+
+**建议上面的流程都熟悉一下，不知道的可以百度一下**
 
 **大家针对每家公司的具体情况再进行安装一些必要的软件**
 
@@ -153,7 +176,7 @@ Web软件开发环境（Web Software Development Environment，Web SDE）
 * 临时使用
 
 ```bash
-npm --registry https://registry.npm.taobao.org install express
+npm --registry https://registry.npm.taobao.org
 ```
 
 * 持久使用
@@ -195,6 +218,32 @@ Webpack 是一个前端资源加载/打包工具。它将根据模块的依赖�
   * [webpack入门教程](http://www.runoob.com/w3cnote/webpack-tutorial.html)
   * [入门 Webpack，看这篇就够了](https://segmentfault.com/a/1190000006178770)
 
+### 安装
+```bash
+// 全局安装
+npm install --global webpack
+
+// 本地安装
+// 要安装最新版本
+npm install --save-dev webpack
+// 安装特定版本
+npm install --save-dev webpack@<version>
+
+// 如果你使用 webpack 4+ 版本，你还需要安装 CLI
+npm install --save-dev webpack-cli
+
+// 安装体验版本
+npm install webpack@beta
+npm install webpack/webpack#<tagname/branchname>
+
+// 安装这些最新体验版本时要小心！它们可能仍然包含 bug，因此不应该用于生产环境
+
+```
+:::tip
+  **npm install --global webpack**
+
+  全局安装有风险，会将你项目中的 webpack 锁定到指定版本，并且在使用不同的 webpack 版本的项目中，可能会导致构建失败。
+:::
 ### webpack 开发配置
 
 ```javascript
@@ -463,6 +512,44 @@ Git是目前世界上最先进的分布式版本控制系统（没有之一）
 * 使用教程：
   * [廖雪峰Git使用教程](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000)
   * [Git入门教程](http://www.runoob.com/git/git-tutorial.html)
+
+### 配置用户名和邮箱
+初次安装git需要配置用户名和邮箱，否则git会提示：please tell me who you are
+
+```bash
+git config --global user.name "你的用户名"
+
+git config --global user.email "你的密码"
+```
+
+:::tip
+
+**用户名和邮箱是git提交代码时用来显示你身份和联系方式的，并不是github用户名和邮箱**
+:::
+
+### 生成密钥对（Mac）
+大多数 Git 服务器都会选择使用 SSH 公钥来进行授权。系统中的每个用户都必须提供一个公钥用于授权，没有的话就要生成一个。
+
+生成公钥的过程在所有操作系统上都差不多。
+
+首先你要确认一下本机是否已经有一个公钥。
+
+**SSH 公钥默认储存在账户的主目录下的 ~/.ssh 目录**
+```bash
+ // 进入目录
+ cd ~/.ssh
+ // 查看当前目录下面的文件
+ ls
+```
+* 有 .pub 后缀的文件就是公钥，另一个文件则是密钥
+* 如果么有文件就自己生成
+```bash
+ssh-keygen -t rsa -C "your_email@youremail.com"
+```
+* -t：是选择kye的type。分别有 RSA 和 DSA 两种
+* -c：指定所指定的注释，可以方便用户标识这个密钥，指出密钥的用途或其他有用的信息，用自己的邮箱即可
+* 连续三次回车：一个密语字符串(passphrase)和2次口令(password)，空都代表没有
+* **最后把公司文件发给相关人员即可**
 
 ## SVN
 

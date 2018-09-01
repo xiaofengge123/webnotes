@@ -38,12 +38,8 @@ module.exports = {
                 children:[
                     ['Web/','核心内容'],
                     ['Web/WebSDE/','前端开发环境搭建'],
-<<<<<<< HEAD
                     ['Web/css/','CSS（3）'],
                     ['Web/Module/','前端模块化'],
-=======
-                    ['Web/webpack/','前端模块化'],
->>>>>>> 387e90bfea649a049297097a6d34b6a2d6d8b797
                     ['Web/React/','React'],
                     ['Web/Vue/','Vue'],
                     ['Web/VueSrc/','Vue源码学习'],
