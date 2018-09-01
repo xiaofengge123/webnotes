@@ -6,7 +6,10 @@
 
 web开发环境搭建
 
+* 基本入职须知
 * 开发工具
+* git
+* webpack
 * 浏览器
 * Nodejs
 * webpack
