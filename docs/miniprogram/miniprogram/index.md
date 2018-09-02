@@ -5,6 +5,7 @@
 * 官方资源：
     * [微信官方小程序文档](https://developers.weixin.qq.com/miniprogram/dev/index.html)
     * [微信官方小游戏文档](https://developers.weixin.qq.com/minigame/dev/index.html?t=18081511)
+    * [微信开放平台](open.weixin.qq.com)
     * [微信开发者工具](https://developers.weixin.qq.com/minigame/dev/devtools/download.html)
     * [官方小程序开发指南](https://developers.weixin.qq.com/ebook?action=get_post_info&token=935589521&volumn=1&lang=zh_CN&book=miniprogram&docid=0008aeea9a8978ab0086a685851c0a)
 * 开发资源：
@@ -15,12 +16,13 @@
 * UI组件库：
     * [WeUI](https://weui.io/)
 
+## 小程序介绍
 
-## 什么是小程序
+### 什么是小程序
 
 小程序是一种不需要下载安装即可使用的应用，它实现了应用触手可及的梦想，用户扫一扫或者搜一下即可打开应用。也体现了用完即走的理念，用户不用关心是否安装太多应用的问题。应用将无处不在，随时可用，但又无序安装卸载 -- 张小龙
 
-## 生活中的小程序
+### 生活中的小程序
 
 - 跳一跳
 - 圣诞头像：换一个带着圣诞帽的微信头像
@@ -29,7 +31,7 @@
 - 摩拜单车
 - 等等...
 
-## 前世今生
+### 前世今生
 
 * 2016年1月11日，2016微信公开课PRO版在广州举行，“微信之父”张小龙首次公开演讲，宣布微信公众号将推出“**应用号**”，通过公众号完成一些App的部分功能
 * 2016年9月21日，微信小程序正式开启内测，首批内存名额200个，有人报价300万交易
@@ -41,7 +43,8 @@
 * 2018年3月，微信正式宣布小程序广告组件启动内测
 * 2018年7月13日，小程序任务栏功能升级，新增“我的小程序”板块；而小程序原有的“星标”功能升级，可以将喜欢的小程序直接添加到“我的小程序”。
 
-## 与传统应用对比
+### 与传统应用对比
+
 * 传统应用：下载 —> 安装 —> 注册
 * 小程序：打开微信 —>搜索小程序
 * 最大特点：
@@ -214,7 +217,7 @@ project.config.json --- 开发工具配置（例如界面颜色、编译配置�
 
 * 每一个小程序页面也可以使用 json 文件来对本页面的窗口表现进行配置
 * 页面的配置只能设置 app.json 中部分  window  配置项的内容
-* 页面中配置项会覆盖  app.json  的  window 中相同的配置项
+* **页面中配置项会覆盖  app.json  的  window 中相同的配置项**
 
 | 属性                           | 类型       | 默认值     | 描述                                       |
 | ---------------------------- | -------- | ------- | ---------------------------------------- |
@@ -239,6 +242,7 @@ project.config.json --- 开发工具配置（例如界面颜色、编译配置�
 * 项目配置文件
 * 同开发者工具详情点击后显示的数据一样
 * 各种配置
+* 一般会配置appid和忽略域名校准
 
 ## 小程序基础
 
@@ -265,14 +269,14 @@ project.config.json --- 开发工具配置（例如界面颜色、编译配置�
 
 #### 基础内容
 
-* text：
+* text
   * 文本显示，最基础的，相当于span
-* rich-text:
+* rich-text
   * 富文本
   * 低版本需要做兼容处理
-* icon：
+* icon
   * 图标
-* progress：
+* progress
   * 进度条
 
 #### 视图组件
@@ -283,43 +287,46 @@ project.config.json --- 开发工具配置（例如界面颜色、编译配置�
 * scroll-view
   * 滚动视图
   * 部分组件在scroll-view中无法使用
-  * 下拉刷新，请使用页面的滚动，而不是scroll-view
-* swiper：
+  * **下拉刷新，请使用页面的滚动，而不是scroll-view**
+* swiper
   * 滑块视图容器
+  * 也就是我们常见的**轮播图**
+  * 内嵌：swiper-item
 
 #### 表单组件
 
-* button：
+* button
   * 按钮
-* input：
+* input
   * 输入框
-* form：
+* form
   * 表单
-* checkbox-group：
+* checkbox-group
   * 多项选择器
   * 内部多个checkbox
-* picker：
+* picker
   * 从底部弹起的滚动选择器
   * 普通选择器
   * 多列选择器
   * 时间选择器
   * 日期选择器
   * 地区选择器
-* picker-view：
+* picker-view
   * 嵌入页面的滚动选择器
-* radio：
+* radio
   * 多项选择器
   * 内部多个radio
-* slide：
+* slide
   * 滑动选择器
-* switch：
+* switch
   * 开关选择器
-* textarea：
+* textarea
   * 多行输入框
 
 #### 导航
 
 * navigate
+  * 导航，相当于a标签，常用
 * 页面链接
 
 #### 媒体组件
@@ -328,6 +335,13 @@ project.config.json --- 开发工具配置（例如界面颜色、编译配置�
 
   * 图片
   * **图片必须要设置宽度和高度，如果只设置宽度或高度其中一种，图片是不会自动适应**
+
+:::tip
+
+请求数据化渲染网络图片会报错，因为网络是耗时操作，他会提示加载本地url图片失败，这个时候你需要用wx:if价格判断，数据没用的时候，不展示image，等数据获取到了，自然就展示了
+
+:::
+
 * video：
 
   * 视频，需要权限
@@ -436,6 +450,23 @@ project.config.json --- 开发工具配置（例如界面颜色、编译配置�
 * 定义在 app.wxss 中的样式为全局样式，作用于每一个页面。
 * 在 page 的 wxss 文件中定义的样式为局部样式，只作用在对应的页面，并会覆盖 app.wxss 中相同的选择器。
 
+```javascript
+<text class="{{ className }}"></text>
+
+className = "class1" 样式1
+className = "class2" 样式2
+```
+
+
+
+:::tip
+
+我们可以使用动态样式，用变量代替样式名称，变量变了，样式自然就变化了
+
+当className = “class1”，就对应class1的样式，等于别的就是别的样式，这样就可以根据数据，动态绑定样式效果
+
+:::
+
 ### 数据绑定
 
 微信小程序是通过 状态模式-单向数据流 的方法来进行数据绑定的
@@ -468,7 +499,7 @@ Page({
 **说明**：
 
 * wxml 中的动态数据均来自对应 Page 的 data
-* 微信小程序是单向数据流传递的，我们需要通过事件来传递视图的变化，去变更数据
+* 微信小程序是**单向数据流传递**的，我们需要通过事件来传递视图的变化，去变更数据
 
 #### setData
 
@@ -489,14 +520,26 @@ Page({
    title: 'Hello MINA!'
  },
  changeText: function(){
-    this.setData({
+    
+    // 获取this，防止有些方法中this不是我们需要的
+    let that = this
+    
+    that.setData({
       title:'changed data'
     })
  }
 })
 ```
 
+:::tip
 
+注意有些地方获取到的 **this** 并不是我们需要的this，所以需要在一开始获取 **this** 存起来
+
+**let that = this**  
+
+使用that去操作数据
+
+:::
 
 ### 条件渲染
 
@@ -518,7 +561,22 @@ Page({
 </block>
 ```
 
+#### block
 
+```html
+<block wx:if="{{true}}">
+  <view> view1 </view>
+  <view> view2 </view>
+</block>
+```
+
+:::tip
+
+1. `<block/>` 并不是一个组件，它仅仅是一个包装元素，不会在页面中做任何渲染，只接受控制属性。
+
+2. 因为 `wx:if` 是一个控制属性，需要将它添加到一个标签上。如果要一次性判断多个组件标签，可以使用一个 `<block/>` 标签将多个组件包装起来，并在上边使用 `wx:if` 控制属性。
+
+:::
 
 #### hidden
 
@@ -528,7 +586,28 @@ Page({
 </view>
 ```
 
+wx:if VS hidden
+
+* wx:if
+  * 如果在初始渲染条件为 `false`，框架什么也不做，在条件第一次变成真的时候才开始局部渲染。
+  * 因为 `wx:if` 之中的模板也可能包含数据绑定，所以当 `wx:if` 的条件值切换时，框架有一个局部渲染的过程，因为它会确保条件块在切换时销毁或重新渲染。
+* hidden
+  * 组件始终会被渲染，只是简单的控制显示与隐藏
+
+:::tip
+
+如果用web中的DOM元素做对比，本质就是：
+
+1. **wx:if为false，DOM中不存在元素，改变时，也需要重新渲染和创建**
+
+2. **hidden则是DOM中存在，只是display为none或者block的问题**
+3. **`wx:if` 有更高的切换消耗而 `hidden` 有更高的初始渲染消耗**
+4. **如果需要频繁切换的情景下，用 `hidden` 更好，如果在运行时条件不大可能改变则 `wx:if` 较好。**
+
+:::
+
 ### 列表渲染
+
 #### wx:for
 
 * 循环遍历数组，创建元素
@@ -792,6 +871,34 @@ https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=J
 | js_code    | 是    | 登录时获取的 code            |
 | grant_type | 是    | 填写为 authorization_code |
 
+### UnionID
+
+#### UnionID介绍
+
+如果开发者拥有多个移动应用、网站应用、和公众帐号（包括小程序），可通过unionid来区分用户的唯一性，因为只要是同一个微信开放平台帐号下的移动应用、网站应用和公众帐号（包括小程序），用户的unionid是唯一的。
+
+**同一用户，对同一个微信开放平台下的不同应用，unionid是相同的。**
+
+[微信开放平台](open.weixin.qq.com)
+
+### 获取UnionID
+
+UnionID获取途径有三个，前提是：**绑定了开发者帐号的小程序**
+
+* 调用接口 **wx.getUserInfo**，从解密数据中获取UnionID。**注意本接口需要用户授权，请开发者妥善处理用户拒绝授权后的情况**。
+* 如果开发者帐号下存在**同主体的**公众号，并且该用户已经关注了该公众号。开发者可以直接通过 **wx.login** 获取到该用户UnionID，无须用户再次授权。
+* 如果开发者帐号下存在**同主体的**公众号或移动应用，并且该用户已经授权登录过该公众号或移动应用。开发者也可以直接通过 **wx.login** 获取到该用户UnionID，无须用户再次授权
+
+:::tip
+
+**unionid其实就相当于全局id**
+
+**同一用户，对同一个微信开放平台下的不同应用，unionid是相同的**
+
+**建议新项目启动的时候，使用unionid，因为后期如果打通公众号和小程序的用户数据，已经网站和app都共享一个用户数据，unionid你值得拥有**
+
+:::
+
 ### 无UnionID
 
 在不满足UnionID下发条件的情况下，返回参数
@@ -853,6 +960,125 @@ https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=J
   * 如果使用了wx.getUserInfo(OBJECT)获得的用户信息，还是有必要使用wx.checksession()来检查wx.login(OBJECT) 是否过期的
   * 因为用户有可能修改了头像、昵称、城市，省份等信息，可以通过检查wx.login(OBJECT) 是否过期来更新着些信息；
 
+
+## navigator
+页面链接，相当于web中的a标签
+### 示例代码
+```html
+<view class="btn-area">
+  <navigator url="/page/navigate/navigate?title=navigate" 
+             hover-class="navigator-hover">跳转到新页面</navigator>
+    
+  <navigator url="../../redirect/redirect/redirect?title=redirect" 
+             open-type="redirect" 
+             hover-class="other-navigator-hover">在当前页打开</navigator>
+    
+  <navigator url="/page/index/index" 
+             open-type="switchTab" 
+             hover-class="other-navigator-hover">切换 Tab</navigator>
+    
+  <navigator target="miniProgram" 
+             open-type="navigate" 
+             app-id="" 
+             path="" 
+             extra-data="" 
+             version="release">打开绑定的小程序</navigator>
+</view>
+```
+### navigator属性
+
+| 属性名                     | 类型    | 默认值          | 说明                                                         | 最低版本 |
+| -------------------------- | ------- | --------------- | ------------------------------------------------------------ | -------- |
+| target                     | String  |                 | 在哪个目标上发生跳转，默认当前小程序                         | 2.0.7    |
+| **url**                    | String  |                 | 当前小程序内的跳转链接                                       |          |
+| **open-type**              | String  | navigate        | 跳转方式                                                     |          |
+| **delta**                  | Number  |                 | 当 open-type 为 'navigateBack' 时有效，表示回退的层数        |          |
+| **app-id**                 | String  |                 | 当target="miniProgram"时有效，要打开的小程序 appId           | 2.0.7    |
+| **path**                   | String  |                 | 当target="miniProgram"时有效，打开的页面路径，如果为空则打开首页 | 2.0.7    |
+| **extra-data**             | Object  |                 | 当target="miniProgram"时有效，需要传递给目标小程序的数据，目标小程序可在 `App.onLaunch()`，`App.onShow()` 中获取到这份数据。[详情](https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/app.html) | 2.0.7    |
+| version                    | version | release         | 当target="miniProgram"时有效，要打开的小程序版本，有效值 develop（开发版），trial（体验版），release（正式版），仅在当前小程序为开发版或体验版时此参数有效；如果当前小程序是正式版，则打开的小程序必定是正式版。 | 2.0.7    |
+| **hover-class**            | String  | navigator-hover | 指定点击时的样式类，当`hover-class="none"`时，没有点击态效果 |          |
+| **hover-stop-propagation** | Boolean | false           | 指定是否阻止本节点的祖先节点出现点击态                       | 1.5.0    |
+| **hover-start-time**       | Number  | 50              | 按住后多久出现点击态，单位毫秒                               |          |
+| **hover-stay-time**        | Number  | 600             | 手指松开后点击态保留时间，单位毫秒                           |          |
+| **bindsuccess**            | String  |                 | 当target="miniProgram"时有效，跳转小程序成功                 | 2.0.7    |
+| **binderror**              | String  |                 | 当target="miniProgram"时有效，跳转小程序失败                 | 2.0.7    |
+| **bindcomplete**           | String  |                 | 当target="miniProgram"时有效，跳转小程序完成                 | 2.0.7    |
+
+### open-type类型
+
+| 值           | 说明                                                      | 最低版本 |
+| ------------ | --------------------------------------------------------- | -------- |
+| navigate     | 对应 `wx.navigateTo` 或 `wx.navigateToMiniProgram` 的功能 |          |
+| redirect     | 对应 `wx.redirectTo` 的功能                               |          |
+| switchTab    | 对应 `wx.switchTab` 的功能                                |          |
+| reLaunch     | 对应 `wx.reLaunch` 的功能                                 | 1.1.0    |
+| navigateBack | 对应 `wx.navigateBack` 的功能                             | 1.1.0    |
+| exit         | 退出小程序，target="miniProgram"时生效                    | 2.1.0    |
+
+* **navigator-hover 默认为 {background-color: rgba(0, 0, 0, 0.1); opacity: 0.7;}, <navigator/> 的子节点背景色应为透明色**
+
+### wx.navigateTo
+
+保留当前页面，跳转到应用内的某个页面，使用`wx.navigateBack`可以返回到原页面。
+
+#### 参数说明
+
+| 参数     | 类型     | 必填 | 说明                                                         |
+| -------- | -------- | ---- | ------------------------------------------------------------ |
+| url      | String   | 是   | 需要跳转的应用内非 tabBar 的页面的路径 , 路径后可以带参数。参数与路径之间使用`?`分隔，参数键与参数值用`=`相连，不同参数用`&`分隔；如 'path?key=value&key2=value2' |
+| success  | Function | 否   | 接口调用成功的回调函数                                       |
+| fail     | Function | 否   | 接口调用失败的回调函数                                       |
+| complete | Function | 否   | 接口调用结束的回调函数（调用成功、失败都会执行）             |
+
+#### 示例代码
+
+```javascript
+// A页面跳转
+wx.navigateTo({
+  url: 'page路径?参数=XXX'
+})
+
+// 目标页面的js文件
+Page({
+  onLoad: function(option){
+   // 拿到传递的参数
+    console.log(option.query)
+  }
+})
+```
+
+* url中可以传值，在onload中option方法接受
+* 可以把对象转化为json字符串的形式传递，拿到后解析即可
+
+:::tip
+
+**目前页面路径最多只能十层，最初是五层**
+
+:::
+
+### wx.redirectTo
+
+关闭当前页面，跳转到应用内的某个页面。
+
+### wx.reLaunch
+
+关闭所有页面，打开到应用内的某个页面。**基础库 1.1.0 开始支持**
+
+### wx.switchTab
+
+跳转到 tabBar 页面，并关闭其他所有非 tabBar 页面
+
+### wx.navigateBack
+
+关闭当前页面，返回上一页面或多级页面。可通过 **getCurrentPages()**  获取当前的页面栈，决定需要返回几层。
+
+:::tip
+
+wx.navigateTo 和 wx.redirectTo 不允许跳转到 tabbar 页面，只能用 wx.switchTab 跳转到 tabbar 页面
+
+:::
+
 ## 缓存Storage
 
 * 每个微信小程序都可以有自己的本地缓存
@@ -862,6 +1088,12 @@ https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=J
 * **同一个微信用户，同一个小程序 storage 上限为 10MB**
 * localStorage 以用户维度隔离，同一台设备上，A 用户无法读取到 B 用户的数据
 * 如果用户储存空间不足，我们会清空最近最久未使用的小程序的本地缓存。我们不建议将关键信息全部存在 localStorage，以防储存空间不足或用户换设备的情况。
+
+:::tip
+
+**同一个微信用户，同一个小程序 storage 上限为 10MB，一定要注意**
+
+:::
 
 ### 设置缓存
 
