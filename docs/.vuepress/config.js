@@ -49,7 +49,7 @@ module.exports = {
                 title: '微信小程序',
                 collapsable:false,
                 children:[
-                    ['miniprogram/','介绍'],
+                    ['miniprogram/','核心内容'],
                     ['miniprogram/miniprogram/','微信小程序'],
                 ], 
             },
@@ -57,7 +57,7 @@ module.exports = {
                 title: 'CentOS',
                 collapsable:false,
                 children:[
-                    ['CentOS/','介绍'],
+                    ['CentOS/','核心内容'],
                     ['CentOS/CentOS/','CentOS'],
                 ], 
             }

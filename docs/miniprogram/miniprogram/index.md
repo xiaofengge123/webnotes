@@ -862,7 +862,7 @@ https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=J
 
 * 请求参数
 
-#### 请求参数
+### 请求参数
 
 | 参数         | 必填   | 说明                     |
 | ---------- | ---- | ---------------------- |
@@ -871,9 +871,9 @@ https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=J
 | js_code    | 是    | 登录时获取的 code            |
 | grant_type | 是    | 填写为 authorization_code |
 
-### UnionID
+## UnionID
 
-#### UnionID介绍
+### UnionID介绍
 
 如果开发者拥有多个移动应用、网站应用、和公众帐号（包括小程序），可通过unionid来区分用户的唯一性，因为只要是同一个微信开放平台帐号下的移动应用、网站应用和公众帐号（包括小程序），用户的unionid是唯一的。
 
@@ -941,7 +941,7 @@ UnionID获取途径有三个，前提是：**绑定了开发者帐号的小程�
 
 ```
 
-### openid
+## openid
 
 * **一个微信号与一个公众号**对应一个固定不变的openid
 
@@ -951,7 +951,7 @@ UnionID获取途径有三个，前提是：**绑定了开发者帐号的小程�
 * 可用于永久标记一个用户
 * 微信公众号支付的必传参数
 
-### session_key
+## session_key
 
 * 校验用户信息(wx.getUserInfo(OBJECT)返回的signature);
 * 解密(wx.getUserInfo(OBJECT)返回的encryptedData);
@@ -961,7 +961,7 @@ UnionID获取途径有三个，前提是：**绑定了开发者帐号的小程�
   * 因为用户有可能修改了头像、昵称、城市，省份等信息，可以通过检查wx.login(OBJECT) 是否过期来更新着些信息；
 
 
-## navigator
+## 导航navigator
 页面链接，相当于web中的a标签
 ### 示例代码
 ```html
