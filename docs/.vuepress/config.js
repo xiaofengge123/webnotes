@@ -54,6 +54,14 @@ module.exports = {
                 ], 
             },
             {
+                title: 'Git',
+                collapsable:false,
+                children:[
+                    ['Git/','核心内容'],
+                    ['Git/Git/','Git'],
+                ], 
+            },
+            {
                 title: 'CentOS',
                 collapsable:false,
                 children:[
