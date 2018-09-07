@@ -7,7 +7,7 @@
 * AMD
 * CMD
 * UMD
-* ES6
+* ES modules
 * webpack
 * webpack开发配置
 * webpack打包配置
@@ -39,36 +39,37 @@
 
 ### 主流模块化方案
 
-* **commonJS**
+* **CommonJS**
 * **AMD**
 * **CMD**
 * **UMD**
-* **ES6**
+* **ES modules**
+* 模块化打包工具
 
-### CommonJS规范
+## CommonJS规范
 
-#### 特点
+### 特点
 
 * Nodejs规范
 * 同步，require（同步）
 * 仅适用于后端，因为同步的原因，在前端使用会阻塞
-* 总共四个步骤： 定义 -> 输出 -> 加载 -> 使用
+* 总共四个步骤：**定义 -> 输出 -> 加载 -> 使用**
 
-#### 定义模块
+### 定义模块
 
 * 一个单独的文件就是一个模块，并且该文件中的作用域独立
 * 当中的变量是无法被其他文件引用的，如果要使用需要将其定义为`global`
 
-#### 输出模块
+### 输出模块
 
 * 模块只有一个出口
 * 使用`module.exports`对象，将需要输出的内容放入到该对象中
 
-#### 加载模块
+### 加载模块
 
 * 通过`require`加载
 
-#### 示例代码
+### 示例代码
 
 ```javascript
 // 总共四个步骤： 定义 -> 输出 -> 加载 -> 使用
@@ -116,7 +117,7 @@ module.test2(); // "test2"
   * 多个js文件可能有依赖关系，被依赖的文件需要早于依赖它的文件加载到浏览器
   * js加载的时候浏览器会停止页面渲染，加载文件愈多，页面失去响应的时间愈长
 
-#### 示例代码
+### 示例代码
 
 ```javascript
 // 模块定义 module.js
@@ -150,9 +151,7 @@ require(['module'], function (myModule) {
 
 ```
 
-#### 语法详解
-
-#### 定义模块：define()
+### 定义模块：define()
 
 * 全局函数，用来定义模块
 * 格式：define(id?, dependencies?, factory)
@@ -168,7 +167,7 @@ require(['module'], function (myModule) {
   * 如果为函数，它应该只被执行⼀次。
   * 如果是对象，此对象应该为模块的输出值
 
-#### 加载模块：require()
+### 加载模块：require()
 
 * 使用异步的require()来加载模块
 * 格式：require([dependencies], function(){})
@@ -186,3 +185,312 @@ require(['module'], function (myModule) {
 **这样浏览器不会失去响应，它指定的回调函数，只有前面的模块都加载成功后，才会运行，解决了依赖性的问题**
 
 ::: 
+
+### require.config
+
+* 用来配置模块的
+* 可以设置局部配置，也可以添加一个全局配置
+
+```javascript
+// 将百度的jquery库地址标记为jquery，这样在require时只需要写["jquery"]就可以加载该js
+require.config({
+    paths : {
+        "jquery" : ["http://libs.baidu.com/jquery/2.0.3/jquery"],
+        "a" : "js/a"   
+    }
+})
+require(["jquery","a"],function($){
+    $(function(){
+        alert("load finished");  
+    })
+})
+```
+
+**通过paths的配置会使我们的模块名字更精炼，paths还有一个重要的功能，就是可以配置多个路径，如果远程cdn库没有加载成功，可以加载本地的库**
+
+```javascript
+require.config({
+    paths : {
+        "jquery" : ["http://libs.baidu.com/jquery/2.0.3/jquery", "js/jquery"],
+        "a" : "js/a"   
+    }
+})
+require(["jquery","a"],function($){
+    $(function(){
+        alert("load finished");  
+    })
+})
+```
+
+* 这样配置后，当百度的jquery没有加载成功后，会加载本地js目录下的jquery
+
+### 注意事项
+
+* 在使用requirejs时，加载模块时不用写`.js`后缀的，当然也是不能写后缀
+* 上面例子中的callback函数中发现有`$`参数，这个就是依赖的`jquery`模块的输出变量，如果你依赖多个模块，可以依次写入多个参数来使用
+
+```javascript
+require(["jquery","underscore"],function($, _){
+    $(function(){
+        _.each([1,2,3],alert);
+    })
+})
+// 这里的$代表jquery的输出
+// 这里的下划线代表underscore的输出
+```
+
+:::tip
+
+**如果某个模块不输出变量值，则没有，所以尽量将输出的模块写在前面，防止位置错乱引发误解**
+
+:::
+
+### 全局配置
+
+* requirejs提供了一种叫"主数据"的功能，可以添加全局配置
+* 避免了重复出现的require.config中的配置
+
+```javascript
+// main.js 全局配置
+require.config({
+    paths : {
+        "jquery" : ["http://libs.baidu.com/jquery/2.0.3/jquery", "js/jquery"],
+        "a" : "js/a"   
+    }
+})
+
+// 页面中使用下面的方式来使用requirejs
+<script data-main="js/main" src="js/require.js"></script>
+```
+
+#### data-main
+
+* 作用1：
+  * 这个属性指定的js将在加载完reuqire.js后处理
+  * 我们把 require.config 的配置加入到 data-main 后，就可以使每一个页面都使用这个配置，然后页面中就可以直接使用 require 来加载所有的短模块名
+
+
+
+* 作用2：
+  * 当script标签指定data-main属性时，require会默认的将data-main指定的js为根路径，当做基准开始查找，如果没有指定，就以文件所在的路径为基准开始查找
+  * 上面的`data-main="js/main"`设定后，我们在使用`require(['jquery'])`后(不配置jquery的paths)，require会自动加载js/jquery.js这个文件，而不是jquery.js，相当于配置了baseUrl为js目录
+
+```javascript
+// 配置基础路径为js目录
+require.config({
+    baseUrl : "js"
+})
+```
+
+### 第三方模块
+
+* 有时候我们需要加载一些非标准或者不符合AMD规范的模块
+* 关键字**shim**(垫)
+  * 将非标准的AMD模块"垫"成可用的模块
+  * 加载插件形式的非AMD模块
+
+```javascript
+// 加载没有实现AMD规范的underscore类库
+require.config({
+    shim: {
+        "underscore" : {
+            exports : "_";
+        }
+    }
+})
+
+// 这样配置后，我们就可以在其他模块中引用underscore模块
+require(["underscore"], function(_){
+    _.each([1,2,3], alert);
+})
+```
+
+```javascript
+// 加载jquery.form插件，依赖jquery
+// 将form插件"垫"到jquery中
+require.config({
+    shim: {
+        "underscore" : {
+            exports : "_";
+        },
+        "jquery.form" : {
+            deps : ["jquery"]
+        }
+    }
+})
+
+// 这样配置之后我们就可以使用加载插件后的jquery了
+require.config(["jquery", "jquery.form"], function($){
+    $(function(){
+        $("#form").ajaxSubmit({...});
+    })
+})
+```
+
+:::tip
+
+**shim** ：显式地配置模块之间的依赖项
+
+**exports**：非模块的库转化为模块化的库，导出内容，必须是全局的
+
+**deps**：通过 deps 来配置当前模块的依赖项
+
+:::
+
+## CMD
+
+* **Common Module Definition，通用定义模块**
+
+* CMD规范是国内发展出来的，阿里的玉伯
+* AMD有个requireJS，CMD有个浏览器的实现SeaJS
+* SeaJS要解决的问题和requireJS一样，只不过在模块定义方式和模块加载（可以说运行、解析）时机上有所不同
+
+:::tip
+
+**AMD 推崇依赖前置、提前执行，CMD推崇依赖就近、延迟执行。**
+
+:::
+
+### 示例代码
+
+```javascript
+// define(id?, deps?, factory)
+define(function (require, exports, module) {
+    // 依赖可以就近书写
+    var a = require('./a');
+    a.test();  
+    // ...
+    if (status) {
+        // 依赖可以就近书写
+        var b = requie('./b');
+        b.test();
+    }
+});
+```
+
+```javascript
+/** AMD写法 **/
+define(["a", "b", "c", "d", "e", "f"], function(a, b, c, d, e, f) { 
+     // 等于在最前面声明并初始化了要用到的所有模块
+    a.doSomething();
+    if (false) {
+        // 即便没用到某个模块 b，但 b 还是提前执行了
+        b.doSomething()
+    } 
+});
+
+/** CMD写法 **/
+define(function(require, exports, module) {
+    var a = require('./a'); //在需要时申明
+    a.doSomething();
+    if (false) {
+        var b = require('./b');
+        b.doSomething();
+    }
+});
+
+/** sea.js **/
+// 定义模块 math.js
+define(function(require, exports, module) {
+    var $ = require('jquery.js');
+    var add = function(a,b){
+        return a+b;
+    }
+    exports.add = add;
+});
+```
+
+* 因为CMD推崇一个文件一个模块，所以经常就用文件名作为模块id
+
+
+
+* CMD推崇依赖就近，所以一般不在define的参数中写依赖，而是在factory中写
+
+### factory
+
+* factory有三个参数:
+  * require
+    * 是 factory 函数的第一个参数
+    * require 是一个方法，接受 模块标识 作为唯一参数，用来获取其他模块提供的接口
+  * exports
+    * 是一个对象，用来向外提供模块接口
+  * module
+    * 是一个对象，上面存储了与当前模块相关联的一些属性和方法
+
+## AMD VS CMD
+
+**最明显的区别就是在模块定义时对依赖的处理不同**
+
+* AMD推崇依赖前置，在定义模块的时候就要声明其依赖的模块
+* CMD推崇就近依赖，只有在用到某个模块的时候再去require
+
+* 他们的加载都是异步的，⽽非我们理解的同步，只不过依赖处理不同
+
+### AMD
+
+* 同样都是异步加载模块，AMD在加载模块完成后就会执行该模块，所有模块都加载执行完后会进入require的回调函数，执⾏主逻辑
+
+
+
+* 这样的效果就是依赖模块的执行顺序和书写顺序不⼀定一致，看网络速度，哪个先下载下来，哪个先执行，但是主逻辑一定在所有依赖加载完成后才执⾏
+
+### CMD
+
+* CMD加载完某个依赖模块后并不执⾏，只是下载⽽已
+
+
+
+* 在所有依赖模块加载完成后进⼊主逻辑，遇到require语句的时候才执行对应的模块，这样模块的执行顺序和书写顺序是完全一致的
+
+:::tip
+
+**这也是很多人说AMD用户体验好，因为没有延迟，依赖模块提前执行了CMD性能好，因为只有用户需要的时候才执行的原因**
+
+:::
+
+## UMD
+
+* UMD规范，通用模块规范
+* AMD和CommonJS的糅合
+
+### AMD/CMD原则
+
+* AMD/CMD以浏览器为第一（browser-first）的原则发展，选择异步加载模块。
+* 它的模块支持对象（objects）、函数（functions）、构造器（constructors）、字符串（strings）、JSON等各种类型的模块。因此在浏览器中它非常灵活。
+
+
+
+* CommonJS module以服务器端为第一（server-first）的原则发展，选择同步加载模块。
+* 它的模块是无需包装的（unwrapped modules）且贴近于ES.next/Harmony的模块格式。但它仅支持对象类型（objects）模块。
+
+### UMD实现
+
+* UMD的实现很简单，先判断是否支持Node.js模块格式（exports是否存在），存在则使用Node.js模块格式
+* 再判断是否支持AMD（define是否存在），存在则使用AMD方式加载模块。
+* 前两个都不存在，则将模块公开到全局（window或global）。
+
+```javascript
+//xxx.js
+;(function(name, definition){
+    //检测上下文环境是否为 AMD 或 CMD
+    var hasDefine = typeof define === 'function',
+        hasExports = typeof module !== 'undefined' && module.exports;
+    if (hasDefine) {
+        //AMD 环境或 CMD 环境
+        define(definition);
+    } else if (hasExports) {
+        // 定义为普通的node模块
+        module.exports = definition();
+    } else {
+        //将模块的执行结果挂在 window 变量中，在浏览器中 this 指向 window 对象
+        this[name] = definition();
+    }
+})('xxx', function() {
+    //代码主体
+    var xxx = function () {};
+    return xxx;
+})
+```
+
+## ES6 Modules
+
