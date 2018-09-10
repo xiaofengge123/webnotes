@@ -10,18 +10,6 @@
 
 介绍 **web前端** 部分主要包含的内容
 
-### Web SDE
-
-web开发环境搭建
-
-* 基本入职须知
-* 开发工具
-* git
-* webpack
-* 浏览器
-* Nodejs
-* webpack
-* 辅助工具
 
 ### HTML
 

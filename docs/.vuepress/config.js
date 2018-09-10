@@ -37,13 +37,20 @@ module.exports = {
                 collapsable:false,
                 children:[
                     ['Web/','核心内容'],
-                    ['Web/WebSDE/','前端开发环境搭建'],
                     ['Web/css/','CSS（3）'],
                     ['Web/Module/','前端模块化'],
                     ['Web/React/','React'],
                     ['Web/Vue/','Vue'],
                     ['Web/VueSrc/','Vue源码学习'],
                 ],  
+            },
+            {
+                title: '前端开发环境',
+                collapsable:false,
+                children:[
+                    ['WebSDE/','核心内容'],
+                    ['WebSDE/WebSDE/','前端开发环境'],
+                ], 
             },
             {
                 title: '微信小程序',
