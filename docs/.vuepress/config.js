@@ -34,10 +34,9 @@ module.exports = {
             // 用对象分组，一个对象代表一组
             {
                 title: 'Web前端',
-                collapsable:false,
+                collapsable:true,
                 children:[
                     ['Web/','核心内容'],
-                    ['Web/css/','CSS（3）'],
                     ['Web/React/','React'],
                     ['Web/Vue/','Vue'],
                     ['Web/VueSrc/','Vue源码学习'],
@@ -45,15 +44,23 @@ module.exports = {
             },
             {
                 title: '前端开发环境',
-                collapsable:false,
+                collapsable:true,
                 children:[
                     ['WebSDE/','核心内容'],
                     ['WebSDE/WebSDE/','前端开发环境'],
                 ], 
             },
             {
+                title: 'CSS',
+                collapsable:true,
+                children:[
+                    ['Css/','核心内容'],
+                    ['Css/Flex/','Flex'],
+                ], 
+            },
+            {
                 title: '前端模块化',
-                collapsable:false,
+                collapsable:true,
                 children:[
                     ['Module/','核心内容'],
                     ['Module/Module/','前端模块化'],
@@ -61,7 +68,7 @@ module.exports = {
             },
             {
                 title: '微信小程序',
-                collapsable:false,
+                collapsable:true,
                 children:[
                     ['miniprogram/','核心内容'],
                     ['miniprogram/miniprogram/','微信小程序'],
@@ -69,7 +76,7 @@ module.exports = {
             },
             {
                 title: 'Git',
-                collapsable:false,
+                collapsable:true,
                 children:[
                     ['Git/','核心内容'],
                     ['Git/Git/','Git'],
@@ -77,7 +84,7 @@ module.exports = {
             },
             {
                 title: 'CentOS',
-                collapsable:false,
+                collapsable:true,
                 children:[
                     ['CentOS/','核心内容'],
                     ['CentOS/CentOS/','CentOS'],
