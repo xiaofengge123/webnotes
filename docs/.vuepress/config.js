@@ -38,7 +38,6 @@ module.exports = {
                 children:[
                     ['Web/','核心内容'],
                     ['Web/css/','CSS（3）'],
-                    ['Web/Module/','前端模块化'],
                     ['Web/React/','React'],
                     ['Web/Vue/','Vue'],
                     ['Web/VueSrc/','Vue源码学习'],
@@ -50,6 +49,14 @@ module.exports = {
                 children:[
                     ['WebSDE/','核心内容'],
                     ['WebSDE/WebSDE/','前端开发环境'],
+                ], 
+            },
+            {
+                title: '前端模块化',
+                collapsable:false,
+                children:[
+                    ['Module/','核心内容'],
+                    ['Module/Module/','前端模块化'],
                 ], 
             },
             {
