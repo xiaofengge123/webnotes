@@ -15,7 +15,6 @@ Vuejs基础知识学习笔记整理
 
 * 学习资源
 
-
 * JavaScript部分基础
   * let和const
   * ES6箭头函数

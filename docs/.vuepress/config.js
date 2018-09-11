@@ -38,8 +38,6 @@ module.exports = {
                 children:[
                     ['Web/','核心内容'],
                     ['Web/React/','React'],
-                    ['Web/Vue/','Vue'],
-                    ['Web/VueSrc/','Vue源码学习'],
                 ],  
             },
             {
@@ -54,8 +52,8 @@ module.exports = {
                 title: 'CSS',
                 collapsable:true,
                 children:[
-                    ['Css/','核心内容'],
-                    ['Css/Flex/','Flex'],
+                    ['CSS/','核心内容'],
+                    ['CSS/Flex/','Flex'],
                 ], 
             },
             {
@@ -64,6 +62,15 @@ module.exports = {
                 children:[
                     ['Module/','核心内容'],
                     ['Module/Module/','前端模块化'],
+                ], 
+            },
+            {
+                title: 'Vue',
+                collapsable:true,
+                children:[
+                    ['Vue/','核心内容'],
+                    ['Vue/Vue/','Vue'],
+                    ['Vue/VueSrc/','Vue源码学习'],     
                 ], 
             },
             {

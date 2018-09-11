@@ -6,7 +6,7 @@
 
 **最后更新时间：2018年09月10日**
 
-**全站总字数：174924**
+**全站总字数：176497**
 
 :::
 
@@ -19,9 +19,10 @@
 **点击下面目录导航，就可以找到对应的部分**
 
 * **web**
-    * [**前端开发环境搭建**](http://www.xuefeng666.com/Web/WebSDE/)
+    * [**前端开发环境搭建**](http://www.xuefeng666.com/WebSDE/index.html)
     * html（5）
-    * [**CSS（3）**](http://www.xuefeng666.com/Web/css/)
+    * [**CSS**](http://www.xuefeng666.com//CSS/index.html)
+        * [**Flex**](http://www.xuefeng666.com//CSS/Flex/index.html)
     * JavaScript
     * DOM和BOM
     * jQuery
@@ -29,11 +30,11 @@
     * Nodejs
     * npm
     * ES6
-    * [**前端模块化**](http://www.xuefeng666.com/Web/Module/#前端模块化)
-    * [**Vue**](http://www.xuefeng666.com/Web/Vue/)
+    * [**前端模块化**](http://www.xuefeng666.com/Module/index.html)
+    * [**Vue**](http://www.xuefeng666.com/Vue/index.html)
     * webpack
-    * [**Vue 源码**](http://www.xuefeng666.com/Web/VueSrc/#vue源码学习)
-    * [**React**](http://www.xuefeng666.com/Web/React/)
+    * [**Vue 源码**](http://www.xuefeng666.com/VueSrc/index.html)
+    * [**React**](http://www.xuefeng666.com/React/index.html)
     * Angular
     
 
