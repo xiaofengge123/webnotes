@@ -33,14 +33,6 @@ module.exports = {
         sidebar:[
             // 用对象分组，一个对象代表一组
             {
-                title: 'Web前端',
-                collapsable:true,
-                children:[
-                    ['Web/','核心内容'],
-                    ['Web/React/','React'],
-                ],  
-            },
-            {
                 title: '前端开发环境',
                 collapsable:true,
                 children:[
@@ -71,6 +63,14 @@ module.exports = {
                     ['Vue/','核心内容'],
                     ['Vue/Vue/','Vue'],
                     ['Vue/VueSrc/','Vue源码学习'],     
+                ], 
+            },
+            {
+                title: 'React',
+                collapsable:true,
+                children:[
+                    ['React/','核心内容'],
+                    ['React/React/','React'], 
                 ], 
             },
             {

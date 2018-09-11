@@ -6,7 +6,7 @@
 
 **最后更新时间：2018年09月10日**
 
-**全站总字数：176497**
+**全站总字数：174741**
 
 :::
 
@@ -32,8 +32,8 @@
     * ES6
     * [**前端模块化**](http://www.xuefeng666.com/Module/index.html)
     * [**Vue**](http://www.xuefeng666.com/Vue/index.html)
+        * [**Vue 源码**](http://www.xuefeng666.com/Vue/VueSrc/index.html)
     * webpack
-    * [**Vue 源码**](http://www.xuefeng666.com/VueSrc/index.html)
     * [**React**](http://www.xuefeng666.com/React/index.html)
     * Angular
     
@@ -42,10 +42,11 @@
     * React Native
     * ionic
 
-* [**微信小程序**](http://www.xuefeng666.com/miniprogram/miniprogram/#小程序)
+* [**微信小程序**](http://www.xuefeng666.com/miniprogram/index.html)
+* [**Git**](http://www.xuefeng666.com/Git/index.html)
 * **iOS**
 * **Android**
-* [**CentOS**](http://www.xuefeng666.com/CentOS/CentOS/#centos)
+* [**CentOS**](http://www.xuefeng666.com/CentOS/CentOS/index.html)
 
 ### 学习资源网站
 * **排名不分先后**

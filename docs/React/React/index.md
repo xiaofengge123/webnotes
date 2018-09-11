@@ -47,7 +47,7 @@
   - JSX —> VR
   - JSX —> 物联网
 
-### React优点：
+### React优点
 
 - 组件化开发
 - Facebook专门团队维护维护
@@ -79,7 +79,7 @@
 
 ## 安装
 
-### npm使用说明：
+### npm使用说明
 
 - **npm init在项目中引导创建一个package.json文件**
 - **缩写 npm init -y 但是目录不能包含中文**
@@ -377,7 +377,7 @@ const styles = {
 - 官方推荐：在这个钩子函数中发送请求，获取数据
 - 如果在这个钩子函数中调用 setState() 一定会引起重新渲染
 
-render
+### render
 
 - 不能在 render() 方法中修改state！！！
 - 不能在 render 中调用 setState() 方法！！！
