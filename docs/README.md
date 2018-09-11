@@ -21,8 +21,8 @@
 * **web**
     * [**前端开发环境搭建**](http://www.xuefeng666.com/WebSDE/index.html)
     * html（5）
-    * [**CSS**](http://www.xuefeng666.com//CSS/index.html)
-        * [**Flex**](http://www.xuefeng666.com//CSS/Flex/index.html)
+    * [**CSS**](http://www.xuefeng666.com/CSS/index.html)
+        * [**Flex**](http://www.xuefeng666.com/CSS/Flex/index.html)
     * JavaScript
     * DOM和BOM
     * jQuery
