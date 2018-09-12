@@ -4,7 +4,7 @@
 
 **最后更新时间：2018年09月10日**
 
-**字数：15812**
+**字数：15812 17153**  
 
 :::
 
@@ -558,6 +558,47 @@ ssh-keygen -t rsa -C "your_email@youremail.com"
 * -c：指定所指定的注释，可以方便用户标识这个密钥，指出密钥的用途或其他有用的信息，用自己的邮箱即可
 * 连续三次回车：一个密语字符串(passphrase)和2次口令(password)，空都代表没有
 * **最后把公司文件发给相关人员即可**
+
+## Charles
+
+**强大的抓包工具 支持HTTP和HTTPS**
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/12/f04602aa40ccfa73805912e8e535d3d8.png" />
+
+### 介绍
+
+是一个HTTP代理服务器,HTTP监视器,反转代理服务器，当浏览器连接Charles的代理访问互联网时，Charles可以监控浏览器发送和接收的所有数据。它允许一个开发者查看所有连接互联网的HTTP通信，这些包括request, response和HTTP headers （包含cookies与caching信息）。
+
+**简单来说就类似与我们浏览器调试模式的network的抓包工具，但是如果不是浏览器环境下，我们就需要用这一款软件了**
+
+### 优点
+
+- **支持SSL代理。可以截取分析SSL的请求**。
+- 支持流量控制。可以模拟慢速网络以及等待时间（latency）较长的请求。
+- 支持AJAX调试。**可以自动将json或xml数据格式化，方便查看**。
+- 支持AMF调试。可以将Flash Remoting 或 Flex Remoting信息格式化，方便查看。
+- 支持重发网络请求，方便后端调试。
+- **支持修改网络请求参数**。
+- **支持网络请求的截获并动态修改**。
+- 检查HTML，CSS和RSS内容是否符合W3C标准。
+
+:::tip
+
+**该软件在特殊情况下会出现劫持浏览器导致无法浏览网页的问题(请谨慎使用)**
+
+**关闭软件即可，或者是取消代理**
+
+:::
+
+* [官方网站](https://www.charlesproxy.com/)
+* [下载地址](https://www.charlesproxy.com/download/)
+* 版本：
+  * Windows
+  * Mac OS
+  * Linux
+* 使用教程：
+  * [Charles教程](https://blog.csdn.net/u012928324/article/details/73196334)
+  * [Charles教程](http://www.cnblogs.com/jiayuchn-test/p/8875105.html)
 
 ## SVN
 
