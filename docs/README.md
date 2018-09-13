@@ -2,11 +2,13 @@
 
 **座右铭：求知若渴，虚心若愚**
 
+**手机浏览请点击左上角的菜单按钮，选择内容**
+
 :::tip
 
-**最后更新时间：2018年09月10日**
+**最后更新时间：2018年09月14日**
 
-**全站总字数：176148**
+**全站总字数：179313**
 
 :::
 
@@ -102,9 +104,12 @@
 
  **[项目github：https://github.com/xuefeng666/webnotes](https://github.com/xuefeng666/webnotes)**
 
+ **[小峰哥知乎：https://www.zhihu.com/people/qian-duan-xiao-feng-ge/activities](https://www.zhihu.com/people/qian-duan-xiao-feng-ge/activities)**
+
 网站持续更新中......
 
 **请支持我们，给我们的github点赞！**
+
 :::
 
 

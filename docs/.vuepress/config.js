@@ -20,12 +20,14 @@ module.exports = {
                 text: '支持我们',
                 items:[
                     { text:'给我们点赞 -- github', link:'https://github.com/xuefeng666/webnotes'},
+                    { text:'关注知乎大牛', link:'https://www.zhihu.com/people/qian-duan-xiao-feng-ge/activities'},
                 ],
             },
             {
                 text: '友情链接',
                 items:[
                     { text:'小峰哥笔记', link:'http://www.xuefeng666.com'},
+                    { text:'知乎大牛', link:'https://www.zhihu.com/people/qian-duan-xiao-feng-ge/activities'},
                 ],
             }
         ],
@@ -44,8 +46,8 @@ module.exports = {
                 title: 'CSS',
                 collapsable:true,
                 children:[
-                    ['CSS/','核心内容'],
-                    ['CSS/Flex/','Flex'],
+                    ['Css/','核心内容'],
+                    ['Css/Flex/','Flex'],
                 ], 
             },
             {

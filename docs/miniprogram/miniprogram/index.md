@@ -3,9 +3,9 @@
 
 :::tip
 
-**最后更新时间：2018年09月10日**
+**最后更新时间：2018年09月14日**
 
-**字数：67261**
+**字数：70426**
 
 :::
 
@@ -200,6 +200,47 @@ project.config.json --- 开发工具配置（例如界面颜色、编译配置�
 * 提供小程序生命周期函数
 * 进行一些场景值处理
 * 可以定义一些全局方法和数据
+
+### globalData
+
+**由于微信Storage坑实在是太多，所以我们一般会使用微信提供的全局数据GlobalData，GlobalData可以随时在页面中读取和存储数据，比Storage方便很多**
+
+* 在App.js中可以设置GlobalData的初始值。
+
+```javascript
+App({
+  globalData:{
+    appid: 'xxxxxxxx',
+    secret: 'xxxxxxxx', 
+    openid:'xxxxx', 
+    userInfo:{}
+  },
+)
+```
+
+* 在App.js中修改GlobalData数据
+
+```javascript
+// this代表的是当前文件
+this.globalData.openid = e.detail.openid;
+```
+
+* 在小程序的所有页面中都可以随时调用和写入存放在GlobalData的数据
+* 无论是调用还是写入，第一步都是要让页面与App.js产生关联
+* 所以我们要获取app对象
+
+```javascript
+// 获取app对象
+var app = getApp();
+
+// 获取globalData数据
+var getAppInfo = app.globalData.openid;
+
+// 修改globalData中的数据
+getApp().globalData.openid = "12345";
+```
+
+
 
 ### app.json
 
@@ -676,17 +717,119 @@ Page({
 })
 ```
 
+:::tip
+
+**注意，我们传值的时候写data-ID，默认会被转成小写，获取的是e.currentTarget.dataset.id小写**
+
+:::
+
 在我们开发过程中，经常被使用到的事件如下：
 
 - 单击——tap
 - 长按——longtap
 - 滑动——touchstart、touchmove、touchend、touchcancel
 
+**单击、双击、长按属于点触事件，会触发touchstart、touchend、tap事件，touchcancel事件只能在真机模拟**
+
+| 事件 | 触发顺序                                                  |
+| ---- | --------------------------------------------------------- |
+| 单击 | touchstart → touchend → tap                               |
+| 双击 | touchstart → touchend → tap → touchstart → touchend → tap |
+| 长按 | touchstart → longtap → touchend → tap                     |
+
 ::: tip
 
 **没有双击事件！没有双击事件！没有双击事件！**
 
 两次间隔时间小于300ms认为是双击；微信官方文档没有双击事件，需要开发者自己定义处理。 
+
+长按事件手指触摸后，超过350ms再离开
+
+:::
+
+#### 双击事件模拟
+
+```javascript
+wxml文件
+<button data-time="{{lastTapTime}}" data-title="标题" bindtap="doubleClick">双击</button>
+
+//js文件
+doubleClick: function(e) {
+    var curTime = e.timeStamp
+    var lastTime = e.currentTarget.dataset.time  // 通过e.currentTarget.dataset.time 访问到绑定到该组件的自定义数据
+    console.log(lastTime)
+    if (curTime - lastTime > 0) {
+      if (curTime - lastTime < 300) {
+        console.log("挺快的双击，用了：" + (curTime - lastTime))
+      }
+    }
+    this.setData({
+      lastTapTime: curTime
+    })
+  }
+```
+
+
+
+### touch事件
+
+* touchstart 手指触摸
+
+* touchmove 手指触摸后移动
+
+* touchcancel 手指触摸动作被打断，如弹窗和来电提醒
+
+* touchend 手指触摸动作结束
+
+```html
+<view>
+ <button type="primary"
+         bindtouchstart="mytouchstart"
+         bindtouchmove="mytouchmove"
+         bindtouchend="mytouchend">点我吧</button>
+</view>
+
+```
+
+```javascript
+	//开始触摸，获取触摸坐标
+	mytouchstart: function (e) {
+		var that = this;
+		
+		console.log(e)
+		that.setData({ startpoint: [e.touches[0].pageX, e.touches[0].pageY] });
+	},
+	
+	//触摸点移动
+	mytouchmove: function (e) {
+		//当前触摸点坐标
+		var that = this;
+		var curPoint = [e.touches[0].pageX, e.touches[0].pageY];
+		
+		// 获取原来的坐标点
+		var startpoint = that.data.startpoint;
+
+		// 一般就是用X大小来判断是左划还是右划
+		// 一般就是用Y大小来判断是上划还是下划		
+	},
+	// 滑动结束调用	
+	mytouchend: function (e) {
+		//滑动结束一般都是一个点
+        获取数据是changedTouches，而不是touches
+	},
+```
+
+:::tip
+
+**注意：**
+
+**1. 在touchstart和touchmove中都是e.touches获取数据，但是touchend中不是**
+
+**2. touchend中是：e.changedTouches**
+
+**3. 开始和结束都是一个点，可以根据开始和技术的点的位置，判断是点击还是滑动**
+
+**4.在touchmove中和touchstart中的数据作对比，判断是左划还是右划**
 
 :::
 
@@ -1197,7 +1340,7 @@ checkSettingStatu: function(cb) {
  }
 ```
 
-### 方案二
+#### 方案二
 
 ```html
 <button wx:if="{{ldata}}" bindtap='btnTap'>获取位置信息</button>
