@@ -429,10 +429,10 @@ define(function(require, exports, module) {
 
 **最明显的区别就是在模块定义时对依赖的处理不同**
 
-* AMD推崇依赖前置，在定义模块的时候就要声明其依赖的模块
-* CMD推崇就近依赖，只有在用到某个模块的时候再去require
+* **AMD推崇依赖前置**，在定义模块的时候就要声明其依赖的模块
+* **CMD推崇就近依赖**，只有在用到某个模块的时候再去require
 
-* 他们的加载都是异步的，⽽非我们理解的同步，只不过依赖处理不同
+* 他们的加载都是**异步**的，⽽非我们理解的同步，只不过依赖处理不同
 
 ### AMD
 
@@ -517,10 +517,17 @@ define(function(require, exports, module) {
 ### ES6模块化优点
 
 * 类似commonJS，语法更简洁
+* 类似AMD，直接支持异步加载和配置模块加载
+* 结构可以做静态分析，静态检测，比如引入宏（macro）和类型检验（type system）这些只能靠静态分析实现的功能
+* 比commonJS更好的支持循环依赖
 
-- 类似AMD，直接支持异步加载和配置模块加载
-- 结构可以做静态分析，静态检测
-- 比commonJS更好的支持循环依赖
+### ES6模块化特点
+
+* ES6 模块的设计思想是尽量的静态化，使得编译时就能确定模块的依赖关系，以及输入和输出的变量。
+* CommonJS 和 AMD 模块，都只能在运行时确定这些东西。
+* ES6 模块不是对象，而是通过`export`命令显式指定输出的代码，再通过`import`命令输入。
+* ES6 加载称为“编译时加载”或者静态加载，即 ES6 可以在编译时就完成模块加载，效率要比 CommonJS 模块的加载方式高。当然，这也导致了没法引用 ES6 模块本身，因为它不是对象。
+* ES6 的模块自动采用严格模式，不管你有没有在模块头部加上`"use strict";`
 
 :::tip
 
@@ -531,4 +538,29 @@ define(function(require, exports, module) {
 **例如，你不能把import或export放在一个if条件内部；它们必须出现在所有块儿和函数的外部。**
 
 :::
+
+### 严格模式
+
+## 命名导出(named exports)
+
+* 可以直接在任何变量或者函数前面加上一个 `export` 关键字，就可以将它导出
+* 这种写法非常简洁，和平时几乎没有区别，唯一的区别就是在需要导出的地方加上一个 export 关键字。
+
+```javascript
+// a.jx
+export const name = 'zhangsan';
+export function getName(x) {
+    return name;
+}
+export function count(x, y) {
+    return x + y;
+}
+```
+
+```javascript
+// b.js
+import { name, getName, count } from './a.js';
+console.log(getName()); // zhangsan
+console.log(count(4, 3)); // 7
+```
 
