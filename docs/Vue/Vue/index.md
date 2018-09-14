@@ -2,9 +2,9 @@
 
 :::tip
 
-**最后更新时间：2018年09月10日**
+**最后更新时间：2018年09月14日**
 
-**字数：29984**
+**字数：31349**
 
 :::
 
@@ -21,6 +21,7 @@ Vuejs基础知识学习笔记整理
   * this指向问题
   * 数组方法
   * 字符串方法
+
 * Vuejs基础
   * 基本指令
   * 修饰符
@@ -31,14 +32,17 @@ Vuejs基础知识学习笔记整理
   * 指令
   * 组件
   * 网络请求
+
 * Vue-Router
   * SPA介绍
   * 路由配置
   * 监听路由
   * **路由钩子函数**
+
 * Vuex
   * 核心概念
   * 使用demo
+  
 * **模块化和webpack请参考webpack笔记部分**
 
 ## 学习资源
@@ -50,7 +54,13 @@ Vuejs基础知识学习笔记整理
 
 ## JavaScript
 
-### let、const和var
+:::tip
+
+这里的JavaScript能够帮助快速开发Vuejs项目，所以贴了出来
+
+:::
+
+###  let、const和var
 
 - JS没有块级作用域：
   - 在JS函数中的var声明，其作用域是函数体的全部
@@ -68,7 +78,6 @@ Vuejs基础知识学习笔记整理
   - 如果const定义的对象，对象属性是可以修改的
 
 ### ES6中的箭头函数
-
 - 不绑定this:
   - 箭头函数的this其实就是在定义的时候就确定好的，以后不管怎么调用这个箭头函数，箭头函数的this始终为定义时的this
 - 不绑定arguments：
@@ -129,28 +138,43 @@ Vuejs基础知识学习笔记整理
 - str.match(rgExp)：
   - 正则匹配
 
-## Vuejs
+## 认识Vue
 
-### 认识Vue
+### Vue介绍
 
-#### MVC和MVVM
+* 作者大大：[尤雨溪](https://baike.baidu.com/item/%E5%B0%A4%E9%9B%A8%E6%BA%AA/2281470?fr=aladdin)
+
+* Vue.js（读音 /vjuː/, 类似于 view） 是一套构建用户界面的渐进式框架。
+
+* Vue 只关注视图层， 采用自底向上增量开发的设计。
+* Vue 的目标是通过尽可能简单的 API 实现响应的数据绑定和组合的视图组件。
+
+### MVC和MVVM
 
 - MVC：模型(model) — 视图(view) — 控制器器(controller)
   - 用户操作->View（负责接收用户的输入操作）->Controller（业务逻辑处理）->Model（数据持久化）->View（将结果反馈给View）
 - MVVM：模型(model) — 视图(view) — 视图模型(ViewModel)
   - 数据双向绑定
 
-#### 插值表达式
+:::tip
+
+**有人坚持Vue不是双向绑定的，有人坚持是，如果你听到有人说Vue不是双向绑定的，不要奇怪**
+
+:::
+
+## 基本语法
+
+### 插值表达式
 
 - Mustache语法
 - 双括号包裹需要渲染的值：{{}}
 
-#### el
+### el
 
 - el：element
 - 指定了Vue管理理的范围
 
-#### data
+### data
 
 - 指定了Vue中的数据
 - Vue 将会递归将 data 的属性转换为 getter/setter，从而让 data 的属性能够响应数据变化
@@ -163,73 +187,85 @@ Vuejs基础知识学习笔记整理
   - key：要更改的具体数据
   - value ：重新赋的值
 
-#### methods
+### methods
 
 - Vue中所有的方法都是写在methods中的
 - 方法中的this自动绑定为 Vue 实例
 - 不应该使用箭头函数来定义 method 函数
 
-#### Object.defineProperty
+## Vuejs开发须知
+
+### Object.defineProperty
 
 - Vue双向绑定原理理，IE8不不⽀支持，详解看MDN社区
+- [Object.defineProperty()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
 
-#### Vue异步更新DOM
-
-- 如果多次连续改变数据，其实Vue只会更新最后一次数据，因为它有一个队列，记录改变的数据，短时间内可能会被覆盖掉变化
+### Vue异步更新DOM
 
 
-- 节省资源开销
+- 只要观察到数据变化，Vue 将开启一个队列，并缓冲在同一事件循环中发生的所有数据改变。
+- 如果同一个 watcher 被多次触发，只会被推入到队列中一次。
+- 这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作上非常重要。
+- 然后，在下一个的事件循环“tick”中，Vue 刷新队列并执行实际 (已**去重的**) 工作。
 
-### Vue基本指令
+:::tip
 
-#### v-text
+**如果多次连续改变数据，其实Vue只会更新最后一次数据，因为它有一个队列，记录改变的数据，短时间内可能会被覆盖掉变化**
+
+**节省资源开销**
+
+:::
+
+## Vue基本指令
+
+### v-text
 
 - 设置⽂文本内容
 - 和{{}}有相同作用
 - 相当于原⽣生DOM操作的innerText/textContent
 
-#### v-model
+### v-model
 
 - 在表单控件或者组件上创建双向绑定
 
-#### v-html
+### v-html
 
 - 相当于innerHTML
 - 内容按普通 HTML 插入 - 不会作为 Vue 模板进行编译
 
-#### v-bind
+### v-bind
 
 - 动态地绑定一个或多个特性，或一个组件 prop 到表达式
 - 在绑定class 或 style 特性时，支持其它类型的值，如数组或对象
 - 在绑定 prop 时，prop 必须在子组件中声明
 - 简写：冒号
 
-#### v-if(v-slse,v-else-if)
+### v-if(v-slse,v-else-if)
 
 - 根据表达式的值的真假条件渲染元素
 
 
 - 如果是隐藏，DOM中是没有这个元素的
 
-#### v-show
+### v-show
 
 - 根据表达式之真假值，切换元素的display属性
 - 如果不显示元素，其实是display:none
 - 和v-if的区别就是这个时候DOM中是存在这个元素的
 
-#### v-pre
+### v-pre
 
 - 跳过这个元素和它的子元素的编译过程。
 - 可以用来显示原始 Mustache 标签。
 - 跳过大量没有指令的节点会加快编译。
 
-#### v-once
+### v-once
 
 - 只渲染元素和组件一次
 - 随后的重新渲染，元素/组件及其所有的子节点将被视为静态内容并跳过。
 - 这可以用于优化更新性能
 
-#### v-cloak
+### v-cloak
 
 - 这个指令保持在元素上直到关联实例结束编译
 - 和 CSS 规则如 `[v-cloak] { display: none }` 一起用时，这个指令可以隐藏未编译的 Mustache 标签直到实例准备完毕。
@@ -249,7 +285,7 @@ Vuejs基础知识学习笔记整理
 </div>
 ```
 
-#### v-for
+### v-for
 
 - 基于源数据多次渲染元素或模板块，也就是循环渲染
 
@@ -267,7 +303,7 @@ Vuejs基础知识学习笔记整理
 - index:为当前项的索引
 - key：和元素复用性能有关，有相同父元素的子元素必须有独特的 key，一般可以用id
 
-#### v-on
+### v-on
 
 - 监听 DOM 事件，并在触发时运行一些 JavaScript 代码
 - 可以接收一个需要调用的方法名称
@@ -275,9 +311,9 @@ Vuejs基础知识学习笔记整理
 - 处理DOM事件的时候，可以传递事件对象$event
 - 可以添加事件修饰符
 
-### 修饰符
+## 修饰符
 
-#### 事件修饰符
+### 事件修饰符
 
 - 修饰符是由点开头的指令后缀来表示的
 - .stop：阻止冒泡修饰符
@@ -309,7 +345,7 @@ Vuejs基础知识学习笔记整理
 <div v-on:click.self="doThat">...</div>
 ```
 
-#### 按键修饰符
+### 按键修饰符
 
 - 监听键盘事件时添加按键修饰符
 - .enter
@@ -324,12 +360,12 @@ Vuejs基础知识学习笔记整理
 - ⾃定义按键修饰符:
   - Vue.config.keyCodes.f1 = 112
 
-#### 系统修饰符
+### 系统修饰符
 
 - .exact 修饰符
 - 鼠标按钮修饰符
 
-### @click
+## @click
 
 - @click = 'fn' 相当于 v-on:click='fn'
 
@@ -337,13 +373,12 @@ Vuejs基础知识学习笔记整理
 - 绑定点击事件
 - 可以传递参数和事件对象$event
 
-### 过滤器filter
+## 过滤器filter
 
 - 进行一些常见的文本格式化
 - 可以用在差值表达式和v-bind中
 
-
-#### 全局过滤器
+### 全局过滤器
 
 - Vue.filter
 
@@ -360,7 +395,7 @@ new Vue({
 })
 ```
 
-#### 局部过滤器
+### 局部过滤器
 
 - filters
 
@@ -375,7 +410,7 @@ filters: {
 }
 ```
 
-#### 使用
+### 过滤器使用
 
 ```javascript
 <!-- 在双花括号中 -->
@@ -387,7 +422,7 @@ filters: {
 
 - 竖线 ‘ | ’：管道，操作系统中也有管道这个概念
 
-### 计算属性computed
+## 计算属性computed
 
 - 对于一些复杂逻辑的数据处理，你都应当使用计算属性
 - 关键字：computed
@@ -404,7 +439,7 @@ computed: {
 
 - 注意:计算属性不能与data中提供的数据重名, 否则会报错
 
-### 属性侦听watch
+## 属性侦听watch
 
 - 用于观察Vue实例上的数据变动，watch是一个对象，一定要当成对象来用
 - 对象的键
@@ -445,7 +480,7 @@ var vm = new Vue({
 })
 ```
 
-### debounce
+## debounce
 
 - 一个通过 Lodash 限制操作频率的函数
 
@@ -457,13 +492,13 @@ var vm = new Vue({
   - 如果用户连续输入，间隔小于我们设置的时间，是不会出发请求的
   - 比如某个按钮，用户连续点击，可以只相应一次
 
-### Vue生命周期
+## Vue生命周期
 
-#### 生命周期图示
+### 生命周期图示
 
 <img src='http://bmob-cdn-4908.b0.upaiyun.com/2018/04/11/6d5e5d6d40ebb21d8081aa9b7c0605ff.png' />
 
-#### Vue生命周期三个阶段
+### Vue生命周期三个阶段
 
 - 初始化阶段：
   - 进入页面
@@ -472,26 +507,41 @@ var vm = new Vue({
 - 卸载阶段：
   - 实例卸载
 
-#### 生命周期函数
+## 生命周期函数
 
-- beforeCreate:
-  - 可以在这加个loading效果
-- created:
-  - 这时DOM还未生成，$el 属性还不存在
-  - 发送ajax请求，获取数据，在这结束loading效果
-- beforeMount：
-  - 模块编译/挂在之前
-- mounted:
-  - 模块编译/挂在之后
-  - 可以获取到DOM，然后，就可以进行DOM操作了
-- beforeUpdate:更更新前的DOM内容
-- updated:
-- beforeDestroy:
-  - 你确认删除XX吗？
-- destroyed:
-  - 当前组件已被删除，清空相关内容
+### beforeCreate
 
-#### Vue.nextTick
+- 可以在这加个loading效果
+
+### created
+
+- 这时DOM还未生成，$el 属性还不存在
+- 发送ajax请求，获取数据，在这结束loading效果
+
+### beforeMount
+
+- 模块编译/挂在之前
+
+### mounted
+
+- 模块编译/挂在之后
+- 可以获取到DOM，然后，就可以进行DOM操作了
+
+### beforeUpdate:
+
+* 更更新前的DOM内容
+
+### updated
+
+### beforeDestroy
+
+- 你确认删除XX吗？
+
+### destroyed
+
+- 当前组件已被删除，清空相关内容
+
+## Vue.nextTick
 
 - nextTick由来：
   - 由于Vue的数据驱动视图更新，是**异步**的，即修改数据的当下，视图不会立刻更新，而是等同一事件循环中的所有数据变化完成之后，再统一进行视图更新
@@ -525,9 +575,15 @@ getMyWidth() {
 }
 ```
 
-### 指令directive
+:::tip
 
-#### 由来
+**相信你肯定有修改数据后，再获取DOM元素属性的场景，nextTick就是你最好的选中**
+
+:::
+
+## 指令directive
+
+### 由来
 
 - 在 Vue2.0 中，代码复用和抽象的主要形式是组件。然而，有的情况下，你仍然需要对普通 DOM 元素进行底层操作，这时候就会用到自定义指令。
 
@@ -535,7 +591,7 @@ getMyWidth() {
 - 使用场景：
   - 操作DOM元素，可以结合jQuery
 
-#### 全局指令和局部指令
+### 全局指令和局部指令
 
 ```javascript
 // 注册一个全局自定义指令 `v-focus`
@@ -563,7 +619,7 @@ directives: {
 <input v-focus>
 ```
 
-#### 自定义指令钩子函数
+### 自定义指令钩子函数
 
 - 目前我们知道有钩子函数的知识点：
   - ajax
@@ -621,7 +677,7 @@ Vue.directive('hello',{
 - vnode：Vue 编译生成的虚拟节点。
 - oldVnode：上一个虚拟节点，仅在 `update` 和 `componentUpdated` 钩子中可用。
 
-### refs
+## refs
 
 - 类似于 `jQuery` 操作 DOM 结构
 - `ref` 被用来给元素或子组件注册引用信息
@@ -634,9 +690,9 @@ Vue.directive('hello',{
   - $refs是⼀一个对象，⻚页⾯面中所有的ref都会作为$refs对象中的键
   - DOM元素：$refs.xxx
 
-### 网络请求
+## 网络请求
 
-#### axios
+### axios
 
 - Vue官方推荐
 - 不能use，因为不是Vue插件
@@ -647,7 +703,7 @@ Vue.directive('hello',{
   - 后台可以轻松辨别出这个请求是否是用户在假冒网站上的误导输入，从而采取正确的策略。
 - 一些配置项目（后面有专门axios介绍）
 
-#### ajax
+### ajax
 
 - 对原生XHR的封装，支持JSONP
 - 优点不用多说，缺点：
@@ -655,7 +711,7 @@ Vue.directive('hello',{
   - 给予XHR，XHR有问题
   - 太大，必须引入jQuery
 
-#### fetch
+### fetch
 
 - 号称是AJAX的替代品
 - 优点：
@@ -667,18 +723,20 @@ Vue.directive('hello',{
   - fetch没有办法原生监测请求的进度，而XHR可以
   - fetch只对网络请求报错，对400，500都当做成功的请求，需要封装去处理
 
-### 组件component
+## 组件component
 
 - 组件（Component）是 Vue.js 最强大的功能之一。
 - 组件可以扩展 HTML 元素，封装可重用的代码。
 - 组件系统让我们可以用独立可复用的小组件来构建大型应用，几乎任意类型的应用的界面都可以抽象为一个组件树
-#### 全局组件
+### 全局组件
+
   - Vue.component(tagName, options)
   - tagName：组件名
   - options：组件配置对象
   - 使用组件：```<tagName></tagName>```
 
- #### 局部组件
+### 局部组件
+
 * 注册：components
 
 - 组件配置对象：
@@ -689,12 +747,13 @@ Vue.directive('hello',{
 - 组件嵌套：
   - 组件是可以嵌套的
 
-#### 函数式组件
+### 函数式组件
 
   - functional：无状态，也就是没有响应式数据
   - React中也有这个概念
 
-#### 单文件组件
+### 单文件组件
+
   - 文件扩展名vue
   - template：
     - 编写html结构
@@ -709,7 +768,7 @@ Vue.directive('hello',{
 
 - Vue中所有的钩子函数在组件中都是可以用的
 
-### 模块化和组件化
+## 模块化和组件化
 
 - 组件：
   - 最初的目的是代码重用，功能相对单一或者独立。
@@ -724,7 +783,7 @@ Vue.directive('hello',{
 - 模块化:隔离/封装，⾼高内聚、松耦合，业务模块
 - 举例：发表评论功能是一个模块，但是其中添加图片就可以是一个组件
 
-### 组件通讯
+## 组件通讯
 
 - 因为组件是独⽴立的个体，需要组件通讯
 - 父组件到子组件：
@@ -739,7 +798,7 @@ Vue.directive('hello',{
   - 注册时间：bus.$on('fn',function(data){})
   - 调⽤用⽅法传值：bus.$emit('fn', this.data);
 
-### 组件模板
+## 组件模板
 
 - 类似arttemplate模板引擎
 - ```<script type="text/x-template" id="tpl"></script>```
@@ -772,9 +831,9 @@ Vue.directive('hello',{
 - 虚拟DOM：
   - 用代码对DOM对象进行描述追踪变化
 
-## Vue-Router
+##SPA单页Web应用
 
-### SPA
+### 介绍
 
 - 单页Web应用（single page web application）
 - 只有一张Web页面的应用
@@ -797,7 +856,22 @@ Vue.directive('hello',{
 - vue-router：
   - Vue核⼼插件，官方推荐
 
-### 配置
+## Vue-Router
+
+* Vue Router 是  Vue.js 官方的路由管理器。它和 Vue.js 的核心深度集成，让构建单页面应用变得易如反掌
+
+### 包含功能
+
+- 嵌套的路由/视图表
+- 模块化的、基于组件的路由配置
+- 路由参数、查询、通配符
+- 基于 Vue.js 过渡系统的视图过渡效果
+- 细粒度的导航控制
+- 带有自动激活的 CSS class 的链接
+- HTML5 历史模式或 hash 模式，在 IE9 中自动降级
+- 自定义的滚动条行为
+
+## Vue-Router配置
 
 - 创建：
   - new VueRoute({配置对象})
@@ -819,7 +893,7 @@ Vue.directive('hello',{
 - router-view：
   - 路由出口
 
-### 示例代码
+## 示例代码
 
 ```javascript
 // 导入
@@ -854,7 +928,7 @@ export default router
 - 路由与实例关联
   - router
 
-### 动态路径参数
+## 动态路径参数
 
 - 其实就是路由参数
 - 一个“路径参数”使用冒号 `:` 标记， /stu/:id?
@@ -865,7 +939,7 @@ export default router
 - 嵌套路由：
   - children
 
-### 监听路由
+## 监听路由
 
 - 复用组件时，对路由参数的变化作出响应
 - watch (监测变化) `$route` 对象
@@ -881,7 +955,7 @@ const User = {
 }
 ```
 
-### 路由导航钩子函数
+## 路由导航钩子函数
 
 - 路由导航钩子函数：
   - 拦截导航，让它完成跳转或取消
@@ -978,7 +1052,7 @@ export default router
 
 ```
 
-#### 全局导航钩子
+### 全局导航钩子
 
 - 分类：
   - 前置守卫
@@ -1000,7 +1074,7 @@ export default router
       - next(error)：如果传入参数是一个 Error 实例，那么导航被终止的同时会将错误传递给 router.onError() 注册过的回调
   - 注意：next 方法必须要调用，否则钩子函数无法 resolved
 
-#### 单个路由独享的钩⼦函数
+### 单个路由独享的钩⼦函数
 
 - 顾名思义，即单个路由独享的导航钩子
 - 上面示例代码中有的，可以仔细查看
@@ -1008,7 +1082,7 @@ export default router
   - beforeEnter：进入
   - beforeLeave：离开
 
-#### 组件内的导航钩子
+### 组件内的导航钩子
 
 - 直接在路由组件内部直接进行定义
 - 上面示例代码中有的，可以仔细查看
@@ -1048,7 +1122,7 @@ next (vm => {
 })
 ```
 
-#### 完整的导航解析流程
+### 完整的导航解析流程
 
 * 导航被触发
 * 在失活的组件⾥里里调⽤用离开守卫
@@ -1063,7 +1137,7 @@ next (vm => {
 * 触发 DOM 更更新
 * 在创建好的实例例调⽤用 beforeRouteEnter 守卫中传给 next 的回调函数
 
-#### 路路由缓存
+## 路由缓存
 
 * keep-alive
 * meta设置参数
@@ -1088,7 +1162,7 @@ meta:{
 
 * 然后router-view中添加`v-if:router-view(v-if="$route.meta.keep_alive")`，但是有一定的局限性
 
-## Vuex
+## Vuex介绍
 
 - [官方文档](https://vuex.vuejs.org/zh/guide/)
 - 安装：`npm install vuex —save`
@@ -1272,7 +1346,7 @@ mapState 辅助函数:
 - mapState 函数返回的是⼀个对象
 - 通常我们需要使⽤一个⼯具函数将多个对象合并为⼀个，以使我们可以将最终对象传给computed属性。
 
-### Vuex注意点：
+### Vuex注意点
 
 Vue.js中axios请求代码应该写在组件的methods中还是vuex的actions中:
 
