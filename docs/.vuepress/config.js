@@ -51,6 +51,15 @@ module.exports = {
                 ], 
             },
             {
+                title: 'jQuery',
+                collapsable:true,
+                children:[
+                    ['jQuery/','核心内容'],
+                    // ['jQuery/jQuery/','jQuery'],
+                    ['jQuery/jQuerySrc/','jQuery源码学习'],
+                ], 
+            },
+            {
                 title: '前端模块化',
                 collapsable:true,
                 children:[

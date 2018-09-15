@@ -8,7 +8,7 @@
 
 **最后更新时间：2018年09月14日**
 
-**全站总字数：180678**
+**全站总字数：203140**
 
 :::
 
@@ -28,7 +28,7 @@
     * JavaScript
     * DOM和BOM
     * jQuery
-    * jQuery 源码
+    * [**jQuery 源码**](http://www.xuefeng666.com/jQuery/jQuerySrc/index.html)
     * Nodejs
     * npm
     * ES6
