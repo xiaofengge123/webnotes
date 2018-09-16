@@ -2,9 +2,9 @@
 
 :::tip
 
-**最后更新时间：2018年09月16日**
+**最后更新时间：2018年09月17日**
 
-**字数：20383**
+**字数：30755**
 
 :::
 
@@ -31,7 +31,26 @@ https://study.163.com/course/introduction.htm?courseId=465001#/courseDetail?tab=
 ## jQuery源码版本
 
 * jquery2.0.3
+  * jQuery2.0.3并不完全兼容IE 6、7、8
+* 解决方案：
+
+```javascript
+// 不是IE就用2.03，IE8以上也用2.0.3，IE8及以下用1.11版本 
+<!--[if !IE]> -->
+     <script src="/Scripts/jquery-2.0.3.min.js"></script>
+ <!-- <![endif]-->
+
+ <!--[if lte IE 8]>
+     <script src="/Scripts/jquery-1.11.1.min.js"></script>
+ <![endif]-->
+
+ <!--[if gt IE 8]>
+      <script src="/Scripts/jquery-2.0.3.min.js"></script>
+ <![endif]-->
+```
+
 * [jQuery所有源码下载](http://www.jq22.com/jquery-info122)
+* [jQuery所有版本CDN](https://www.bootcdn.cn/jquery/)
 
 ## 学习资源
 
@@ -82,7 +101,6 @@ https://study.163.com/course/introduction.htm?courseId=465001#/courseDetail?tab=
 
     (8826) window.jQuery = window.$ = jQuery;
     
-
 })()
 ```
 ## 匿名函数自调用
@@ -129,11 +147,7 @@ jQuery.prototype.init.prototype = jQuery.prototype;
 
 * jQuery对象中有一个原型方法init才是是真正的构造函数，通过init的原型对象跟jQuery的原型对象保持引用关系使得init的实例可以正常调用jQuery的原型方法，就好像是jQuery的实例一样。
 
-
-
 * 这个方法接受3个参数，其前两个参数是jQuery方法传递过来的
-
-
 
 * Selector：
   * 原则上可以输入任意值，但并不是所有值都是有意义的
@@ -248,7 +262,7 @@ class2type = {}
 
 * 类型判断会用到
 
-* [Object String]:'string'
+* `[Object String]:'string'`
 
 ### core_deletedIds
 
@@ -354,6 +368,7 @@ core_trim = core_version.trim,
 
 ```javascript
 fcamelCase = function( all, letter ) {
+    // toUpperCase:把字符串转换为大写，返回一个新的字符串
 	return letter.toUpperCase();
 },
 ```
@@ -363,7 +378,7 @@ fcamelCase = function( all, letter ) {
 * DOM加载成功触发的方法
 * 关键字：jQuery.ready()
 
-```
+```javascript
 completed = function() {
 	document.removeEventListener( "DOMContentLoaded", completed, false );
 	window.removeEventListener( "load", completed, false );
@@ -371,9 +386,176 @@ completed = function() {
 };
 ```
 
+### DOMContentLoaded
+
+* 就是dom内容加载完毕
+* 当文档中没有脚本时，浏览器解析完文档便能触发 DOMContentLoaded 事件
+* 如果文档中包含脚本，则脚本会阻塞文档的解析，而脚本需要等位于脚本前面的css加载完才能执行。
+* 在任何情况下，DOMContentLoaded 的触发不需要等待图片等其他资源加载完成。
+
+
+
+* DOMContentLoaded兼容问题：
+
+  * 支持DOMContentLoaded事件的，就使用DOMContentLoaded事件
+  * **IE6、IE7不支持DOMContentLoaded**，但它支持onreadystatechange事件，该事件的目的是提供与文档或元素的加载状态有关的信息。
+  * 更低的ie还有个特有的方法doScroll， 通过间隔调用：document.documentElement.doScroll("left");
+
+
+
+  * 可以检测DOM是否加载完成。 当页面未加载完成时，该方法会报错，直到doScroll不再报错时，就代表DOM加载完成了。该方法更接近DOMContentLoaded的实现
+
+### 渲染过程和渲染引擎
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/16/9186c979402ab65e800fea6596d6a197.png" />
+
+* 渲染引擎工作原理
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/04/11/e10e11dc40cf8ccf80fbcf80ae31c121.png" />
+
+* javascript会阻塞dom的解析
+  * 当解析过程中遇到script标签的时候，便会停止解析过程，转而去处理脚本
+  * 如果脚本是内联的，浏览器会先去执行这段内联的脚本
+  * 如果是外链的，那么先会去加载脚本，然后执行。在处理完脚本之后，浏览器便继续解析HTML文档。
+* 现代的浏览器都使用了猜测预加载
+  * 为了减缓渲染被阻塞的情况，当解析被阻塞的时候，浏览器会有一个轻量级的HTML（或CSS）扫描器（scanner）继续在文档中扫描，查找那些将来可能能够用到的资源文件的url，在渲染器使用它们之前将其下载下来。
+
+:::tip
+
+****我们为什么一再强调将css放在头部，将js文件放在尾部****
+
+1. 是因为浏览器生成Dom树的时候是一行一行读HTML代码的，script标签放在最后面就不会影响前面的页面的渲染
+2. 现代浏览器为了更好的用户体验,渲染引擎将尝试尽快在屏幕上显示的内容。它不会等到所有HTML解析之前开始构建和布局渲染树。部分的内容将被解析并显示。
+3. 也就是说浏览器能够渲染不完整的dom树和cssom，尽快的减少白屏的时间。假如我们将js放在header，js将阻塞解析dom，dom的内容会影响到First Paint，导致First Paint延后。所以说我们会将js放在后面，以减少First Paint的时间，但是不会减少DOMContentLoaded被触发的时间。
+4. 老版本的浏览器：
+   1. Dom树完全生成好后页面才能渲染出来
+   2. 浏览器又必须读完全部HTML才能生成完整的Dom树
+   3. script标签不放在body底部也一样，因为dom树的生成需要整个文档解析完毕
+   4. 但是这样会阻塞线程，现代浏览器基本不是这个流程了
+
+:::
+
+### load
+
+* 页面上所有的资源（图片，音频，视频等）被加载以后才会触发load事件
+* 简单来说，页面的load事件会在DOMContentLoaded被触发之后才触发
+* onload事件所有的浏览器都支持：window.load=function(){}
+* 我们在 jQuery 中经常使用的 (document).ready(function() { // ...代码... }); 其实监听的就是 DOMContentLoaded 事件
+* 而(document).load(function() { // ...代码... }); 监听的是 load 事件。
+* 在用jquery的时候，我们一般都会将函数调用写在ready方法内，就是页面被解析后，我们就可以访问整个页面的所有dom元素，可以缩短页面的可交互时间，提高整个页面的体验
+
+### addEventListener
+
+* 用于向指定元素添加事件句柄
+* **使用  removeEventListener()  方法来移除 addEventListener() 方法添加的事件句柄**
+
+```javascript
+// 为 <button> 元素添加点击事件。 当用户点击按钮时，在 id="demo" 的 <p> 元素上输出 "Hello World" :
+document.getElementById("myBtn").addEventListener("click", function(){
+    document.getElementById("demo").innerHTML = "Hello World";
+});
+```
+
+:::tip
+
+**Internet Explorer 8 及更早IE版本不支持 addEventListener() 方法**
+
+Opera 7.0 及 Opera 更早版本也不支持。 
+
+**对于这些不支持该函数的浏览器，你可以使用 **attachEvent()** 方法来添加事件句柄**
+
+:::
+
+```javascript
+var x = document.getElementById("myBtn");
+if (x.addEventListener) {                    //所有主流浏览器，除了 IE 8 及更早 IE版本
+    x.addEventListener("click", myFunction);
+} else if (x.attachEvent) {                  // IE 8 及更早 IE 版本
+    x.attachEvent("onclick", myFunction);
+}
+```
+
+| 参数         | 描述                                                         |
+| ------------ | ------------------------------------------------------------ |
+| *event*      | 必须。字符串，指定事件名。  <br />**注意:** 不要使用 "on" 前缀。 例如，使用 "click" ,而不是使用 "onclick"。  <br /> **提示：** 所有 HTML DOM 事件，可以查看菜鸟教程完整的 [HTML DOM Event 对象参考手册](http://www.runoob.com/jsref/dom-obj-event.html)。 |
+| *function*   | 必须。指定要事件触发时执行的函数。  <br />当事件对象会作为第一个参数传入函数。 事件对象的类型取决于特定的事件。例如， "click" 事件属于 MouseEvent(鼠标事件) 对象。 |
+| *useCapture* | 可选。布尔值，指定事件是否在捕获或冒泡阶段执行。  <br />可能值:<br />true 事件句柄在捕获阶段执行<br />false- 默认。事件句柄在冒泡阶段执行 |
+
+* 您可以通过函数名来引用外部函数。
+* 您可以在文档中添加许多事件，添加的事件不会覆盖已存在的事件
+* 您可以在同一个元素中添加不同类型的事件
+* 当传递参数值时，使用"匿名函数"调用带参数的函数
+
+```javascript
+// 添加两个点击事件，不会覆盖
+document.getElementById("myBtn").addEventListener("click", myFunction);
+document.getElementById("myBtn").addEventListener("click", someOtherFunction);
+
+// 添加多个不同事件
+document.getElementById("myBtn").addEventListener("mouseover", myFunction);
+document.getElementById("myBtn").addEventListener("click", someOtherFunction);
+document.getElementById("myBtn").addEventListener("mouseout", someOtherFunction);
+
+// 使用"匿名函数"调用带参数的函数
+document.getElementById("myBtn").addEventListener("click", function() {
+    myFunction(p1, p2);
+});
+
+// this访问元素
+document.getElementById("myBtn").addEventListener("click", function(){
+    this.style.backgroundColor = "red";
+});
+
+// 添加 <div> 事件句柄 
+document.getElementById("myDIV").addEventListener("mousemove", myFunction);
+
+// 移除 <div> 事件句柄 
+document.getElementById("myDIV").removeEventListener("mousemove", myFunction);
+```
+
+### removeEventListener
+
+```javascript
+// 语法
+element.removeEventListener(event, function, useCapture)
+
+// 移除 <div> 元素的事件句柄
+document.getElementById("myDIV").removeEventListener("mousemove", myFunction);
+```
+
+* 如果要移除事件句柄，addEventListener() 的执行函数必须使用外部函数
+* **匿名函数，类似 "document.removeEventListener("*event*", function(){ *myScript* });" 该事件是无法移除的**。
+
+:::tip
+
+**Internet Explorer 8 及更早IE版本不支持 removeEventListener() 方法**，Opera 7.0 及 Opera 更早版本也不支持。
+
+ 对于这些不支持该函数的浏览器，你可以使用 **detachEvent()** 方法来移除由 attachEvent() 方法添加的事件句柄 
+
+**这个也可能是jquery2.0.3不支持IE678的原因**
+
+**文章最顶部有IE678关于jQuery兼容写法**
+
+:::
+
+| 参数         | 描述                                                         |
+| ------------ | ------------------------------------------------------------ |
+| *event*      | 必须。要移除的事件名称。<br />**注意:**不要使用 "on" 前缀。 例如，使用 "click" ,而不是使用 "onclick"。   <br />**提示:** 所有 HTML DOM 事件，可以查看菜鸟教程完整的 [HTML DOM Event 对象参考手册](http://www.runoob.com/jsref/dom_obj_event.asp)。 |
+| *function*   | 必须。指定要移除的函数。                                     |
+| *useCapture* | 可选。布尔值，指定移除事件句柄的阶段。 <br /> 可能值：<br />true - 在捕获阶段移除事件句柄<br />false- 默认。在冒泡阶段移除事件句柄<br />**注意:** 如果添加两次事件句柄，一次在捕获阶段，一次在冒泡阶段，你必须单独移除该事件。 |
+
+```javascript
+var x = document.getElementById("myDIV");
+if (x.removeEventListener) {                   // // 所有浏览器，除了 IE 8 及更早IE版本
+    x.removeEventListener("mousemove", myFunction);
+} else if (x.detachEvent) {                   // IE 8 及更早IE版本
+    x.detachEvent("onmousemove", myFunction);
+}
+```
+
 ## 给jQuery添加方法和属性（96行-283行）
 
-* 其中最重要的一个init方法
+- 其中最重要的一个init方法
 
 #### 原型问题
 
@@ -404,6 +586,14 @@ jquery: core_version,
 constructor: jQuery,
 ```
 
+### exec
+
+* exec() 方法用于检索字符串中的正则表达式的匹配
+* 返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回值为 null。
+* 此数组的第 0 个元素是与正则表达式相匹配的文本
+* 第 1 个元素是与 RegExpObject 的第 1 个子表达式相匹配的文本（如果有的话），第 2 个元素是与 RegExpObject 的第 2 个子表达式相匹配的文本（如果有的话）
+* 
+
 #### init (重要)
 
 - 初始化和参数管理
@@ -418,7 +608,7 @@ constructor: jQuery,
       - 判断左边第一个字符是不是<
       - 判断最后一个字符是不是>
       - 在判断长度是不是大于等于3
-    - 判断是不是选择元素：
+    - 判断是不是选择元素
   - 判断DOM元素：nodeType
   - $()传递的函数形式：isFunction
   - 传递数组或者json形式
@@ -478,15 +668,15 @@ if(match && (match[1] || !context)) {
  // $(document).find('ul li.box') 其实find内部调用的就是sizzle这个选择器引擎
 ```
 
-- 判断DOM元素：
+- 判断DOM元素
   - 判断是否有nodeType即可
   - 这个其实就是DOM对象转jQuery对象
-- 判断是不是函数：
+- 判断是不是函数
   - jQuery.isFunction，一般都是为了入口函数 ready
   - $(function(){}):简写的形式，其实本质调用的还是ready方法
 - 处理特殊情况：$(里面还是一个jquery对象)
 - 处理一个json或者数组之类的情况
-- makeArray：
+- makeArray
   - 将一个类似数组的对象转换为真正的数组对象
   - 类数组对象具有许多数组的属性(例如length属性，[]数组访问运算符等)，不过它毕竟不是数组，缺少从数组的原型对象上继承下来的内置方法(例如：pop()、reverse()等)
   - 在jQuery内部其实是可以传第二个参数的，那么这个时候，就是转为我们想要的json对象的形式
@@ -641,6 +831,89 @@ $().html()
 $.trim()
 $.proxy()
 ```
+
+### expando
+
+* 唯一性
+* core_version 为jQuery的版本号。
+* \D的意思是：不是数字的，就选中。
+* 因此expando就是jQuery+一段整数。
+* 数据缓存，ajax，事件机制都用到了这个。
+
+### noConflict
+
+* 处理冲突，因为有些库可能会用到$甚至jQuery
+* 其他一些 JavaScript 框架包括：MooTools、Backbone、Sammy、Cappuccino、Knockout、JavaScript MVC、Google Web Toolkit、Google Closure、Ember、Batman 以及 Ext JS。
+* noConflict() 方法会释放会 $ 标识符的控制，这样其他脚本就可以使用它了
+* 我们可以调用jq = $.onConflict(true);这时jq就可以当做jQuery了,并且其他库可以使用jQuery的到乐标识符了
+
+### isReady
+
+* DOM准备好了吗？一旦发生，就设置为真
+
+### readyWait
+
+* 一个计数器，用于跟踪准备好的事件发生之前等待多少项目
+* 要加载多个文件时（a.js,b.js），就要每次都++
+
+### holdReady
+
+* 用于暂停或恢复.ready() 事件的执行
+  * 恢复执行一次，减少一次jQuery.readyWait，直到它为0
+* 该方法必须在文档靠前部分被调用，例如，在头部加载完 jQuery 脚本之后，立刻调用该方法。如果在 ready 事件已经被调用后再调用该方法，将不会起作用。 
+* 首先调用`$.holdReady(true)`[调用后 ready 事件将被锁定]。当准备好执行 ready 事件时，调用$.holdReady(false)。
+* 可以对 ready 事件添加多个锁定，每个锁定对应一次$.holdReady(false)[解锁]调用。
+* ready 事件将在所有的锁定都被解除，并且页面也已经准备好的情况下被触发。
+
+### ready
+
+* 当 DOM（文档对象模型） 已经加载，并且页面（包括图像）已经完全呈现时，会发生 ready 事件
+* ready() 函数仅能用于当前文档，因此无需选择器
+* 三种写法
+
+```
+$(document).ready(function)
+
+$().ready(function)
+
+$(function)
+```
+
+:::tip
+
+**ready() 函数不应与 body的onload=""一起使用**
+
+:::
+
+### isFunction
+
+* 判断是否是function
+* 在低版本IE浏览器下typeof alert   返回object,而不是function
+
+### isArray
+
+* isArray = Array.isArray
+
+* 不兼容IE8以及以下版本
+
+### isWindow
+
+```javascript
+isWindow: function( obj ) {
+	return obj != null && obj === obj.window;
+},
+```
+
+* 判断是不是window
+
+* false == null 结果是  false
+* true == null 结果 false
+* 只有null和undefined才等于null，而只有这两个变量没有属性。其他的像字符串有包装对象，可以有属性。
+* window有两种意思：
+  * 全局对象
+  * 浏览器窗口。
+  * 而只有window才有window属性，因此只有window才会返回true
+  * window.window表示全局对象中的浏览器窗口。
 
 ## Sizzle选择器（877行-2856行）
 
