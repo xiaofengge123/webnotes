@@ -19,8 +19,9 @@ module.exports = {
             {
                 text: '支持我们',
                 items:[
-                    { text:'给我们点赞 -- github', link:'https://github.com/xuefeng666/webnotes'},
+                    { text:'github点赞', link:'https://github.com/xuefeng666/webnotes'},
                     { text:'关注知乎大牛', link:'https://www.zhihu.com/people/qian-duan-xiao-feng-ge/activities'},
+                    { text:'阿里云服务器', link:'https://promotion.aliyun.com/ntms/act/jianzhanquan.html?userCode=thfy2lwh'},
                 ],
             },
             {

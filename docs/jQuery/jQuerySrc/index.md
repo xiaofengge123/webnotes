@@ -2,9 +2,9 @@
 
 :::tip
 
-**最后更新时间：2018年09月17日**
+**最后更新时间：2018年09月18日**
 
-**字数：30755**
+**字数：42291**
 
 :::
 
@@ -253,6 +253,12 @@ _$ = window.
 
 * 很多库都可能会用 $
 * 防冲突
+
+:::tip
+
+**jQuery初始化时，把可能存在的window.jQuery和window.刀乐备份到局部变量_jQuery和_$。**
+
+:::
 
 ### class2type
 
@@ -557,7 +563,7 @@ if (x.removeEventListener) {                   // // 所有浏览器，除了 IE
 
 - 其中最重要的一个init方法
 
-#### 原型问题
+### 原型问题
 
 ```javascript
 jQuery.fn = jQuery.prototype = {
@@ -569,7 +575,7 @@ jQuery.fn = jQuery.prototype = {
 - 对象引用，jQuery原型给了jQuery.fn
 - 给原型对象新添加实例属性和方法
 
-#### jquery
+### jquery
 
 - 添加jQuery版本
 
@@ -577,7 +583,7 @@ jQuery.fn = jQuery.prototype = {
 jquery: core_version,
 ```
 
-#### constructor 
+### constructor 
 
 - 修正this指向问题
 - 因为新的对象覆盖了原来的原型对象，需要修正
@@ -594,7 +600,7 @@ constructor: jQuery,
 * 第 1 个元素是与 RegExpObject 的第 1 个子表达式相匹配的文本（如果有的话），第 2 个元素是与 RegExpObject 的第 2 个子表达式相匹配的文本（如果有的话）
 * 
 
-#### init (重要)
+### init (重要)
 
 - 初始化和参数管理
 - init其实是真正的构造函数
@@ -635,6 +641,7 @@ if(match && (match[1] || !context)) {
         // 标签的情况
         //1. 首先context上下文需要是元生的document对象
         //2. jQuery.parseHTML方法:用于将HTML字符串解析为对应的DOM节点数组，返回一个数组
+        // 方法详细解析说明，后面部分有
         $.parseHTML( htmlString [, context ] [, keepScripts ] )
         htmlString(String类型):需要解析并转为DOM节点数组的HTML字符串
         context(Element类型):指定在哪个Document中创建元素，默认为当前文档的document
@@ -690,24 +697,24 @@ $(function () {
 })
 ```
 
-#### selector 
+### selector 
 
 - 存储选择字符串
 
-#### length
+### length
 
 - this对象的长度
 
-#### toAttay()
+### toAttay()
 
 - 转原生数组
 
-#### get()
+### get()
 
 - 不穿参数：转原生DOM元素的集合，数组
 - 传递参数：获取某个DOM元素
 
-#### pushStack()
+### pushStack()
 
 - JQ对象的入栈
 - 栈：
@@ -715,32 +722,32 @@ $(function () {
   - 后进先出
 - prevObject：保存之前的对象，在链式编程end()方法（回溯到上一个对象）中会用得到
 
-#### each()
+### each()
 
 - 遍历集合
 - 最终调用的其实是jQuery工具下面的each方法
 
-#### ready()
+### ready()
 
 - DOM加载的接口
 - 最终调用的其实是jQuery工具下面的ready方法
 
-#### slice()
+### slice()
 
 - 集合的截取
 - 最终调用的是入栈方法pushStack()
 
-#### first()
+### first()
 
 - 集合的第一项
 - 其实调用的就是eq方法eq(0)
 
-#### last()
+### last()
 
 - 集合的最后一项
 - 其实调用的就是eq方法eq(-1)
 
-#### eq() 
+### eq() 
 
 - 找到集合当中指定的某一项
 - 参数可以是负数
@@ -754,7 +761,7 @@ $(function () {
 
 ### jQuery.extend({ })
 
-### 包含方法
+### 方法列表
 
 * 版本控制、DOM加载完成事件、js类型判断、脚步解析、数组操作、权限控制、时间和其他工具方法
 
@@ -795,8 +802,6 @@ jQuery.extend({
     swap: null
 });
 ```
-
-## 静态（扩展）方法和实例方法
 
 ### 静态（扩展）方法
 
@@ -840,12 +845,28 @@ $.proxy()
 * 因此expando就是jQuery+一段整数。
 * 数据缓存，ajax，事件机制都用到了这个。
 
-### noConflict
+### noConflict()
 
 * 处理冲突，因为有些库可能会用到$甚至jQuery
 * 其他一些 JavaScript 框架包括：MooTools、Backbone、Sammy、Cappuccino、Knockout、JavaScript MVC、Google Web Toolkit、Google Closure、Ember、Batman 以及 Ext JS。
 * noConflict() 方法会释放会 $ 标识符的控制，这样其他脚本就可以使用它了
 * 我们可以调用jq = $.onConflict(true);这时jq就可以当做jQuery了,并且其他库可以使用jQuery的到乐标识符了
+
+```javascript
+noConflict: function( deep ) {
+    // 如果window.$ === jQuery，则设置window.$为初始化时备份的_$。也就是说，只有在当前jQuery库持有全局变量$的情况下，才会释放$的控制权给前一个JavaScript库
+    if ( window.$ === jQuery ) {
+        window.$ = _$;
+    }
+	// 如果参数deep为true，并且window.jQuery === jQuery，则设置window.jQuery为初始化时备份的_jQuery。
+    // 如果参数deep为true，只有在当前jQuery库持有全局变量jQuery的情况下，才会释放jQuery的控制权给前一个JavaScript库。
+    if ( deep && window.jQuery === jQuery ) {
+        window.jQuery = _jQuery;
+    }
+
+    return jQuery;
+},
+```
 
 ### isReady
 
@@ -856,7 +877,7 @@ $.proxy()
 * 一个计数器，用于跟踪准备好的事件发生之前等待多少项目
 * 要加载多个文件时（a.js,b.js），就要每次都++
 
-### holdReady
+### holdReady()
 
 * 用于暂停或恢复.ready() 事件的执行
   * 恢复执行一次，减少一次jQuery.readyWait，直到它为0
@@ -865,7 +886,7 @@ $.proxy()
 * 可以对 ready 事件添加多个锁定，每个锁定对应一次$.holdReady(false)[解锁]调用。
 * ready 事件将在所有的锁定都被解除，并且页面也已经准备好的情况下被触发。
 
-### ready
+### ready()
 
 * 当 DOM（文档对象模型） 已经加载，并且页面（包括图像）已经完全呈现时，会发生 ready 事件
 * ready() 函数仅能用于当前文档，因此无需选择器
@@ -885,10 +906,11 @@ $(function)
 
 :::
 
-### isFunction
+### isFunction()
 
 * 判断是否是function
-* 在低版本IE浏览器下typeof alert   返回object,而不是function
+* **在低版本IE浏览器下typeof alert   返回object,而不是function**
+* **这个方法的实现依赖于方法jQuery.type( obj )，通过判断 jQuery.type( obj )返回值是否是 function 来实现**
 
 ### isArray
 
@@ -896,7 +918,7 @@ $(function)
 
 * 不兼容IE8以及以下版本
 
-### isWindow
+### isWindow()
 
 ```javascript
 isWindow: function( obj ) {
@@ -914,6 +936,336 @@ isWindow: function( obj ) {
   * 浏览器窗口。
   * 而只有window才有window属性，因此只有window才会返回true
   * window.window表示全局对象中的浏览器窗口。
+
+### isNumeric()
+
+* 先判断参数是否能转成数字，不可以就是NaN，那么isNaN就会返回true
+* 如果是数字，但是必须是有限数，不然也不是number类型
+
+```javascript
+isNumeric: function( obj ) {
+	return !isNaN( parseFloat(obj) ) && isFinite( obj );
+},
+```
+
+* 先执行parseFloat( obj )尝试把参数obj解析为数字
+* 然后用isNaN()判断解析结果是否是合法数字，并用isFinite()判断参数obj是否是有限的。
+* 如果parseFloat( obj )的解析结果是合法数字，并且参数obj是有限数字，则返回true；否则返回false。
+* 方法parseFloat( string )用于对字符串参数进行解析，并返回字符串中的第一个数字。
+  * 在解析过程中，如果遇到了不是有效数字的字符，解析就会停止并返回解析结果；
+  * 如果字符串没有以一个有效的数字开头，则返回NaN；
+  * 如果传入的参数是对象，则自动调用该对象的方法toString()，得到该对象的字符串表示，然后再执行解析过程
+* 方法isNaN( x )用于判断参数是否为非数字值，常用于检测方法parseFloat()和parseInt()的解析结果。
+* 方法isFinite( number )用于判断一个数字是否是有限的。
+
+### type()
+
+* 确定JavaScript内置对象的类型
+* 返回小写形式的类型名称
+* 如果对象是undefined或null，则返回相应的"undefined"或"null"
+
+```javascript
+type: function( obj ) {
+    if ( obj == null ) {
+    	return String( obj );
+    }
+    // Support: Safari <= 5.1 (functionish RegExp)
+    return typeof obj === "object" || typeof obj === "function" ?
+    	class2type[ core_toString.call(obj) ] || "object" :
+    	typeof obj;
+},
+```
+
+* 如果参数obj是undefined或null，通过String( obj )转换为对应的原始字符串“undefined”或“null”
+* 如果参数是JavaScript内部对象，则返回对应的字符串名称；其他情况一律返回“object”。
+  * 先借用Object的原型方法toString()获取obj的字符串表示，返回值的形式为[object class]，其中的class是内部对象类，
+  * 例如，Object.prototype.toString.call( true )会返回[object Boolean]；
+  * 然后从对象class2type中取出[object class]对应的小写字符串并返回；如果未取到则一律返回“object”。
+* 对象class2type初始化后的结构为：
+
+```javascript
+{
+   "[object Array]": "array"
+   "[object Boolean]": "boolean"
+   "[object Date]": "date"
+   "[object Function]": "function"
+   "[object Number]": "number"
+   "[object Object]": "object"
+   "[object RegExp]": "regexp"
+   "[object String]": "string"
+}
+```
+
+```javascript
+$.type( undefined ) === "undefined"
+
+$.type() === "undefined"
+
+$.type( window.notDefined ) === "undefined"
+
+$.type( null ) === "null"
+```
+
+* 如果对象有一个内部属性[[Class]]和一个浏览器的内置对象的 [[Class]] 相同，我们返回相应的 [[Class]] 名字
+
+```javascript
+$.type( true ) === "boolean"
+
+$.type( 3 ) === "number"
+
+$.type( "test" ) === "string"
+
+$.type( function(){} ) === "function"
+
+$.type( [] ) === "array"
+
+$.type( new Date() ) === "date"
+
+$.type( new Error() ) === "error" // jQuery 1.9 新增支持
+
+$.type( /test/ ) === "regexp"
+```
+
+### isPlainObject()
+
+* 判断指定参数是否是一个纯粹的对象
+* 即是否是用对象直接量{}或new Object()创建的对象
+
+```javascript
+isPlainObject: function( obj ) {
+    	
+		if ( jQuery.type( obj ) !== "object" || obj.nodeType || jQuery.isWindow( obj ) ) {
+			return false;
+		}
+    
+		try {
+			if ( obj.constructor &&
+					!core_hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
+				return false;
+			}
+		} catch ( e ) {
+			return false;
+		}
+
+		return true;
+	},
+```
+
+* 如果参数obj满足以下条件之一，则返回false
+  * Object.prototype.toString.call( obj )返回的不是[object Object]
+  * 参数obj是DOM元素
+  * 参数obj是window对象
+  * 如果参数obj不满足以上所有条件，则至少可以确定参数obj是对象
+
+* 检查对象obj是否由构造函数Object()创建。如果对象obj满足以下所有条件，则认为不是由构造函数Object()创建，而是由自定义构造函数创建，返回false
+  * 对象obj含有属性constructor。
+    * 由构造函数创建的对象都有一个constructor属性，默认引用了该对象的构造函数。如果对象obj没有属性constructor，则说明该对象必然是通过对象字面量{}创建的。
+  * 对象obj的属性constructor是非继承属性。
+    * 默认情况下，属性constructor继承自构造函数的原型对象。如果属性constructor是非继承属性，说明该属性已经在自定义构造函数中被覆盖。
+  * 对象obj的原型对象中没有属性isPrototypeOf。
+    * 属性isPrototypeOf是Object原型对象的特有属性，如果对象obj的原型对象中没有，说明不是由构造函数Object()创建，而是由自定义构造函数创建。
+  * 函数hasOwn()指向Object.prototype.hasOwnProperty( property )，用于检查对象是否含有执行名称的非继承属性
+
+:::tip
+
+**在IE 8/9中，在某些浏览器对象上执行以上检测时会抛出异常，也应该返回false。**
+
+:::
+
+### isEmptyObject
+
+* isEmptyObject() 函数用于检查对象是否为空（不包含任何属性）
+
+```javascript
+isEmptyObject: function( obj ) {
+	var name;
+	for ( name in obj ) {
+		return false;
+	}
+	return true;
+},
+```
+
+* for-in 循环遍历，如果有属性，就返回false，没有就是true
+
+### err
+
+* 抛出一个错误
+
+### parseHTML
+
+* 将HTML字符串解析为对应的DOM节点数组
+
+```javascript
+parseHTML: function( data, context, keepScripts ) {
+    
+    // 对于非法参数一律返回null。如果参数data不是字符串，或者可以转换为false，则返回null。
+    if ( !data || typeof data !== "string" ) {
+        return null;
+    }
+    
+    // 只有两个参数的时候，第二个就是是否保存script标签，这时候context就没有传进来!
+    if ( typeof context === "boolean" ) {
+        keepScripts = context;
+        context = false;
+    }
+    // 如果只有两个参数那么context就是document对象!
+    context = context || document;
+
+    // 如果不是单个标签那么parsed就是null,所谓的单个标签就是<div/>或者<div></div>但是<div>hello</div>不满足!
+    var parsed = rsingleTag.exec( data ),
+        // 如果keepScripts是false，那么scripts就是
+        scripts = !keepScripts && [];
+
+    // Single tag
+    if ( parsed ) {
+        // 如果是单个标签就调用相应的createElement方法，默认上下文是document!
+        return [ context.createElement( parsed[1] ) ];
+    }
+	// 如果不是单个标签就调用buildFragment方法，把html字符串传入，同时上下文也传入，第三个参数就是scripts!
+    // 如果paseHTML的第三个参数是false，那么这里的scripts就是一个数组，传递到buildFragment中会把所有的script标签放在里面
+	//所以就要收到移除!
+    parsed = jQuery.buildFragment( [ data ], context, scripts );
+
+    if ( scripts ) {
+        jQuery( scripts ).remove();
+    }
+	// buildFragment返回的是文档碎片，所以要变成数组，调用merge方法
+    return jQuery.merge( [], parsed.childNodes );
+},
+
+```
+
+* 如果没有指定context参数，或该参数为null或undefined，则默认为当前document。如果创建的DOM元素用于另一个文档，例如iframe，则应该指定该iframe的document对象
+
+| 参数        | 描述                                                         |
+| ----------- | ------------------------------------------------------------ |
+| data        | String类型 需要解析并转为DOM节点数组的HTML字符串             |
+| context     | Element类型 指定在哪个Document中创建元素，默认为当前文档的document |
+| keepScripts | Boolean类型 指定传入的HTML字符串中是否包含脚本，默认为false  |
+
+:::tip
+
+大多数jQuery API都允许HTML字符串在HTML中包含运行脚本。 
+
+jQuery.parseHTML()不会运行解析的HTML中的脚本，除非你明确将参数keepScripts指定为true。 
+
+不过，大多数环境仍然可以间接地执行脚本
+
+例如：通过属性。调用者应该避免 这样做，并清理或转义诸如URL、cookie等来源的任何不受信任的输入，从而预防出现这种情况。
+
+ 出于未来的兼容性考虑，当参数keepScripts被省略或为false时，调用者应该不依赖任何运行脚 本内容的能力。
+
+:::
+
+### parseJSON
+
+* 转为json，目前用的是JSON.parse
+
+### parseXML
+
+* 将字符串解析为对应的XML文档
+* 该函数将使用浏览器内置的解析函数来创建一个有效的XML文档，该文档可以传入jQuery()函数来创建一个典型的jQuery对象，从而对其进行遍历或其他操作
+
+```javascript
+parseXML: function( data ) {
+    var xml, tmp;
+    // 对于非法参数一律返回null。如果参数data不是字符串，或者可以转换为false，则返回null
+    if ( !data || typeof data !== "string" ) {
+        return null;
+    }
+
+    // Support: IE9
+    // 尝试用标准解析器DOMParser解析
+    // 在IE 9+中，如果解析失败，则会抛出异常。如果抛出异常，在catch块中设置xml为undefined，然后抛出一个更易读的异常
+    try {
+        tmp = new DOMParser();
+        xml = tmp.parseFromString( data , "text/xml" );
+    } catch ( e ) {
+        xml = undefined;
+    }
+	// 判断解析是否失败
+    if ( !xml || xml.getElementsByTagName( "parsererror" ).length ) {
+        jQuery.error( "Invalid XML: " + data );
+    }
+    return xml;
+},
+```
+
+* DOMParser在HTML5中标准化，可以将XML或HTML字符串解析为一个DOM文档。
+  * 解析时，首先要创建一个DOMParser对象
+  * 然后使用它的方法parseFromString()来解析XML或HTML字符串。
+  * DOMParser.parseFromString( DOMString str, SupportedType type )
+    * 参数str：待解析的 XML 或 HTML 字符串
+    * 参数type：支持的类型
+      * "text/html"
+      * "text/xml"
+      * "application/xml"
+      * "application/xhtml+xml"
+      * "image/svg+xml"
+    * 返回一个解析后的新创建的文档对象
+
+* 如果解析失败，则抛出一个更易读的异常。如果满足以下条件之一，则认为解析失败：
+  * 在IE 9+中，通过标准XML解析器DOMParser解析失败，此时!xml为true
+  * 在其他浏览器中，通过标准XML解析器DOMParser解析失败，此时xml.getElementsByTagName("parsererror").length可以转换为true。
+* 如果解析成功，则返回解析结果
+
+### noop
+
+* 一个空函数
+* **此方法不接受任何参数**
+* 当某些时候你需要传入函数参数，而且希望它什么也不做的时候，你可以使用该函数，也无需再新建一个空的函数
+* 比如当插件提供了一个可选的回调函数接口，那么如果调用的时候没有传递这个回调函数，就用$.noop来代替执行。
+
+### globalEval
+
+* **将变量转为全局变量**
+* 实际就是全局的eval()函数，并且做了兼容处理
+* eval()函数
+  * eval()函数执行一段JavaScript代码字符串，只有**直接**使用eval()本身，会在当前作用域中执行代码，否则相当于在全局作用域中执行代码。
+    * 直接使用eval()本身，相当于在当前作用域执行代码
+    * 通过**window.eval**()，代码将在**全局作用域**执行
+    * 将eval赋值给其他变量，**间接使用**，代码将在**全局作用域**执行
+    * eval()函数在严格模式下：
+      * eval中的代码不能创建eval所在作用域下的变量、函数。
+      * 而是为eval单独创建一个作用域，即严格模式创设了第三种作用域：**eval作用域**，并在eval返回时丢弃
+      * 严格模式下，间接使用：没有eval作用域，仍是**全局作用域**执行
+      * 在严格模式下，通过window调用，没有eval作用域
+
+:::tip
+
+**严格模式只对直接使用eval()有效，对间接使用的eval()无效**
+
+**jQuery中的工具方法globalEval()，无论在什么条件下，都在全局作用域中执行代码**
+
+**其实就是：将变量转为全局变量**
+
+:::
+
+```javascript
+// Evaluates a script in a global context
+globalEval: function( code ) {
+    var script,
+        indirect = eval;
+    // eval既是关键字，又是window下的属性。直接写eval(code)，浏览器会当做js关键字使用，出错。所以赋值一下，就会把eval当做window的属性
+
+    //code必须为字符串形式
+    code = jQuery.trim( code );
+
+    if ( code ) {
+        // 严格模式下，不能使用eval
+        if ( code.indexOf("use strict") === 1 ) {
+            script = document.createElement("script");
+            script.text = code;
+            document.head.appendChild( script ).parentNode.removeChild( script );
+        } else {
+            // Otherwise, avoid the DOM node creation, insertion
+            // and removal by using an indirect global eval
+            indirect( code );
+        }
+    }
+},
+```
 
 ## Sizzle选择器（877行-2856行）
 

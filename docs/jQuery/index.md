@@ -2,9 +2,9 @@
 
 :::tip
 
-**最后更新时间：2018年09月17日**
+**最后更新时间：2018年09月18日**
 
-**字数：1073**
+**字数：1941**
 
 :::
 
@@ -24,13 +24,40 @@
     * 对外公开（8825行）
 
     * 初始定义的变量和函数（21行-94行）
-      * 变量和函数
+      * rootjQuery
+      * readyList
+      * core_strundefined
+      * location
+      * document
+      * docElem
+      * _jQuery
+      * _$
+      * class2type
+      * core_deletedIds
+      * core_version
+      * core_concat
+      * core_push
+      * core_slice
+      * core_indexOf
+      * core_toString
+      * core_hasOwn
+      * core_trim
+      * core_pnum
+      * core_rnotwhite
+      * rquickExpr
+      * rsingleTag
+      * rmsPrefix
+      * rdashAlpha
+      * fcamelCase
+      * completed
       * DOMContentLoaded
       * 浏览器渲染过程和渲染引擎
       * 现代浏览器
       * load
+      
 
     * 添加属性和方法（96行-283行）
+      * 原型问题
       * jquery
       * constructor
       * exec正则方法
@@ -50,9 +77,29 @@
     *  jQuery的继承方法（285行-347行）
 
     *  jQuery的扩展工具方法（扩展静态方法）（349行-817行）
+      * jQuery.extend({})
       * 静态方法
       * 实例方法
       * 区别
+      * expando
+      * noConflict()
+      * isReady
+      * readyWait
+      * holdReady()
+      * ready()
+      * isFunction()
+      * isArray
+      * isWindow()
+      * isNumeric()
+      * type()
+      * isPlainObject()
+      * isEmptyObject
+      * err
+      * parseHTML
+      * parseJSON
+      * parseXML
+      * noop
+      * globalEval
 
     * Sizzle选择器（877行-2856行）
       * 为什么有Sizzle
