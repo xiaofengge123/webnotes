@@ -28,7 +28,7 @@
     * JavaScript
     * DOM和BOM
     * jQuery
-    * jQuery 源码
+    * [**jQuery 源码**](http://www.xuefeng666.com/jQuery/jQuerySrc/index.html)
     * Nodejs
     * npm
     * ES6
