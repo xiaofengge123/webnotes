@@ -52,6 +52,14 @@ module.exports = {
                 ], 
             },
             {
+                title: 'JavaScript',
+                collapsable:true,
+                children:[
+                    ['JavaScript/','核心内容'],
+                    ['JavaScript/JavaScript/','JavaScript'],
+                ], 
+            },
+            {
                 title: 'jQuery',
                 collapsable:true,
                 children:[

@@ -4,7 +4,7 @@
 
 **最后更新时间：2018年09月18日**
 
-**字数：1941**
+**字数：2243**
 
 :::
 
@@ -93,13 +93,31 @@
       * isNumeric()
       * type()
       * isPlainObject()
-      * isEmptyObject
-      * err
-      * parseHTML
-      * parseJSON
-      * parseXML
-      * noop
-      * globalEval
+      * isEmptyObject()
+      * err()
+      * parseHTML()
+      * parseJSON()
+      * parseXML()
+      * noop()
+      * globalEval()
+      * camelCase()
+      * nodeName()
+      * each()
+      * trim()
+      * makeArray()
+      * inArray()
+      * merge()
+      * grep()
+      * map()
+      * guid
+      * proxy()
+      * access()
+      * now()
+      * swap
+
+    * jQuery.ready.promise
+    * jQuery.each 
+    * isArraylike
 
     * Sizzle选择器（877行-2856行）
       * 为什么有Sizzle
