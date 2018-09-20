@@ -4,7 +4,7 @@
 
 **最后更新时间：2018年09月18日**
 
-**字数：42291**
+**字数：62586**
 
 :::
 
@@ -56,6 +56,8 @@ https://study.163.com/course/introduction.htm?courseId=465001#/courseDetail?tab=
 
 * [jQuery源码逐行分析](https://study.163.com/course/introduction.htm?courseId=465001#/courseDetail?tab=1)
 * [小峰哥jQuery学习笔记](http://www.xuefeng666.com/jQuery/jQuerySrc/index.html)
+* [jquery源码解析-适合入门者](https://www.cnblogs.com/chaojidan/category/634197.html)
+* [菜鸟教程jQuery](http://www.runoob.com/jquery/jquery-tutorial.html)
 
 ## jQuery源码模块
 
@@ -272,8 +274,8 @@ class2type = {}
 
 ### core_deletedIds
 
+* 这里指定为一个空数组
 * 数组和缓存变量有关
-* 其实在2.0版本及其之后没有用处了，在老版本和数据缓存有关系的
 
 ### core_version
 
@@ -281,7 +283,7 @@ class2type = {}
 
 ### core_concat
 
-```
+```javascript
 core_concat = core_deletedIds.concat
 ```
 
@@ -765,41 +767,41 @@ $(function () {
 
 * 版本控制、DOM加载完成事件、js类型判断、脚步解析、数组操作、权限控制、时间和其他工具方法
 
-```
+```javascript
 jQuery.extend({
-    expando: null, 
-    noConflict: null,
+    expando: '字符串', 
+    noConflict: '方法',
     isReady: false,
     readyWait: 1,
-    holdReady: null,
-    ready: null,
-    isFunction: null,
-    isArray: null,
-    isWindow: null,
-    isNumeric: null,
-    type: null,
-    isPlainObject: null,
-    isEmptyObject: null,
-    error: null,
-    parseHTML: null,
-    parseJSON: null,
-    parseXML: null,
-    noop: null,
-    globalEval: null,
-    camelCase: null,
-    nodeName: null,
-    each: null,
-    trim: null,
-    makeArray: null,
-    inArray: null,
-    merge: null,
-    grep: null,
-    map: null,
-    guid: null,
-    proxy: null,
-    access: null,
-    now: null,
-    swap: null
+    holdReady: '方法',
+    ready: '方法',
+    isFunction: '方法',
+    isArray: '方法',
+    isWindow: '方法',
+    isNumeric: '方法',
+    type: '方法',
+    isPlainObject: '方法',
+    isEmptyObject: '方法',
+    error: '方法',
+    parseHTML: '方法',
+    parseJSON: '方法',
+    parseXML: '方法',
+    noop: '方法',
+    globalEval: '方法',
+    camelCase: '方法',
+    nodeName: '方法',
+    each: '方法',
+    trim: '方法',
+    makeArray: '方法',
+    inArray: '方法',
+    merge: '方法',
+    grep: '方法',
+    map: '方法',
+    guid: 1,
+    proxy: '方法',
+    access: '方法',
+    now: '方法',
+    swap: '方法'
 });
 ```
 
@@ -1088,11 +1090,12 @@ isEmptyObject: function( obj ) {
 
 * for-in 循环遍历，如果有属性，就返回false，没有就是true
 
-### err
+### err()
 
-* 抛出一个错误
+* 接受一个字符串，抛出一个包含了该字符串的异常。
+* 开发插件时可以覆盖这个方法，用来显示更有用或更多的错误提示消息
 
-### parseHTML
+### parseHTML()
 
 * 将HTML字符串解析为对应的DOM节点数组
 
@@ -1158,11 +1161,11 @@ jQuery.parseHTML()不会运行解析的HTML中的脚本，除非你明确将参�
 
 :::
 
-### parseJSON
+### parseJSON()
 
 * 转为json，目前用的是JSON.parse
 
-### parseXML
+### parseXML()
 
 * 将字符串解析为对应的XML文档
 * 该函数将使用浏览器内置的解析函数来创建一个有效的XML文档，该文档可以传入jQuery()函数来创建一个典型的jQuery对象，从而对其进行遍历或其他操作
@@ -1210,14 +1213,14 @@ parseXML: function( data ) {
   * 在其他浏览器中，通过标准XML解析器DOMParser解析失败，此时xml.getElementsByTagName("parsererror").length可以转换为true。
 * 如果解析成功，则返回解析结果
 
-### noop
+### noop()
 
 * 一个空函数
 * **此方法不接受任何参数**
 * 当某些时候你需要传入函数参数，而且希望它什么也不做的时候，你可以使用该函数，也无需再新建一个空的函数
 * 比如当插件提供了一个可选的回调函数接口，那么如果调用的时候没有传递这个回调函数，就用$.noop来代替执行。
 
-### globalEval
+### globalEval()
 
 * **将变量转为全局变量**
 * 实际就是全局的eval()函数，并且做了兼容处理
@@ -1265,6 +1268,591 @@ globalEval: function( code ) {
         }
     }
 },
+```
+
+### camelCase()
+
+* 转换连字符式的字符串为驼峰式
+* 用于CSS模块和数据缓存模块
+* Camel-Case：骆驼命名法
+
+```javascript
+rmsPrefix = /^-ms-/,
+rdashAlpha = /-([\da-z])/gi,
+// fcamelCase:把字符串转换为大写，返回一个新的字符串
+camelCase: function( string ) {
+	return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
+},
+```
+
+* 正则rdashAlpha用于匹配字符串中连字符“-”和其后的第一个字母或数字。
+* 如果连字符“-”后是字母，则匹配部分会被替换为对应的大写字母；如果连字符“-”后是数字，则会删掉连字符“-”，保留数字。
+
+* 正则rmsPrefix用于匹配字符串中前缀“-ms-”，匹配部分会被替换为“ms-”。
+* 这么做是因为在IE中，连字符式的样式名前缀“-ms-”对应小写的“ms”，而不是驼峰式的“Ms”。
+* 例如，“-ms-transform”对应“msTransform”而不是“MsTransform”。在IE以外的浏览器中，连字符式的样式名则可以正确地转换为驼峰式，例如，“-moz-transform”对应“MozTransform”。
+
+### nodeName()
+
+* 用于检查DOM元素的节点名称（即属性nodeName）与指定的值是否相等
+* 检查时忽略大小写
+
+```javascript
+nodeName: function( elem, name ) {
+	return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
+},
+```
+
+* 前先检查elem.nodeName是否存在，可以防止传递进来的不是DOM元素，或者元素没有nodeName引起的报错问题
+* 把属性elem.nodeName和参数name都转换为大写再做比较，也就是忽略大小写比较
+  * DOM元素的属性nodeName返回该元素的节点名称
+  * 对于HTML文档，始终返回其大写形式
+  * 对于XML文档，因为**XML文档区分大小写**，所以返回值与源代码中的形式一致。
+
+### each()
+
+* jQuery的工具方法，其实就是静态方法，本方法是$.each()
+  * 注意jquery的`$().each`,`$.each`的区别
+  * `$().each`
+    * 该方法用于遍历jQuery对象
+    * 本质调用的是`$.each`
+    * each() 方法规定为每个匹配元素规定运行的函数。
+    * 回调函数中的this不是jQuery对象 而是Dom对象
+  * `$.each`
+    * 该方法用于遍历任何集合，包括数组和对象
+    * 对于jQuery对象，只是把each方法简单的进行了委托
+      * 把jQuery对象作为第一个参数传递给jQuery的each方法
+      * 也就是jQuery提供的each方法是对参数一提供的对象的中所有的子元素逐一进行方法调用
+    * jQuery里的each方法是通过js里的call方法来实现的
+      * call：改变上下文this指针
+
+```javascript
+each: function( obj, callback, args ) {
+    var value,
+        i = 0,
+        length = obj.length,
+        // 是否是类数组或数组，json（不包括jQuery这种对象形式）返回false
+        isArray = isArraylike( obj );
+
+    if ( args ) { //jQuery内部使用
+        if ( isArray ) { // 如果是类数组
+            for ( ; i < length; i++ ) {
+                value = callback.apply( obj[ i ], args );
+
+                if ( value === false ) {
+                    break;
+                }
+            }
+        } else {
+            for ( i in obj ) {
+                value = callback.apply( obj[ i ], args );
+
+                if ( value === false ) {
+                    break;
+                }
+            }
+        }
+
+        // A special, fast, case for the most common use of each
+    } else { // 我们在外面调用时，执行的代码
+        if ( isArray ) { // 如果是类数组
+            for ( ; i < length; i++ ) {
+                value = callback.call( obj[ i ], i, obj[ i ] );
+				// 回调方法返回false就停止循环
+                if ( value === false ) {
+                    break;
+                }
+            }
+        } else {
+            for ( i in obj ) {	// //如果是json对象
+                value = callback.call( obj[ i ], i, obj[ i ] );
+
+                if ( value === false ) {
+                    break;
+                }
+            }
+        }
+    }
+
+    return obj;
+},
+```
+
+* 第三个参数args用于内部调用
+* 此方法就是来遍历数组的，然后取数组中的值进行显示。
+* 不能改变原数组arr，跟map一样，但是map返回新数组，而each返回原数组。
+* 这里跟原生的forEach和map的回调方法参数不一样，原生的回调方法中，第三个参数是原数组，可以在回调方法中改变原数组的值。但jQuery的回调方法，不会传第三个参数。
+
+### trim()
+
+* 用于去除字符串两端的空白字符
+* $.trim()函数会移除字符串开始和末尾处的所有换行符，空格(包括连续的空格)和制表符。如果这些空白字符在字符串中间时，它们将被保留，不会被移除。
+
+```javascript
+core_version = "2.0.3",
+core_trim = core_version.trim,
+trim: function( text ) {
+	return text == null ? "" : core_trim.call( text );
+},
+```
+
+* core_version是字符串
+* core_trim：是字符串的trim方法
+
+### makeArray()
+
+* 将一个类似数组的对象转换为真正的数组对象
+* 类数组对象具有许多数组的属性(例如length属性，[]数组访问运算符等)，不过它毕竟不是数组，缺少从数组的原型对象上继承下来的内置方法(例如：pop()、reverse()等)。
+
+```javascript
+// results is for internal usage only
+// 第二个参数是给内部用的
+makeArray: function( arr, results ) {
+    // 如果传入了results，就给ret，如果么有就付给一个新建的数组
+    var ret = results || [];
+	// 过滤参数array是null、undefined的情况
+    if ( arr != null ) {
+        // isArrayLike 判断是否为数组，类数组
+        // 后面有isArrayLike分析
+        if ( isArraylike( Object(arr) ) ) {
+            // 调用方法jQuery.merge()把该参数合并到返回值ret中。
+            // 如果arr为数字6789，这里会返回false，因为number不是类数组。
+            // 但是如果是字符串"hello"，Object会把它转成具有length的json对象，所以就返回true。
+            // 因为字符串是有length属性的。
+            jQuery.merge( ret,
+                         typeof arr === "string" ?
+                         [ arr ] : arr
+                        );
+        } else {
+            // 插入元素时执行的是push.call( ret,array )，而不是ret.push( array )
+            // 这是因为返回值ret不一定是真正的数组。
+            // 如果只传入参数array，则返回值ret是真正的数组；
+            // 如果还传入了第二个参数result，则返回值ret的类型取决于该参数的类型
+            core_push.call( ret, arr );
+        }
+    }
+	// 返回ret
+    return ret;
+},
+```
+
+### inArray()
+
+* 元素是否在arr数组中，从i位置开始找
+* 找到就返回其下标，未找到则返回-1。
+
+```javascript
+inArray: function( elem, arr, i ) {
+	return arr == null ? -1 : core_indexOf.call( arr, elem, i );
+},
+```
+
+### merge()
+
+* 合并两个数组内容到第一个数组
+
+```javascript
+merge: function( first, second ) {
+    var l = second.length,
+        i = first.length,
+        j = 0;
+
+    // 如果参数second的属性length是数值类型，则把该参数当作数组处理，把其中的所有元素都添加到参数first中
+    if ( typeof l === "number" ) {
+        for ( ; j < l; j++ ) {
+            first[ i++ ] = second[ j ];
+        }
+    } else {
+        // 把该参数当作含有连续整型（或可以转换为整型）属性的对象，
+        // 例如，{ 0:'a', 1:'b'}，把其中的非undefined元素逐个插入参数first中。
+        while ( second[j] !== undefined ) {
+            first[ i++ ] = second[ j++ ];
+        }
+    }
+	// 修正first.length。因为参数first可能不是真正的数组，所以需要手动维护属性length的值。
+    first.length = i;
+
+    return first;
+}
+```
+
+* 参数first：
+  * 数组或类数组对象，必须含有整型（或可以转换为整型）属性length，
+  * 第二个数组second中的元素会被合并到该参数中。
+* 参数second：
+  * 数组、类数组对象或任何含有连续整型属性的对象
+  * 其中的元素会被合并到第一个参数first中。
+
+### grep()
+
+* 用指定的函数过滤数组中的元素，并返回过滤后的数组
+* **源数组不会受到影响，过滤结果只反映在返回的结果数组中**
+
+| 参数     | 描述                                                         |
+| -------- | ------------------------------------------------------------ |
+| array    | Array类型 将被过滤的数组。                                   |
+| function | Function类型 指定的过滤函数。<br />grep()方法为function提供了两个参数：<br />其一为当前迭代的数组元素，<br />其二是当前迭代元素在数组中的索引。 |
+| invert   | 可选。 <br />Boolean类型 默认值为false，指定是否反转过滤结果。<br />如果参数invert为true，则结果数组将包含function返回false的所有元素。 |
+
+```javascript
+grep: function( elems, callback, inv ) {
+    var retVal,
+        ret = [],
+        i = 0,
+        length = elems.length;
+    // 转换成true or false，不传的时候是undefined，就会变成fase
+    inv = !!inv;
+
+    // 遍历数组elems，为每个元素执行过滤函数。
+    // 如果参数inv为true，把执行结果为false的元素放入结果数组ret；
+    // 如果inv为false，则把执行结果为true的元素放入结果数组ret。
+    for ( ; i < length; i++ ) {
+        retVal = !!callback( elems[ i ], i );// 转换成true or false
+        if ( inv !== retVal ) {
+            ret.push( elems[ i ] );
+        }
+    }
+	// 返回结果数组ret
+    return ret;
+},
+```
+
+* 如果参数invert未传入或是false，元素只有在过滤函数返回true，
+* 或者返回值可以转换为true时，才会被保存在最终的结果数组中，即返回一个满足回调函数的元素数组；
+* 如果参数invert是true，则情况正好相反，返回的是一个不满足回调函数的元素数组
+
+### map()
+
+* 用于使用指定函数处理数组中的每个元素(或对象的每个属性)，并将处理结果封装为新的数组返回
+
+:::tip
+
+* 在jQuery 1.6 之前，该函数只支持遍历数组；从 1.6 开始，该函数也支持遍历对象。 
+
+* map()还会为函数传入两个参数：其一是当前迭代的元素或属性值，其二是当前迭代项的数组索引或对象属性名。 
+
+* 该函数返回值将作为结果数组中的一个元素，如果返回值为null或undefined，则不会被添加到结果数组中。
+
+:::
+
+```javascript
+// 支持普通json,数组，类数组，特殊json（jQuery对象形式）
+// 第三个参数内部调用
+map: function( elems, callback, arg ) {
+    var value,
+        i = 0,
+        length = elems.length,
+        isArray = isArraylike( elems ),// //数组和类数组都可以，jQuery对象形式也可以
+        ret = [];
+
+    if ( isArray ) {
+        for ( ; i < length; i++ ) {
+            value = callback( elems[ i ], i, arg );
+			// //回调返回的值不是null或者undefined，就存入新数组中
+            if ( value != null ) {
+                ret[ ret.length ] = value;
+            }
+        }
+    } 
+    // 普通json就执行这里，比如：{name:"zhangsan",age:18}
+    else {
+        for ( i in elems ) {
+            value = callback( elems[ i ], i, arg );
+
+            if ( value != null ) {
+                ret[ ret.length ] = value;
+            }
+        }
+    }
+	// core_deletedIds = [],
+	// core_concat = core_deletedIds.concat,
+    // 以防回调方法返回的是数组形式，那么就会出现复合数组，比如:ret = [[1],[2],[3]],通过concat([1],[2],[3])，合并，返回[1,2,3]
+    return core_concat.apply( [], ret );
+},
+```
+
+### guid
+
+* 属性jQuery.guid是一个全局计数器，用于jQuery事件模块和缓存模块
+* 在jQuery事件模块中，每个事件监听函数会被设置一个guid属性，用来唯一标识这个函数；
+* 在缓存模块中，通过在DOM元素上附加一个唯一标识，来关联该元素和该元素对应的缓存。
+* 属性jQuery.guid初始值为1，使用时自增1
+
+```javascript
+function show(){
+	alert(this);
+}， 
+$("#input1").click(show)，
+$("#input2").click(function(){$("#input1").off()})
+```
+
+* 这里的show方法是事件方法，所以通过off取消掉事件绑定，可以很容易找到事件方法show。
+* 但是如果把 `$("#input1").click(show)`改成 `$("#input1").click($.proxy(show,window))`，这时show不是事件方法，而是普通方法，那么通过off取消的时候，它是怎么找到这个普通方法show的，其实就是通过guid，因为guid会累加，所以是唯一的，因此可以找到。
+
+### proxy()
+
+* 改变方法（函数）执行的this指向
+* 方法proxy接受一个函数，返回一个新函数，新函数总是持有特定的上下文。
+
+* proxy两种调用形式：
+  * jQuery.proxy(  function, context )
+    * 参数function是将被改变上下文的函数，参数context是上下文。
+    * 指定参数function的上下文始终为参数content。
+  * jQuery.proxy( context, name )
+    * 参数name是参数context的属性。
+    * 指定参数name对应的函数的上下文始终为参数context。
+
+```javascript
+proxy: function( fn, context ) {
+    var tmp, args, proxy;
+	// 修正参数fn和context。
+    // 如果第二个参数是字符串，说明参数格式是jQuery.proxy( context, name )，修正为jQuery.proxy( fn, context )。
+    if ( typeof context === "string" ) {
+        tmp = fn[ context ];
+        context = fn;
+        fn = tmp;
+    }
+	// 如果参数fn不是函数，则返回undefined
+    if ( !jQuery.isFunction( fn ) ) {
+        return undefined;
+    }
+	// 收集多余参数
+    // 说明：如果调用jQuery.proxy()时，除了传入参数fn、context之外，还传入了其他参数，那么在调用函数fn时，这些多余的参数将会优先传入。
+    // 这里借用数组方法slice()来获取参数对象arguments中fn、context后的其他参数。
+    // core_deletedIds = [],
+    // core_slice = core_deletedIds.slice,
+    args = core_slice.call( arguments, 2 );
+    
+    // 创建一个代理函数，在代理函数中调用原始函数fn，调用时通过方法apply()指定上下文。
+    // 代理函数通过闭包机制引用context、args、slice
+    proxy = function() {
+        return fn.apply( context || this, args.concat( core_slice.call( arguments ) ) );
+    };
+    
+	// 为代理函数设置与原始函数相同的唯一标识guid。如果原始函数没有，则重新分配一个。
+    proxy.guid = fn.guid = fn.guid || jQuery.guid++;
+
+    return proxy;
+},
+```
+
+:::tip
+
+* 相同的唯一标识将代理函数和原始函数关联了起来。
+
+* 例如，在jQuery事件系统中，如果为DOM元素绑定了事件监听函数的代理函数，当移除事件时，即使传入的是原始函数，jQuery也能通过唯一标识guid移除正确的函数。
+
+:::
+
+### access()
+
+* 可以为集合中的元素设置一个或多个属性值，或者读取第一个元素的属性值。
+* 如果设置的属性值是函数，并且参数exec是true时，还会执行函数并取其返回值作为属性值。
+
+* 为.attr()、.prop()、.css()提供支持
+* 这三个方法在调用jQuery.access()时，参数exec为true
+* 参数fn是同时支持读取和设置属性的函数（例jQuery.attr()、jQuery.prop()）
+
+:::tip
+
+* 根据参数的个数和参数的类型不同，去区分
+
+* `$().css(), ` 和`$().attr()`和`$().prop()`，通过参数的不同，实现get/set。
+* `$("div").css("width")`，获得第一个div元素的width，`$("div").css("width",100)`设置所有的div元素的width。
+* `$("div").css({width:100,height:200})`，也是设置所有的div元素，尽管只有一个参数，但是类型不一样。JQuery中有很多这种方法，所以统一用access实现。
+
+:::
+
+```javascript
+access: function( elems, fn, key, value, chainable, emptyGet, raw ) {
+    // elems：元素集合，通常是jQuery对象，操作的元素，可能是一个集合
+    // fn是一个回调函数（有区别的在回调函数中处理，比如，css设置样式，attr设置属性）
+    // key和value就是属性名和属性值
+    // chainable为true，设置，为false就获取, 是否可以链式调用，如果是get动作，为false，如果是set动作，为true
+    // emptyGet：该参数一般是不给的，当没有元素时返回undefined, 如果jQuery没有选中到元素的返回值
+    // raw : 字符串为真，函数为假
+    var i = 0,
+        length = elems.length,
+        bulk = key == null;
+
+   	// 如果参数key是对象，表示要设置多个属性，则遍历参数key，为每个属性递归调用方法jQuery.access()，遍历完后返回元素集合elems。
+    // 处理这种类型$("div").css({width:100,height:200})
+    if ( jQuery.type( key ) === "object" ) {
+        chainable = true;
+        for ( i in key ) {
+            jQuery.access( elems, fn, i, key[i], true, emptyGet, raw );
+        }
+    } 
+    // 如果参数value不是undefined，表示要设置单个属性，则遍历元素集合elems，为每个元素调用回调函数fn，遍历完后返回元素集合elems。如果参数exec为true，并且参数value是函数，则执行参数value，并取其返回值作为属性值。
+    // 处理这种$("div").css("width",100)
+    else if ( value !== undefined ) {
+        chainable = true;// 表示可以链式调用
+		// 如果value不是function，设置raw为true
+        if ( !jQuery.isFunction( value ) ) {
+            raw = true;
+        }
+		// 判断key值是否为null或者undefined，key若为空值
+        if ( bulk ) {
+            if ( raw ) { // 如果value是字符串（数字）
+                fn.call( elems, value );// 调用回调方法
+                fn = null;// 把回调方法赋为空
+            }
+            // 如果是函数，这里面的不用深入理解
+            else { 
+                bulk = fn;
+                fn = function( elem, key, value ) {
+                    return bulk.call( jQuery( elem ), value );
+                };
+            }
+        }
+
+        // 如果没有key值，并且value是字符串（数字），这里就为null,不会执行
+        // 如果fn存在，掉调用每一个元素，无论key是否有值，都会走到这个判断，执行set动作
+        if ( fn ) {
+            for ( ; i < length; i++ ) {
+                fn( elems[i], key, raw ? value : value.call( elems[i], i, fn( elems[i], key ) ) );
+            }
+        }
+    }
+
+    return chainable ? // 如果chainable为true，说明是个set方法，就返回elems,否则说明是get方法
+        elems : // //设置时，chainable为true，直接返回元素，进行后续的链式操作
+
+    // 1.如果bulk是个true，说明没有key值，调用fn，将elems传进去
+	// 2.如果bulk为false，说明key有值哦，然后判断元素的长度是否大于0
+    // 2.1 如果大于0，调用fn，传入elems[0]和key，完成get
+    // 2.2 如果为0，说明传参有问题，返回指定的空值emptyGet
+    bulk ?
+        fn.call( elems ) : 
+    length ? fn( elems[0], key ) : emptyGet; // 有key值时，判断元素有没有元素，有的话就获取第一个元素的key值（属性名的值），没有元素的话，就返回emptyGet。
+},
+```
+
+* 首先判断key值是不是一个object，如果是，遍历key，递归调用jQuery.access，并将是否可以链式调用的标志位设置为true
+* 判断value值是否已经定义，如果已经定义，说明是个set操作
+  * set操作的是可链式调用的
+  * 如果value不是function，设置raw为true
+  * 判断key值是否为null或者undefined，key若为空值
+    * 如果value不是个函数，或者强制赋值raw为true，那么调用fn，可能是以下调用：$('#box').attr(null,{abc:'def',a:'1'})
+    * 如果value是个函数，将fn包装之，改变原来fn的作用域和参数
+  * 如果fn存在，遍历jQuery内部元素，分别执行set操作
+* 首先判断是否为set方法，如果是，返回 elems，如果不是执行get操作（如果jQuery内部length为0，返回指定的默认空值）
+
+### now()
+
+* 当前时间距离1970年的毫秒数
+* 相当于(new Date()).getTime()
+
+ ### swap
+
+* css交换（内部）
+* 原生js无法获取display为none的属性值，而jQuery却可以获取，原因就是在内部使用了swap方法。
+
+```javascript
+<div id="div1" style="width:100px;height:100px;display:none;">ddd</div>　
+
+$("#div1").get(0).offsetWidth取到的是0，因为它是display:none，不存在DOM树中。
+
+$("#div1").width()取到的是100，为啥jQuery可以。因为jQuery会对display:none的元素进行处理，变成<div id="div1"style="width:100px;height:100px;display:block;visibility:hidden;position:absolute">ddd</div>
+
+这里就可以通过$("#div1").get(0).offsetWidth取到100了，然后再把新添加的样式去掉。
+```
+
+```javascript
+swap: function( elem, options, callback, args ) {
+    var ret, name,
+        old = {};
+
+	//保存老样式，插入新样式。
+    for ( name in options ) {
+        old[ name ] = elem.style[ name ];
+        elem.style[ name ] = options[ name ];
+    }
+
+    ret = callback.apply( elem, args || [] );
+	// 通过插入的新样式来获取元素的css值
+    for ( name in options ) { // 恢复老样式
+        elem.style[ name ] = old[ name ];
+    }
+
+    return ret;
+}
+```
+
+## jQuery.ready.promise
+
+* 页面初始化中，用的较多的就是$(document).ready(function(){//代码});
+* ready是在DOM的结构加载完后就触发,ready的内部是如何判断DOM的结构加载完的,就是当前的方法
+
+```javascript
+jQuery.ready.promise = function( obj ) {
+    // readyList为预先申明的变量，未赋值
+	if ( !readyList ) {
+		// 函数执行后申明为jQuery.Deferred()
+        // 最后把延迟对象返回出去，满足条件后触发fn函数
+		readyList = jQuery.Deferred();
+		// if()else（），监听dom加载，最终调用的都是jQuery.ready方法（静态方法）
+		if ( document.readyState === "complete" ) {
+			setTimeout( jQuery.ready );
+
+		} else {
+			// 当浏览器是基于标准浏览器时，会在加载完DOM结构后触发“DOMContentLoaded”事件，jquery内部就用此事件作为ready的触发源
+            // 当浏览器是IE浏览器时，因为IE浏览器（蛋疼并强大着）不支持“DOMContentLoaded”事件，所以只能另谋它法，这里没有判断，估计是ie678不支持的原因之一
+			document.addEventListener( "DOMContentLoaded", completed, false );
+
+			window.addEventListener( "load", completed, false );
+		}
+	}
+	return readyList.promise( obj );
+};
+```
+
+## jQuery.each
+
+* 填充class2type映射表
+* 生成一个class2type对象
+* type方法中用到的
+
+```javascript
+class2type = {
+    "Boolean": "boolean",
+    "Number": "number",
+    "String": "string",
+    "Function": "function",
+    "Array": "array",
+    "Date": "date",
+    "RegExp": "regexp",
+    "Object": "object",
+    "Error": "error",
+}
+```
+
+## isArraylike
+
+* 判断是否是数组，类数组，带length的json，是的话就返回真
+
+```javascript
+function isArraylike( obj ) {
+	var length = obj.length,
+		type = jQuery.type( obj );
+
+    // 担心window对象有length属性
+	if ( jQuery.isWindow( obj ) ) {
+		return false;
+	}
+	// 如果有nodeType的话并且还有长度，那么就是类数组的形式，返回true。
+	if ( obj.nodeType === 1 && length ) {
+		return true;
+	}
+	// 如果还不满足则判断是否为数组
+    // 不能是函数，因为函数也可能有length属性
+    // typeof length === "number" && length > 0 && ( length - 1 ) in obj )处理{0:"a",1:"b",length:2}这种情况。
+    // length === 0处理arguments为空的时候，就是不传入函数任何数据，这时函数中的arguments的length为0，但是是类数组。
+    // document.getElementsByTagName("div")和body.childNodes也是类数组。
+	return type === "array" || type !== "function" &&
+		( length === 0 ||
+		typeof length === "number" && length > 0 && ( length - 1 ) in obj );
+}
 ```
 
 ## Sizzle选择器（877行-2856行）
