@@ -52,14 +52,6 @@ module.exports = {
                 ], 
             },
             {
-                title: 'JavaScript',
-                collapsable:true,
-                children:[
-                    ['JavaScript/','核心内容'],
-                    ['JavaScript/JavaScript/','JavaScript'],
-                ], 
-            },
-            {
                 title: 'jQuery',
                 collapsable:true,
                 children:[
@@ -74,6 +66,14 @@ module.exports = {
                 children:[
                     ['Module/','核心内容'],
                     ['Module/Module/','前端模块化'],
+                ], 
+            },
+            {
+                title: 'Web安全渗透',
+                collapsable:true,
+                children:[
+                    ['WebSRC/','核心内容'],
+                    ['WebSRC/WebSRC/','Web安全渗透'],
                 ], 
             },
             {
