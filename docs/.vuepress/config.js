@@ -61,6 +61,14 @@ module.exports = {
                 ], 
             },
             {
+                title: '前端工程化',
+                collapsable:true,
+                children:[
+                    ['WebGCH/','核心内容'],
+                    ['WebGCH/WebGCH/','前端工程化'],
+                ], 
+            },
+            {
                 title: '前端模块化',
                 collapsable:true,
                 children:[
