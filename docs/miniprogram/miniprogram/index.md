@@ -1973,6 +1973,48 @@ try {
 }
 ```
 
+### 缓存的坑
+
+**调用同步方法写缓存时，经常会报错**
+
+:::tip
+
+**小程序官方给的答复，建议使用异步写入缓存的方法，少用同步方法**
+
+[https://developers.weixin.qq.com/community/develop/doc/a352fb32bfc76cb6a6438925e4edf9b1](https://developers.weixin.qq.com/community/develop/doc/a352fb32bfc76cb6a6438925e4edf9b1)
+
+有些场景，异步缓存不适合，必须同步去写入缓存。最好的办法：**try catch**
+
+:::
+
+```javascript
+function setStorage(key, value) {
+    try {
+  		wx.setStorageSync(key, value)
+	} 
+	catch (e) {
+        setStorage(key,value)
+	}
+}
+```
+
+**清除小程序缓存**
+
+* 可以用wx.removeStorage，或者wx.removeStorageSync来清除小程序缓存
+* 也可以从小程序列表中，把小程序删除，本地缓存就没有了
+
+* **在开发小程序过程中，已经删除了体验版小程序，但是缓存依然存在（坑）**
+
+:::tip
+
+**因为，同一个小程序的开发版、体验版、线上版的缓存是共用的，你需要同时删除这三个版本的小程序，缓存才会被删除**。
+
+
+
+**如果你使用了开发工具里面的远程调试，建议你清除缓存时，顺便把开发工具内的缓存也清除掉**
+
+:::
+
 ## 网络请求
 
 ### 网络API列表
