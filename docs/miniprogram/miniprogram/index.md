@@ -3,7 +3,9 @@
 
 :::tip
 
-**最后更新时间：2018年09月25日**
+**整理人：黄雪峰**
+
+**最后更新时间：2018年09月27日**
 
 **字数：77947**
 
@@ -94,8 +96,50 @@
 
 :::tip
 
-* 最新wx.navigateTo可以打开10层了
+* **最新wx.navigateTo可以打开10层了**
 * 要注意不同的想转页面方式，触发的页面生命周期是不一样的，请注意
+
+:::
+
+:::tip
+
+**使用微信的storage一定要注意，同步读取有时候会失败**
+
+:::
+
+:::tip
+
+**一定要详细理解微信授权和openid以及unionid机制unionid有时候是获取不到的，想起参考本文章unionid记住部分**
+
+:::
+
+:::tip
+
+**使用微信支付，需要线上或者模拟线上环境，要注意**
+
+:::
+
+:::tip
+
+**不校检域名，真机调试可以，但是点击预览，有时候获取不到数据，必须是后台设置的https域名，否则请求不到数据**
+
+:::
+
+:::tip
+
+**使用微信的storage一定要注意，同步读取有时候会失败**
+
+:::
+
+:::tip
+
+**小程序是有类目的，不同的小程序上架需要设置不同的类目，有些类目需要资质和证书的**
+
+:::
+
+:::tip
+
+**小程序虚拟支付，iOS端，审核很大可能性会不通过，要注意，Android可以，解决方案看本文虚拟支付部分**
 
 :::
 
@@ -225,7 +269,12 @@
   * 被拒后许多都不会给拒绝理由
 * 域名、备案、https
 
+## 小程序内存优化
+
+* 
+
 ## React Native
+
 * Facebook于2015年4月开源的跨平台移动应用开发框架
 * React Native产出的并不是“网页应用”， 或者说“HTML5应用”，又或者“混合应用”。
 * 最终产品是一个真正的移动应用，从使用感受上和用Objective-C或Java编写的应用相比几乎是无法区分的。
@@ -1236,6 +1285,12 @@ https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=J
 
 ### 获取UnionID
 
+:::tip
+
+**开发之前记住一点：**
+
+:::
+
 UnionID获取途径有三个，前提是：**绑定了开发者帐号的小程序**
 
 * 调用接口 **wx.getUserInfo**，从解密数据中获取UnionID。**注意本接口需要用户授权，请开发者妥善处理用户拒绝授权后的情况**。
@@ -1243,6 +1298,10 @@ UnionID获取途径有三个，前提是：**绑定了开发者帐号的小程�
 * 如果开发者帐号下存在**同主体的**公众号或移动应用，并且该用户已经授权登录过该公众号或移动应用。开发者也可以直接通过 **wx.login** 获取到该用户UnionID，无须用户再次授权
 
 :::tip
+
+**重点：记住！记住！记住！**
+
+**在登录小程序之前，既没有关注过公众号，也没有登录过公众号，更没有使用微信登录的方式登录过app，通过 wx.login 的到的 code 换不回 unionid 及 openid 等信息**
 
 **unionid其实就相当于全局id**
 
@@ -1293,6 +1352,135 @@ UnionID获取途径有三个，前提是：**绑定了开发者帐号的小程�
 }
 
 ```
+
+### 解决unionid问题
+
+我们知道：一般情况下(即在登录小程序之前，既没有关注过公众号，也没有登录过公众号，更没有使用微信登录的方式登录过app)，通过 wx.login 的到的 code 换不回 unionid 及 openid 等信息。
+
+**未授权的获取方式openid是需要用户关注你的公众号的，但是，授权的情况下，只要用户点击确定，用户是不需要去关注你的公众号的，你就可以获取到用户的openId以及用户的基本信息！！！**
+
+#### 解决办法
+
+* 通过带登录态的 wx.getUserInfo  获取到用户的加密数据 encryptedData 和加密算法的初始向量iv
+* 然后将 encryptdata、iv 以及 code传给后端
+* 后端再去通过接收到的encryptedData、iv以、code 以及之前的 session_key 解密出用户的 openid、unionid 等
+
+#### 小程序代码
+
+```javascript
+// 需要用户主动授权
+<button 
+	type="default" 
+	open-type="getUserInfo" 
+	lang="zh_CN" 
+	bindgetuserinfo="bindGetUserInfo"
+>
+    微信登录
+</button>
+//微信登录
+bindGetUserInfo: function (e) {
+    console.log(e)
+    let that = this
+    // 用户授权，e.detail.userInfo有值
+    if (e.detail.userInfo) {
+		// 请求code
+        wx.login({
+            success: res => {
+                // 发送 res.code 到后台换取 openId, sessionKey, unionId
+                console.log(res.code)
+                let code = res.code
+                let data = {
+                    code: code,
+                }
+                // 发送code，获取openid
+                // wx.xx.getOpenId 是封装的网络请求方法
+                wx.xx.getOpenId(data, function (res) {
+                    console.log('第一次请求获取到的数据',res)
+                    if (res.data) {
+                        let openid = res.data.openid
+                        // open是肯定可以获取到的，因为这里是已经授权了
+                        // 获取到的openid存到全局data
+                        getApp().globalData.openid = openid
+                        // 判断有没有unionid，没有再去请求，并且添加参数
+                        // 这里这样做是因为反解析unionid需要md5解密之类的
+                        // 消耗性能，不如要的时候在湖区
+                        if (!res.data.unionid){
+                            // 再次请求数据
+                            wx.getUserInfo({
+                                withCredentials: true,
+                                success: function (res) {
+                                    // 添加2个关键数据
+                                    let data = {
+                                        code: code,
+                                        encryptedData: res.encryptedData,
+                                        iv: res.iv
+                                    }
+                                    // console.log(data)
+                                    wx.xx.getOpenId(data, function (res) {
+                                        if (res.data) {
+                                            // 存到全局数据
+                                            that.globalData.unionid = res.data.unionid
+                                        }
+                                    })
+                                },
+                                fail: function (res) {
+                                    console.log(res)
+                                }
+                            })
+                        }
+                        else {
+                            // 如果第一次请求到unionid，直接存起来
+                            that.globalData.unionid = res.data.unionid
+                        }
+                    }
+
+                })
+            },
+            fail: function (err) {
+            }
+        })
+
+        // 用户按了允许授权按钮
+        // 发送请求三方登录提交数据
+        // 记录登录状态
+        wx.dk.setLoginStatus('OK')
+        // 返回
+        wx.navigateBack({
+            delta: 1
+        })
+
+    }
+    // 用户拒绝
+    else {
+        let msg = "如需正常使用小程序部分功能，请在授权管理中选中“用户信息”，然后点按确定。最后再重新进入小程序即可正常使用。"
+        //用户按了拒绝按钮
+        wx.showModal({
+            title: '用户未授权',
+            content: msg,
+            showCancel: false,
+        })
+    }
+},
+```
+
+* 旧版本基础库调取wx.getUserInfo()可以直接获取到微信返回的encryptdata等完整数据
+* 基础库更新之后，需要增加withCredentials属性，并将属性值设置为true时才可以获取到除用户基本信息之外的encryptedData以及iv等数据
+* 当withCredentials值为true时，要求此前有调用过wx.login且登录态尚未过期。
+
+### 实际项目解决方案
+
+#### 第一种：前端判断是否有 unionid
+
+* 在向后端上传 code 并且后端返回数据以后
+* 前端判断返回值中是否有 unionid 或者 unionid 是否为 null，null 的情况下去调用带有用户登录态的wx.getUserInfo()
+* 然后再将微信返回的  encryptedData 和 iv 返回给后端，后端解密出相应的信息后再返回给前端；
+
+#### 第二种：后端判断是否有 unionid 
+
+* 前端在调用 wx.getUserInfo() 时候带着登录态
+* 然后不管后台能不能拿到 unionid，都把 encryptedData 和 iv 返回给后端
+* 后端在拿到前端 code 之后去请求微信的接口拿 unionid
+* 如果返回的 unionid 为空，再拿前端传的 encryptedData、iv以及之前的 session_key 解密出 unionid。
 
 ## 用户授权
 
@@ -1515,6 +1703,7 @@ checkSettingStatu: function(cb) {
          }
     });
  }
+// 这里的代码，部分需要修改，大家注意，思路仅供参考，现在权限不可用了
 ```
 
 #### 方案二
@@ -1601,6 +1790,7 @@ Page({
         }
     }
 })
+// 这里的代码，部分需要修改，大家注意，思路仅供参考，现在权限不可用了
 ```
 
 * 如果用户第一次拒绝了授权那么ldata设置为false，显示的是“点击授权并获取位置信息”按钮
