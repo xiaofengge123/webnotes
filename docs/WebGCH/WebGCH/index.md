@@ -122,8 +122,8 @@
 **解决CSS和JavaScript在开发中出现的问题**
 
 #### JavaScript的模块化方案 
-* ADM
-* CDM
+* AMD
+* CMD
 * UMD
 * ES6 Module
 
