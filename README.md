@@ -8,7 +8,7 @@
 
 **最后更新时间：2018年09月29日**
 
-**全站总字数：258166**
+**全站总字数：281118**
 
 :::
 
@@ -32,6 +32,7 @@
     * Nodejs
     * npm
     * ES6
+    * [**前端工程化**](http://www.xuefeng666.com/WebGCH/index.html)
     * [**前端模块化**](http://www.xuefeng666.com/Module/index.html)
     * [**Vue**](http://www.xuefeng666.com/Vue/index.html)
         * [**Vue 源码**](http://www.xuefeng666.com/Vue/VueSrc/index.html)
@@ -105,10 +106,11 @@
  **[项目github：https://github.com/xuefeng666/webnotes](https://github.com/xuefeng666/webnotes)**
 
  **[小峰哥知乎：https://www.zhihu.com/people/qian-duan-xiao-feng-ge/activities](https://www.zhihu.com/people/qian-duan-xiao-feng-ge/activities)**
- 
+
 网站持续更新中......
 
 **请支持我们，给我们的github点赞！**
+
 :::
 
 

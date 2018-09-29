@@ -7,7 +7,7 @@
 
 **最后更新时间：2018年09月29日**
 
-**字数：77947**
+**字数：100899**
 
 :::
 
@@ -137,6 +137,42 @@
 
 :::
 
+:::tip
+
+**小程序开发板，体验版和正式版缓存是通用的，使用正式版之前，要删掉开发板和体验版，不然会出现一些莫名其妙的问题，尤其是开发体验人员**
+
+**体验版更新，测试人员，也建议在小程序列表中删掉，然后重新扫码体验，不然有时候会出一些莫名其妙的问题**
+
+:::
+
+:::tip
+
+* **小程序仍然使用WebView渲染，并非原生渲染**
+* **需要独立开发，不能在非微信环境运行 **
+* **开发者不可以扩展新组件。**
+
+:::
+
+:::tip
+
+**依赖浏览器环境的js库不能使用，因为是JSCore执行的，没有window、document对象。**
+
+:::
+
+:::tip
+
+* **WXSS中无法使用本地（图片、字体等）**
+* **WXSS转化成js 而不是css，为了兼容rpx**
+* **WXSS不支持级联选择器**
+
+:::
+
+:::tip
+
+**小程序不能和公众号重名，于是小程序的名字就成了：自选股+、滴滴出行DiDi 。**
+
+:::
+
 ## 关于虚拟支付
 
 ### 虚拟支付现状
@@ -226,7 +262,7 @@
 
 而其他涉及虚拟支付的答题类和虚拟礼物类小程序，也都会受到波及。
 
-影响范围仅限iOS端**，Android不受影响**，开发者们依然可以在安卓版本的小程序内，提供虚拟支付。
+影响范围仅限iOS端，**Android不受影响**，开发者们依然可以在安卓版本的小程序内，提供虚拟支付。
 
 :::
 
@@ -267,13 +303,37 @@
 
 ### 理解小程序机制
 
+* 小程序在启动时，会直接加载所有页面逻辑代码进内存，即便 page2 可能都不会被使用。在 page1 跳转至 page2 时，page1 的逻辑代码 Javascript 数据也不会从内存中消失。page2 甚至可以直接访问 page1 中的数据。
+* 从页面响应用户点击行为，开始跳转，到新页面onload事件触发，存在一个延迟，这个延迟大概在100-300ms之间（安卓响应比ios慢些）
+* 在小程序启动时，会把所有调用Page()方法的object存在一个队列里（如下图）。每次页面访问的时候，微信会重新创建一个新的对象实例（实际上就是深拷贝）。
+* 也就是说，在A页面在执行点击响应事件的时候，B页面的实例还没创建，这时候调用的xxx方法，实际上是Page对象的原型（小程序启动时候创建的那个）
+
 ### setData优化
+
+* **不要频繁的去 setData**
+* **不要每次 setData 都传递大量新数据**
+* **不应该在后台态页面进行 setData**
+* **严重时，会造成小程序回收**
 
 ### 图片优化
 
+* 目前图片资源的主要性能问题在于大图片和长列表图片上，这两种情况都有可能导致 iOS 客户端内存占用上升，从而触发系统回收小程序页面。
+* 在 iOS 上，小程序的页面是由多个 WKWebView 组成的，在系统内存紧张时，会回收掉一部分 WKWebView。
+* **从过去我们分析的案例来看，大图片和长列表图片的使用会引起 WKWebView 的回收。**
+* **瀑布流在小程序上，真心不是一个好的选择，尤其是要求滑动流畅的情况下**
+* 除了内存问题外，大图片也会造成页面切换的卡顿。我们分析过的案例中，有一部分小程序会在页面中引用大图片，在页面后退切换中会出现掉帧卡顿的情况。
+* **当前我们建议开发者尽量减少使用大图片资源。**
+
 ### 瀑布流策略
 
+* 首先不推荐用瀑布流（勿喷）
+* 可以一屏一屏的展现，不展示的部分隐藏掉，不渲染，类似无线轮播图
+
 ### 渲染DOM问题
+
+* DOM渲染很消耗性能
+* 分批加载DOM，可以节省资源消耗
+* `wx:if` 和`hidden` 灵活使用，可以提高性能
 
 ## React Native
 
@@ -289,8 +349,10 @@
 * 小程序提供了web-view
 
 ::: tip
-小程序不是web，类似于web（对前端开发人员友好）
-小程序没用window对象，没有DOM对象
+**小程序底层还是基于Webview来实现的**
+
+**小程序本质其实就是（混合）的app 介于web app与native 原生app之间，具备丰富的调用手机各种功能的接口，同时又具备灵活性，跨平台**
+
 :::
 
 ## 第一个小程序
@@ -1050,6 +1112,10 @@ doubleClick: function(e) {
 
 ## 应用的生命周期
 
+[参考博客1](https://www.jianshu.com/p/0078507e14d3)
+
+[参考博客2](https://blog.csdn.net/belvine/article/details/80447120)
+
 * 小程序的生命周期用App()来注册，接受一个 object 参数，其指定小程序的生命周期函数等
 * App() 必须在 app.js 中注册，且不能注册多个
 
@@ -1066,8 +1132,11 @@ object参数说明：
 | onPageNotFound | Function | 页面不存在监听函数        | 当小程序出现要打开的页面不存在的情况，会带上页面信息回调该函数，详见下文     |
 | 其他             | Any      |                  | 开发者可以添加任意的函数或数据到 Object 参数中，用 `this` 可以访问 |
 
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/198b3cda40011bbc800bba3b7b6ca3d6.png" />
+
 ::: tip
 
+* App() 必须在 app.js 中注册，且不能注册多个。
 * 不要在定义于 `App()` 内的函数中调用 `getApp()` ，使用 `this` 就可以拿到 `app` 实例。 
 * 不要在 `onLaunch` 的时候调用 `getCurrentPage()`，此时 page 还没有生成。 
 * 通过 `getApp()` 获取实例之后，不要**私自调用生命周期函数**。
@@ -1104,6 +1173,18 @@ object参数说明：
 * **热启动**：
   *  假如用户已经打开过某小程序，然后在一定时间内再次打开该小程序，此时无需重新启动，只需将后台态的小程序切换到前台，这个过程就是热启动
 
+### 小程序更新机制
+
+* 小程序冷启动时如果发现有新版本，将会异步下载新版本的代码包，并同时用客户端本地的包进行启动
+* 即新版本的小程序需要等下一次冷启动才会应用上。 
+* 如果需要马上应用最新版本，可以使用 wx.getUpdateManager  API 进行处理。
+
+### 小程序运行
+
+* 小程序没有重启的概念
+* 当小程序进入后台，客户端会维持一段时间的运行状态，超过一定时间后（**目前是5分钟**）会被微信主动销毁
+* 当短时间内（5s）连续收到两次以上收到系统内存告警，会进行小程序的**销毁**
+
 ## 页面的生命周期
 
 * Page() 函数用来注册一个页面
@@ -1128,14 +1209,14 @@ Object参数说明：
 | onTabItemTap      | Function | 当前是 tab 页时，点击 tab 时触发                    |
 | 其他                | Any      | 开发者可以添加任意的函数或数据到 `Object` 参数中，在页面的函数中用 `this` 可以访问 |
 
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/c9fc4a6740a46f92808078b68ec3601a.png" />
+
 #### data
 
 * data 是页面第一次渲染使用的初始数据
 * 页面加载时，data  将会以 JSON 字符串的形式由逻辑层传至渲染层
 * 因此 data 中的数据必须是可以转成 JSON 的类型：字符串，数字，布尔值，对象，数组。
 * 渲染层可以通过 WXML 对数据进行绑定
-
-
 
 #### 生命周期函数
 
@@ -1159,6 +1240,334 @@ Object参数说明：
 - 监听用户下拉刷新事件。
 - 需要在 config 的 window 选项中开启 enablePullDownRefresh 。
 - 当处理完数据刷新后，wx.stopPullDownRefresh 可以停止当前页面的下拉刷新。
+
+#### 应用的生命周期对页面生命周期的影响
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/d74a049240d1d536804c4bf37c149159.png" />
+
+:::tip
+
+- **小程序初始化完成后，页面首次加载触发onLoad，只会触发一次。**
+- **当小程序进入到后台，先执行页面onHide方法再执行应用onHide方法。**
+- **当小程序从后台进入到前台，先执行应用onShow方法再执行页面onShow方法。**
+
+:::
+
+## 小程序实现原理
+
+[参考博客1](https://blog.csdn.net/rolan1993/article/details/80362029)
+
+[参考博客2](https://blog.csdn.net/xiangzhihong8/article/details/66521459)
+
+[参考博客3](http://www.php.cn/xiaochengxu-350307.html)
+
+### 小程序运行环境
+
+* 微信小程序运行在三端：iOS、Android 和 用于调试的开发者工具
+* 三端的脚本执行环境以及用于渲染非原生组件的环境是各不相同的
+  * 在 iOS 上，小程序的 javascript 代码是运行在 JavaScriptCore 中，是由 WKWebView 来渲染的，环境有 iOS8、iOS9、iOS10 等
+  * 在 Android 上，小程序的 javascript 代码是通过 X5 JSCore来解析，是由 X5 基于 Mobile Chrome 53/57 内核来渲染的 
+  * 在 开发工具上， 小程序的 javascript 代码是运行在 nwjs 中，是由 Chrome Webview 来渲染的来自官方文档说明
+
+### 小程序性能优化
+
+* 安装包缓存
+* 分包加载
+* 独立渲染线程
+* webview 预加载
+* Native 组件
+
+### 小程序打包机制
+
+* 小程序编辑器是基于WEB技术体系实现的，采用技术是nwjs+react
+
+#### nwjs
+
+* nwjs是在英特尔开源技术中心创建的，它是基于谷歌浏览器核心引擎和nodejs运行
+* 你可以通过nwjs技术使用html和js语言编写本地应用程序
+* 它也可以让你直接从DOM调用nodejs模块，使用一种新的方式与所有的Web技术编写本地应用。
+* 它主要有以下6个特点：
+  * 以网络最流行的技术编写原生应用程序的新方法
+  * 基于HTML5, CSS3, JS and WebGL而编写
+  * 完全支持nodejs所有api及第三方模块
+  * 可以使用DOM直接调用nodejs模块
+  * 容易打包和分发
+  * 支持运行环境包括32位和64位的Window、Linux和Mac OS
+
+#### React
+
+* 就是我们常见的react
+
+* VirtualDOM：虚拟DOM
+* Diff：diff算法
+* Render UI实现
+
+#### 小程序打包后目录
+
+* WAService.js  框架JS库，提供逻辑层基础的API能力 
+
+* WAWebview.js 框架JS库，提供视图层基础的API能力 
+* WAConsole.js 框架JS库，控制台 
+* app-config.js 小程序完整的配置，包含我们通过app.json里的所有配置，综合了默认配置型 
+* app-service.js 我们自己的JS代码，全部打包到这个文件 
+* page-frame.html 小程序视图的模板文件，所有的页面都使用此加载渲染，且所有的WXML都拆解为JS实现打包到这里 
+* pages 所有的页面，这个不是我们之前的wxml文件了，主要是处理WXSS转换，使用js插入到header区域。
+
+### 小程序两大线程
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/3e41f4594025dc218017127687980bec.webp" />
+
+**小程序由两大线程组成（上图可以看到）**：
+
+* 负责界面的视图线程（view thread），渲染页面结构
+* 负责数据、服务处理的服务线程（appservice thread），用来逻辑处理、数据请求、接口调用
+* **视图层使用WebView渲染，逻辑层使用JSCore运行**。
+* 视图层和逻辑层通过系统层的**JSBridage**进行通信，逻辑层把数据变化通知到视图层，触发视图层页面更新，视图层把触发的事件通知到逻辑层进行业务处理。
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/8ddfede2409f2a7780cb923cf4b781c3.png" />
+
+* 图片来源，腾讯课堂coding学院
+* 最底层是微信的app，当我们发版时小程序开发工具会把我们的代码和框架一起进行打包，当我们在微信里打开小程序时其实微信会把打包好的代码下载到微信app里，这样我们就可以像在开发工具里一样在微信里运行我们的小程序了。
+* native层就是小程序的框架，就像我们用的react框架一样，这个框架里封装了ui层组件和逻辑层组件，这些组件可以通过微信app提供的接口调用手机硬件信息。
+* 最上层是我们真正需要进行操作的视图层和逻辑层，视图层和逻辑层的交互是通过数据经由native层进行交互的。视图层和逻辑层都可以调用native框架里封装好的组件和方法。
+* **小程序启动时会从CDN下载小程序的完整包，一般是数字命名的,如：_-2082693788_4.wxapkg**
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/13cf24c14022239d8012a9671f2aecb0.jpg" />
+
+### 小程序技术实现
+
+* 小程序的UI视图和逻辑处理是用多个webview实现的
+* 逻辑处理的JS代码全部加载到一个Webview里面，称之为AppService
+* 整个小程序只有一个，并且整个生命周期常驻内存
+* 而所有的视图（wxml和wxss）都是单独的Webview来承载，称之为AppView。
+* 所以一个小程序打开至少就会有2个webview进程，正是因为每个视图都是一个独立的webview进程，考虑到性能消耗，小程序不允许打开超过5个层级的页面，当然同是也是为了体验更好。（目前是10层）
+
+#### 视图线程（AppView）
+
+* 可以理解为h5的页面，提供UI渲染，底层提供一个WAWebview.js来提供底层的功能
+* 视图层由 WXML 与 WXSS 编写，由组件来进行展示。
+* 将逻辑层的数据反应成视图，同时将视图层的事件发送给逻辑层。
+
+#### 视图线程功能
+
+* 消息通信封装为WeixinJSBridge
+  * 开发环境为window.postMessage
+  * IOS下为WKWebview的window.webkit.messageHandlers.invokeHandler.postMessage
+  * android下用WeixinJSCore.invokeHandler 
+* 日志组件Reporter封装 
+* wx对象下的api
+  * 这里的api跟WAService里的还不太一样
+  * 有几个跟那边功能差不多
+  * 但是大部分都是处理UI显示相关的方法 
+* 小程序组件实现和注册 
+* VirtualDOM，Diff和Render UI实现 
+* 页面事件触发
+
+#### 机制
+
+* AppView有一个html模板文件，通过这个模板文件加载具体的页面
+* 这个模板主要就一个方法，$gwx
+* 主要是返回指定page的VirtualDOM
+* 而在打包的时候，会事先把所有页面的WXML转换为ViirtualDOM放到模板文件里
+* 而微信自己写了2个工具wcc（把WXML转换为VirtualDOM）和wcsc（把WXSS转换为一个JS字符串的形式通过style标签append到header里）。
+
+#### View - WXML
+
+* WXML（WeiXin Markup Language）
+  * 支持数据绑定
+  * 支持逻辑算术、运算
+  * 支持模板、引用
+  * 支持添加事件（bindtap）
+
+* **wcc**
+  * wxml编译器
+  * wcc 把wxml文件 转为 js 执行方式：wcc index.wxml
+  * 本质：用于转wxml中的自定义tag为virtual_dom
+
+#### View - WXSS
+
+* WXSS(WeiXin Style Sheets)
+  * 支持大部分CSS特性
+  * 添加尺寸单位rpx，可根据屏幕宽度自适应
+  * 使用@import语句可以导入外联样式表
+  * 不支持多层选择器-避免被组件内结构破坏
+* **wcsc**
+  * wxss编译器
+  * 把wxss文件转化为 js 执行方式： wcsc index.wxss
+
+:::tip
+
+* wcc和wcsc，可以从vendor目录下获取到
+
+* 在“微信web开发者工具”下敲入help，你就会得到下面的数据：
+
+* 运行openVendor()，你就会得到上面的wcss、wxss、WAService.js、WAWebview.js四个文件了。
+
+:::
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/39bbfd7c405bb73b8007139789f87f84.png" />
+
+#### View – WXSS Selectors
+
+* WXSS目前支持如下选择器
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/38ddb93b40c87dae80c4691c79d926c1.jpg" />
+
+#### View - Component
+
+* 小程序提供了一系列组件用于开发业务功能，按照功能与HTML5的标签进行对比如下
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/dc4f1c3f400cae3480b7aa0c9f71dc5d.jpg" />
+
+* 小程序的组件基于Web Component标准
+* 使用Polymer框架实现Web Component
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/37e1b272403e377180c1f224eb79fb75.png" />
+
+#### View - Native Component
+
+* 目前Native实现的组件有 
+  * camera
+  * canvas
+  * input
+  * live-player
+  * live-pusher
+  * map
+  * textarea
+  * video
+* Native组件层在WebView层之上
+
+* 原生组件的使用限制
+  * 原生组件的层级是**最高**的，所以页面中的其他组件无论设置 `z-index` 为多少，都无法盖在原生组件上。
+  * 后插入的原生组件可以覆盖之前的原生组件。
+  * 原生组件还无法在 `scroll-view`、`swiper`、`picker-view`、`movable-view` 中使用。
+  * 部分CSS样式无法应用于原生组件，例如：
+    - 无法对原生组件设置 CSS 动画
+    - 无法定义原生组件为 `position: fixed`
+    - 不能在父级节点使用 `overflow: hidden` 来裁剪原生组件的显示区域
+  * 原生组件的事件监听不能使用 `bind:eventname` 的写法，只支持 `bindeventname`。原生组件也不支持 catch 和 capture 的事件绑定方式。
+  * 在iOS下，原生组件暂时不支持触摸相关事件。
+  * 原生组件会遮挡 vConsole 弹出的调试面板。
+
+:::tip
+
+**在工具上，原生组件是用web组件模拟的，因此很多情况并不能很好的还原真机的表现，建议开发者在使用到原生组件时尽量在真机上进行调试。**
+
+**为了解决原生组件层级最高的限制。小程序专门提供了 `cover-view `和 `cover-image`组件，可以覆盖在**部分**原生组件上面。这两个组件也是原生组件，但是使用限制与其他原生组件有所不同。**
+
+:::
+
+#### WebView预加载
+
+* 每次小程序进入除了当前页面,Native预先额外加载一个WebView
+* 当打开指定页面时，用默认数据直接渲染，请求数据回来时局部更新
+* 返回显示历史View
+* 退出小程序，View状态不销毁
+
+#### 视图线程四大状态
+
+* 初始化状态：初始化视图线程所需要的工作，初始化完成后向“服务线程”发送初始化完成信号，然后进入**等待状态，等待服务线程提供初始化数据**。
+* 首次渲染状态：当收到服务线程提供的初始化数据后（json和js中的data数据），渲染小程序界面，渲染完毕后，发送“首次渲染完成信号”给服务线程，并将页面展示给用户。
+* 持续渲染状态：此时界面线程继续一直等待“服务线程”通过this.setdata（）函数发送来的界面数据，只要收到就重新局部渲染，也因此只要更新数据并发送信号，界面就自动更新。
+* 结束状态：页面被回收或者销毁、应用被系统回收、销毁时触发。
+
+#### 服务线程（AppService）
+
+*  AppService即一个简单的页面，主要功能是负责逻辑处理部分的执行，底层提供一个WAService.js的文件来提供各种api接口
+* 逻辑层将数据进行处理后发送给视图层，同时接受视图层的事件反馈
+
+#### 服务线程功能
+
+* App( ) 小程序的入口；Page( ) 页面的入口
+* 每个页面有独立的作用域，并提供模块化能力。
+* 数据绑定、事件分发、生命周期管理、路由管理
+* 运行环境：
+  * IOS - JSCore
+  * Android - X5 JS解析器
+  * DevTool - nwjs Chrome 内核
+
+* 消息通信封装为WeixinJSBridge
+  * 开发环境为window.postMessage
+  * iOS下为WKWebview的window.webkit.messageHandlers.invokeHandler.postMessage
+  * android下用WeixinJSCore.invokeHandler
+* 日志组件Reporter封装 
+* wx对象下面的api方法 
+* 全局的App,Page,getApp,getCurrentPages等全局方法 
+* 还有就是对AMD模块规范的实现
+
+#### 机制
+
+* 整个页面就是加载一堆JS文件
+* 包括小程序配置config，上面的WAService.js（调试模式下有asdebug.js）
+* 剩下就是我们自己写的全部的js文件，一次性都加载
+
+#### App Service - Binding
+
+* 数据绑定使用 Mustache 语法（双大括号）将变量包起来
+* 动态数据均来自对应 Page 的 data
+* 可以通过setData方法修改数据
+* 事件绑定的写法同组件的属性，以 key、value 的形式，key 以bind或catch开头，然后跟上事件的类型
+* 如bindtap, catchtouchstart，value 是一个字符串，需要在对应的 Page 中定义同名的函数。
+
+#### App Service - Life Cylce
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/00c60209400a4c02804f99e10ecc00c7.jpg" />
+
+#### App Service - API
+
+* API通过JSBridge和Native 进行通信
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/267b4f3440ab81ea80369b647aee935c.png" />
+
+#### App Service - Router 
+
+* 微信导航部分，参考本文导航nav
+
+#### 服务线程五大状态
+
+* 初始化状态：此阶段仅启动服务线程所需的基本功能，比如信号发送模块。系统的初始化工作完毕，就调用自定义的onload和onshow，然后等待视图线程的“视图线程初始化完成”号。onload是只会首次渲染的时候执行一次，onshow是每次界面切换都会执行，简单理解，这就是唯一差别。
+* 等待激活状态：接收到“视图线程初始化完成”信号后，将初始化数据发送给“视图线程”，等待视图线程完成初次渲染。
+* 激活状态：收到视图线程发送来的“首次渲染完成”信号后，就进入激活状态既程序的正常运行状态，并调用自定义的onReady()函数。此状态下就可以通过this.setData 函数发送界面数据给界面线程进行局部渲染，更新页面。
+* 后台运行状态：如果界面进入后台，服务线程就进入后台运行状态，从目前的官方解读来说，这个状态挺奇怪的，和激活状态是相同的，也可以通过setdata函数更新界面的。毕竟小程序的框架刚推出，应该后续会有很大不同吧。
+* 结束状态：页面被回收或者销毁、应用被系统回收、销毁时触发。
+
+#### Service和View通信
+
+* 使用消息publish和subscribe机制实现两个Webview之间的通信
+* 实现方式就是统一封装一个WeixinJSBridge对象
+* 而不同的环境封装的接口不一样
+* 上面都说过了，可以看下
+
+#### 微信组件
+
+* 在WAWebview.js里有个对象叫exparser，它完整的实现小程序里的组件
+* 看具体的实现方式，思路上跟w3c的web components规范神似
+* 但是具体实现上是不一样的，我们使用的所有组件，都会被提前注册好，在Webview里渲染的时候进行替换组装
+* exparser有个核心方法： 
+  * regiisterBehavior: 注册组件的一些基础行为，供组件继承 
+  * registerElement：注册组件，跟我们交互接口主要是属性和事件
+* 组件触发事件（带上webviewID），调用WeixinJSBridge的接口，publish到native
+* 然后native再分发到AppService层指定webviewID的Page注册事件处理方法。
+
+#### 代码运行
+
+* 运行时，外面包裹define，代码作为回调
+* 当调用回调时，只传入前面三个值，由于后面的变量都是局部定义的变量，就屏蔽了(window,document等这些变量
+* define('app.js',callback)，回调值传入了三个参数,屏蔽了其他属性
+
+### 预先加载数据
+
+* 小程序在启动时，会直接加载所有页面逻辑代码进内存，即便 page2 可能都不会被使用。在 page1 跳转至 page2 时，page1 的逻辑代码 Javascript 数据也不会从内存中消失。page2 甚至可以直接访问 page1 中的数据。
+* 小程序的这种机制差异正好可以更好的实现预加载。通常情况下，我们习惯将数据拉取写在 onLoad 事件中。但是小程序的 page1 跳转到 page2，到 page2 的 onLoad 是存在一个 300ms ~ 400ms 的延时的。
+* 因为小程序的特性，完全可以在 page1 中预先拿取数据，然后在 page2 中直接使用数据，这样就可以避开 redirecting 的 300ms ~ 400ms了。
+* 渲染view线程和AppServcie是相互独立的,对于AppServcie中js运行不会阻塞view的渲染
+* 官方的示例也是采用这种方式: 先App中请求数据,在index.js使用数据
+
+#### 总结
+
+* **MSSM**：对逻辑和UI进行了完全隔离，这个跟当前流行的react，agular，vue有本质的区别，小程序逻辑和UI完全运行在2个独立的Webview里面，而后面这几个框架还是运行在一个webview里面的，如果你想，还是可以直接操作dom对象，进行ui渲染的。
+* **组件机制**：引入组件化机制，但是不完全基于组件开发，跟vue一样大部分UI还是模板化渲染，引入组件机制能更好的规范开发模式，也更方便升级和维护。
+* **多种节制**：不能同时打开超过5个窗口，打包文件不能大于1M，dom对象不能大于16000个等，这些都是为了保证更好的体验
 
 ## 小程序登录
 

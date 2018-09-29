@@ -8,7 +8,7 @@
 
 **最后更新时间：2018年09月29日**
 
-**全站总字数：258166**
+**全站总字数：281118**
 
 :::
 
@@ -32,6 +32,7 @@
     * Nodejs
     * npm
     * ES6
+    * [**前端工程化**](http://www.xuefeng666.com/WebGCH/index.html)
     * [**前端模块化**](http://www.xuefeng666.com/Module/index.html)
     * [**Vue**](http://www.xuefeng666.com/Vue/index.html)
         * [**Vue 源码**](http://www.xuefeng666.com/Vue/VueSrc/index.html)
