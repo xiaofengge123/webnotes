@@ -6,9 +6,9 @@
 
 :::tip
 
-**最后更新时间：2018年09月29日**
+**最后更新时间：2018年10月02日**
 
-**全站总字数：277955**
+**全站总字数：287202**
 
 :::
 
@@ -25,7 +25,7 @@
     * html（5）
     * [**CSS**](http://www.xuefeng666.com/CSS/index.html)
         * [**Flex**](http://www.xuefeng666.com/CSS/Flex/index.html)
-    * JavaScript
+    * [**JavaScript**](http://www.xuefeng666.com/JavaScript/index.html)
     * DOM和BOM
     * jQuery
     * [**jQuery 源码**](http://www.xuefeng666.com/jQuery/jQuerySrc/index.html)

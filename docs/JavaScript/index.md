@@ -2,9 +2,9 @@
 
 :::tip
 
-**最后更新时间：2018年09月20日**
+**最后更新时间：2018年10月02日**
 
-**字数：**
+**字数：572**
 
 :::
 
@@ -12,3 +12,38 @@
 **JavaScript**
 
 **主要内容**
+
+* 数组
+    * 数组定义
+    * 数组特点
+
+* 数组创建
+    * 直面量创建
+    * 构造函数
+
+* 数组操作
+    * length
+    * 设置或访问数据
+    * 数组遍历
+
+* 常用数组方法
+    * push()
+    * pop()
+    * shift()
+    * unshift()
+    * concat()
+    * join()
+    * reverse()
+    * sort 排序
+    * slice()
+    * splice()
+    * indexOf()
+    * lastIndexOf()
+    * toString()
+    * forEach()
+    * map()
+    * filter()
+    * some()
+    * every()
+    * reduce()
+    * reduceRight()
