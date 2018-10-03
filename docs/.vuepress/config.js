@@ -84,14 +84,14 @@ module.exports = {
                     ['Module/Module/','前端模块化'],
                 ], 
             },
-            // {
-            //     title: 'Web安全渗透',
-            //     collapsable:true,
-            //     children:[
-            //         ['WebSRC/','核心内容'],
-            //         ['WebSRC/WebSRC/','Web安全渗透'],
-            //     ], 
-            // },
+            {
+                title: 'Web安全渗透',
+                collapsable:true,
+                children:[
+                    ['WebSRC/','核心内容'],
+                    ['WebSRC/WebSRC/','Web安全渗透'],
+                ], 
+            },
             {
                 title: 'Vue',
                 collapsable:true,

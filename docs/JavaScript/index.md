@@ -2,7 +2,7 @@
 
 :::tip
 
-**最后更新时间：2018年10月02日**
+**最后更新时间：2018年10月03日**
 
 **字数：572**
 
@@ -47,3 +47,15 @@
     * every()
     * reduce()
     * reduceRight()
+
+* ES6新增数组方法
+    * from()
+    * of()
+    * find()
+    * findIndex()
+    * fill()
+    * copyWithin()
+    * includes
+    * entries()
+    * keys()
+    * values()
