@@ -4,9 +4,13 @@
 
 **最后更新时间：2018年10月2日**
 
-**字数：8675**
+**字数：15430**
 
 :::
+
+## 参考资料
+
+[阮一峰ES6入门](http://es6.ruanyifeng.com/)
 
 ## 数组
 
@@ -380,16 +384,324 @@ console.log(arr.toString()) // 11,22,33
 
 ### forEach()
 
+* 用于调用数组的每个元素，并将元素传递给回调函数。
+  * **没有返回值**
+  * forEach() 对于空数组是不会执行回调函数的
+  * callback的参数： 
+    * value --当前索引的值 必选
+    * index --索引 可选
+    * array --原数组 可选
+
+```javascript
+var arr = [11，22，33，44]
+arr.forEach((item, index) => {
+    // item 当前元素，必选
+    // index 当前元素的索引
+    // 匿名函数，是里面每一个item都会执行一次
+})
+```
+
 ### map()
+
+* **返回一个新数组，数组中的元素为原始数组元素调用函数处理后的值。**
+* 按照原始数组元素顺序依次处理元素
+* map() 不会对空数组进行检测
+* map() 不会改变原始数组
+
+```javascript
+let arr = [11,22,33,44,55]
+let ret = arr.map( (value,index,array)=>{
+    console.log('value',value)
+    console.log('index',index)
+    console.log('array',array)
+})   
+console.log(arr)
+console.log(ret)
+```
+
+:::tip
+
+**arr.forEach()和arr.map()**
+
+* arr.forEach()是和for循环一样，是for循环的替代品
+* arr.map()是修改数组其中的数据，并返回新的数据
+  * arr.forEach() 没有return
+  * arr.map() 有return
+
+:::
 
 ### filter()
 
+* 创建一个新的数组，新数组中的元素是通过检查指定数组中符合条件的所有元素
+* **返回true的项组成的数组**
+  * filter() 不会对空数组进行检测。
+  * filter() 不会改变原始数组。
+
+```javascript
+let arr = [11,22,33,44,55]
+let arr1 = arr.filter( (i, v) => {
+    if(i < 33) {
+        return true
+    }
+})
+console.log(arr1)    // [11, 22]
+```
+
 ### some()
+
+* 数组中的每一项给定特定的函数，如果任一项返回true,则返回true
+* **数组中任意一个元素满足条件，返回值就是true**
+
+```javascript
+function compare(element, index, array) {
+  return element > 44;
+}    
+[11, 22, 33, 44, 55].some(compare);  //true   有一个满足条件的，返回true
+[11, 22, 33, 44].some(compare); // false  没有满足条件的，返回false
+```
 
 ### every()
 
+* 对数组的每一项都运行给定的函数，每一项都返回 ture，则返回 true
+* 如果有一项返回false，那么就返回false，并且结束循环
+
+```javascript
+var arr = [11, 22, 33, 44];
+var boolValue = arr.every(function (t) {
+    return t + 1 > 10;
+});
+console.log(boolValue); //true 每一项加1，都大于10
+```
+
 ### reduce()
+
+* 返回数累加的值  累加器
+* **迭代数组的所有项，累加器，数组中的每个值（从左到右）合并，最终计算为一个值**
+* **arr.reduce(callback, initialValue)** 
+* callback: 
+  * previousValue 必选 --上一次调用回调返回的值，或者是提供的初始值（initialValue）
+  * currentValue 必选 --数组中当前被处理的数组项
+  * index 可选 --当前数组项在数组中的索引值
+  * array 可选 --原数组
+* initialValue: 可选 --初始值
+
+```javascript
+let arr = [11,22,33,44]
+let arr1 = arr.reduce((preValue, curValue) => 
+    preValue + curValue
+)
+console.log(arr1)    // 110
+```
 
 ### reduceRight()
 
-### 
+* 和arr.reduce()功能一样
+* reduceRight()从数组的**末尾向前**将数组中的数组项做累加
+
+```javascript
+let arr = [11,22,33,44]
+let arr1 = arr.reduceRight((preValue, curValue) => 
+    preValue + curValue
+)
+console.log(arr1)    // 110
+```
+
+## ES6新增数组方法
+
+### from()
+
+* 将两类对象转为真正的数组
+  * 类似数组的对象（array-like object）
+  * 可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）
+
+```javascript
+let arrayLike = {
+    '0': 'a',
+    '1': 'b',
+    '2': 'c',
+    length: 3
+};
+
+// ES5的写法
+var arr1 = [].slice.call(arrayLike); // ['a', 'b', 'c']
+
+// ES6的写法
+let arr2 = Array.from(arrayLike); // ['a', 'b', 'c']
+
+
+// 转化NodeList对象
+let ps = document.querySelectorAll('p');
+Array.from(ps).filter(p => {
+  return p.textContent.length > 100;
+});
+
+// 转化arguments对象
+function foo() {
+  var args = Array.from(arguments);
+  // ...
+}
+
+// 转化字符串，因为字符串有length属性，也可以通过下标访问数据
+Array.from('hello')
+// ['h', 'e', 'l', 'l', 'o']
+
+// 转化set
+let namesSet = new Set(['a', 'b'])
+Array.from(namesSet) // ['a', 'b']
+```
+
+:::tip
+
+* 如果参数是一个真正的数组，`Array.from`会返回一个一模一样的新数组
+* 对于还没有部署该方法的浏览器，可以用`Array.prototype.slice`方法替代
+* `Array.from`还可以接受第二个参数，作用类似于数组的`map`方法，用来对每个元素进行处理，将处理后的值放入返回的数组。
+
+:::
+
+### of()
+
+* 将一组值，转换为数组
+
+```javascript
+Array.of() // []  没有参数，返回空数组
+Array.of(undefined) // [undefined]
+Array.of(3, 11, 8) // [3,11,8]
+Array.of(3) // [3]
+Array.of(3).length // 1
+```
+
+:::tip
+
+可以用来替代`Array()`或`new Array()`，解决由于参数不同而导致一些问题
+
+:::
+
+### find()
+
+* 传入一个回调函数，找到数组中符合当前搜索规则的第一个元素，返回它，并且终止搜索。
+
+```javascript
+let arr = [11,22,33,44,55,22,33]
+let arr1 = arr.find((value, index, array) =>value > 22)
+console.log(arr1)   // 33  找到33，就直接返回，停止
+```
+
+### findIndex()
+
+* 传入一个回调函数，找到数组中符合当前搜索规则的第一个元素，**返回它的下标**，终止搜索。
+
+```javascript
+let arr = [11,22,33,44,55]
+let arr1 = arr.findIndex((value, index, array) => value > 22)
+console.log(arr1)  // 2
+```
+
+### fill()
+
+* **使用给定的值，填充一个数组**
+* **填充完后会改变原数组**
+* **arr.fill(target, start, end)** 
+  * target -- 待填充的元素
+  * start -- 开始填充的位置-索引
+  * end -- 终止填充的位置-索引（不包括该位置)
+
+```javascript
+let arr = [11, 22, 33, 44, 55]
+let arr1 = arr.fill(88)
+console.log(arr1)  // [88, 88, 88, 88, 88]
+console.log(arr)   // [88, 88, 88, 88, 88]
+
+let arr2 = arr.fill(5, 2)
+console.log(arr2) // [88, 88, 5, 5, 5]
+
+let arr3 = arr.fill(5, 1, 3)
+console.log(arr3) // [88, 5, 5, 5, 5]
+```
+
+### copyWithin()
+
+* 在当前数组内部，将制定位置的数组复制到其他位置
+* **会覆盖原数组项**
+* **返回当前数组**
+* **arr.copyWithin()**
+  * target --必选 索引从该位置开始替换数组项
+  * start --可选 索引从该位置开始读取数组项，默认为0.如果为负值，则从右往左读。
+  * end --可选 索引到该位置停止读取的数组项，默认是Array.length,如果是负值，表示倒数 
+
+```javascript
+let arr = [11, 22, 33, 44, 55, 66, 77]
+let arr1 = arr.copyWithin(1)
+console.log(arr1)   // [11, 11, 22, 33, 44, 55, 66]
+let arr2 = arr.copyWithin(1, 2)
+console.log(arr2)   //  [11, 22, 33, 44, 55, 66, 66]
+let arr3 = arr.copyWithin(1, 2, 4)
+console.log(arr3)   // [11, 33, 44, 44, 55, 66, 66]
+```
+
+### includes
+
+* **判断数中是否包含给定的值**
+
+```javascript
+let arr = [11, 22, 33, 44, 55]
+let arr1 = arr.includes(33)
+console.log(arr1)   // ture
+
+let arr2 = arr.includes(88)
+console.log(arr2)    // false
+
+let arr3 = [11, 22, 33, NaN].includes(NaN)
+console.log(arr3)  // true
+```
+
+:::tip
+
+
+**includes与indexOf()**
+
+* indexOf()返回的是数值，而includes()返回的是布尔值
+
+* indexOf() 不能判断NaN，返回为-1 ，includes()则可以判断
+
+:::
+
+###  entries()
+
+* 遍历数组的键名和键值
+
+```javascript
+let arr = [11, 22, 33, 44]
+let arr1 = arr.entries()
+for (let e of arr1) {
+    console.log(e);  
+    // [0, 11]
+    // [1, 22]
+    // [2, 33]
+    // [3, 44]
+}
+```
+
+### keys()
+
+* 遍历数组的键名
+
+```javascript
+let arr = [11, 22, 33, 44]
+let arr2 = arr.keys()
+for (let key of arr2) {
+    console.log(key);   // 0,1,2,3
+}
+```
+
+### values()
+
+* 遍历数组键值
+
+```javascript
+let arr = [11,22, 33, 44]
+let arr1 = arr.values()
+for (let val of arr1) {
+    console.log(val);   // 11,22,33,44
+}
+```
+
