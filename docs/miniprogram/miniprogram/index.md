@@ -7,7 +7,7 @@
 
 **最后更新时间：2018年09月29日**
 
-**字数：100899**
+**字数：107821**
 
 :::
 
@@ -2928,13 +2928,233 @@ exports.Delete = Delete;
         requestTask.abort()
 ```
 
+## DOM操作
+
+* 微信小程序中不允许使用window和document等对象，所以DOM操作是被限制的
+* 并且微信小程序推荐的是数据驱动视图，所以，不推荐使用DOM操作
+
+:::tip
+
+**我们在微信小程序中称DOM操作为节点操作**
+
+:::
+
+### wx.createSelectorQuery()
+
+* 基础库 1.4.0 开始支持，低版本需做兼容处理。
+* 返回一个SelectorQuery对象实例。
+* 可以在这个实例上使用`select`等方法选择节点，并使用`boundingClientRect`等方法选择需要查询的信息。
+
+```javascript
+/ 根据id查询节点，获取节点属性
+wx.createSelectorQuery().select('#iii').boundingClientRect(function (rect) {
+    that.setData({
+        height: rect.height
+    })
+}).exec()
+```
+
+### selectorQuery 对象的方法列表
+
+|      方法      |       参数       |
+| :------------: | :--------------: |
+|       in       | object Component |
+|     select     |     selector     |
+|   selectAll    |     selector     |
+| selectViewport |                  |
+|      exec      |    [callback]    |
+
+### selectorQuery.in(component)
+
+* 基础库 1.6.0 开始支持，低版本需做兼容处理。
+
+* 将选择器的选取范围更改为自定义组件`component`内。
+* 初始时，选择器仅选取页面范围的节点，不会选取任何自定义组件中的节点。
+
+```javascript
+Component({
+  queryMultipleNodes: function(){
+    var query = wx.createSelectorQuery().in(this)
+    query.select('#id').boundingClientRect(function(res){
+      res.top // top是这个组件内 #id 节点的上边界坐标
+    }).exec()
+  }
+})
+```
+
+### selectorQuery.select(selector)
+
+* 在当前页面下选择**第一个匹配**选择器`selector`的节点，返回一个`NodesRef`对象实例，可以用于获取节点信息。
+* `selector`类似于CSS的选择器，但仅支持下列语法。
+  - ID选择器：`#the-id`
+  - class选择器（可以连续指定多个）：`.a-class.another-class`
+  - 子元素选择器：`.the-parent > .the-child`
+  - 后代选择器：`.the-ancestor .the-descendant`
+  - 跨自定义组件的后代选择器：`.the-ancestor >>> .the-descendant`
+  - 多选择器的并集：`#a-node, .some-other-nodes`
+
+### selectorQuery.selectAll(selector)
+
+* 在当前页面下选择匹配选择器`selector`的节点，返回一个`NodesRef`对象实例。 
+* 与`selectorQuery.select(selector)`不同的是，它选择所有匹配选择器的节点。
+
+### selectorQuery.selectViewport()
+
+* 选择显示区域，可用于获取显示区域的尺寸、滚动位置等信息，返回一个`NodesRef`对象实例。
+
+### nodesRef.boundingClientRect([callback])
+
+* 添加节点的布局位置的查询请求，相对于显示区域，以像素为单位。
+* 其功能类似于DOM的getBoundingClientRect。
+* 返回值是nodesRef对应的selectorQuery。
+* 返回的节点信息中，每个节点的位置用`left`、`right`、`top`、`bottom`、`width`、`height`字段描述。
+* 如果提供了callback回调函数，在执行selectQuery的exec方法后，节点信息会在callback中返回。
+
+```javascript
+Page({
+  getRect: function(){
+    // 选择一个
+    wx.createSelectorQuery().select('#the-id').boundingClientRect(function(rect){
+      rect.id      // 节点的ID
+      rect.dataset // 节点的dataset
+      rect.left    // 节点的左边界坐标
+      rect.right   // 节点的右边界坐标
+      rect.top     // 节点的上边界坐标
+      rect.bottom  // 节点的下边界坐标
+      rect.width   // 节点的宽度
+      rect.height  // 节点的高度
+    }).exec()
+  },
+    
+  getAllRects: function(){
+    // 选择多个，获取到的是一个数组
+    wx.createSelectorQuery().selectAll('.a-class').boundingClientRect(function(rects){
+      rects.forEach(function(rect){
+        rect.id      // 节点的ID
+        rect.dataset // 节点的dataset
+        rect.left    // 节点的左边界坐标
+        rect.right   // 节点的右边界坐标
+        rect.top     // 节点的上边界坐标
+        rect.bottom  // 节点的下边界坐标
+        rect.width   // 节点的宽度
+        rect.height  // 节点的高度
+      })
+    }).exec()
+  }
+})
+```
+
+### nodesRef.scrollOffset([callback])
+
+* 添加节点的滚动位置查询请求，以像素为单位。
+* 节点必须是`scroll-view`或者viewport。
+* 返回值是nodesRef对应的selectorQuery。
+* 返回的节点信息中，每个节点的滚动位置用`scrollLeft`、`scrollTop`字段描述。
+* 如果提供了callback回调函数，在执行selectQuery的exec方法后，节点信息会在callback中返回。
+
+```javascript
+Page({
+  getScrollOffset: function(){
+    wx.createSelectorQuery().selectViewport().scrollOffset(function(res){
+      res.id      // 节点的ID
+      res.dataset // 节点的dataset
+      res.scrollLeft // 节点的水平滚动位置
+      res.scrollTop  // 节点的竖直滚动位置
+    }).exec()
+  }
+})
+```
+
+### nodesRef.fields(fields, [callback])
+
+* 获取节点的相关信息，需要获取的字段在`fields`中指定。
+* 返回值是nodesRef对应的selectorQuery。
+
+| 字段名        | 默认值 | 说明                                                         |
+| ------------- | ------ | ------------------------------------------------------------ |
+| id            | 否     | 是否返回节点`id`                                             |
+| dataset       | 否     | 是否返回节点`dataset`                                        |
+| rect          | 否     | 是否返回节点布局位置（`left` `right` `top` `bottom`）        |
+| size          | 否     | 是否返回节点尺寸（`width` `height`）                         |
+| scrollOffset  | 否     | 是否返回节点的 `scrollLeft` `scrollTop` ，节点必须是`scroll-view`或者viewport |
+| properties    | `[]`   | 指定属性名列表，返回节点对应属性名的当前属性值（只能获得组件文档中标注的常规属性值， `id` `class` `style` 和事件绑定的属性值不可获取） |
+| computedStyle | `[]`   | 指定样式名列表，返回节点对应样式名的当前值                   |
+
+:::tip
+
+**computedStyle 的优先级高于 size，当同时在 computedStyle 里指定了 width/height 和传入了 size: true，则优先返回 computedStyle 获取到的 width/height。**
+
+:::
+
+```javascript
+Page({
+  getFields: function(){
+    wx.createSelectorQuery().select('#the-id').fields({
+      dataset: true,
+      size: true,
+      scrollOffset: true,
+      properties: ['scrollX', 'scrollY'],
+      computedStyle: ['margin', 'backgroundColor']
+    }, function(res){
+      res.dataset    // 节点的dataset
+      res.width      // 节点的宽度
+      res.height     // 节点的高度
+      res.scrollLeft // 节点的水平滚动位置
+      res.scrollTop  // 节点的竖直滚动位置
+      res.scrollX    // 节点 scroll-x 属性的当前值
+      res.scrollY    // 节点 scroll-y 属性的当前值
+      // 此处返回指定要返回的样式名
+      res.margin
+      res.backgroundColor
+    }).exec()
+  }
+})
+```
+
+### selectorQuery.exec([callback])
+
+* 执行所有的请求，请求结果按请求次序构成数组，在callback的第一个参数中返回。
+
 ## 微信支付
 
-#### requestPayment
+:::tip
+
+**微信支付需要商户号，小程序开发人员也需要了解详细申请微信支付的流程**
+
+**小程序微信支付，收到的钱也是进入商户号里面了**
+
+**微信支付大部分都是后台去做的，我们只需要获取参数，然后调用微信里面的支付方法，即可**
+
+:::
+
+### 大致支付流程
+
+### 1.获取code
+
+* 在小程序中获取用户的登录信息，成功后可以获取到用户的code值
+* wx.login
+
+### 2.获取openid
+
+* 在用户自己的服务端请求微信获取用户openid接口，成功后可以获取用户的openid值
+* openid是根据code获取到的
+* 必须服务器用code去获取openid
+
+### 3.服务器统一下单
+
+* 在用户自己的服务器上面请求微信的统一下单接口，下单成功后可以获取prepay_id值
+* 服务器返回给小程序数据，小程序调用支付方法
+
+### 4.小程序调用支付
+
+* 在微信小程序中支付订单，最终实现微信的支付功能
+* wx.requestpayment
+
+### requestPayment
 
 发起微信支付
 
-#### 参数说明
+### 参数说明
 
 | 参数        | 类型       | 必填   | 说明                                       |
 | --------- | -------- | ---- | ---------------------------------------- |
@@ -2947,7 +3167,7 @@ exports.Delete = Delete;
 | fail      | Function | 否    | 接口调用失败的回调函数                              |
 | complete  | Function | 否    | 接口调用结束的回调函数（调用成功、失败都会执行）                 |
 
-#### 回调结果
+### 回调结果
 
 | 回调类型    | errMsg                               | 说明                                    |
 | ------- | ------------------------------------ | ------------------------------------- |
@@ -2955,7 +3175,7 @@ exports.Delete = Delete;
 | fail    | requestPayment:fail cancel           | 用户取消支付                                |
 | fail    | requestPayment:fail (detail message) | 调用支付失败，其中 detail message 为后台返回的详细失败原因 |
 
-```
+```javascript
 wx.requestPayment({
    'timeStamp': '',
    'nonceStr': '',

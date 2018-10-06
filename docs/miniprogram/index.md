@@ -203,6 +203,18 @@
     * 关于请求
     * 关于服务器返回
 
+* DOM操作
+    * wx.createSelectorQuery()
+    * selectorQuery
+        * in
+        * select
+        * selectAll
+        * selectViewport
+        * exec
+        * nodesRef.boundingClientRect([callback])
+        * nodesRef.scrollOffset([callback])
+        * nodesRef.fields(fields, [callback])
+
 * 微信支付
 
 * 设备相关信息

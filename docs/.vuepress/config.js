@@ -6,10 +6,8 @@ module.exports = {
     // 网站的标题。这将是所有页面标题的前缀，并显示在默认主题的导航栏中
     title: '前端小峰哥的学习笔记',
     // 网站描述。这将在页面 HTML 中表现为一个 <meta> 标签。
-    description: '前端小峰哥的学习笔记！包括HTML,CSS,JavaScript,Vue,React,Angular,Nodejs,webpack,微信小程序,React Native,iOS,Android,混合开发,CentOS等',
+    description: '黄雪峰,前端黄雪峰,前端小峰哥,小峰哥学习笔记!包括HTML,CSS,JavaScript,jQuery,jQUery源码学习,前端工程化,前端模块化,Web安全渗透,Vue,Vue源码学习,React,微信小程序,Angular,Nodejs,webpack,React Native,iOS,Android,混合开发,CentOS等',
     // 被注入页面 HTML <head> 额外的标签。
-    head: [
-    ],
     // 如果设置为 true，VuePress 将自动生成并注册一个 service worker ，这个 worker 将内容缓存以供离线使用（仅在生产环境中启用）
     serviceWorker: false,
     // 为使用的主题提供配置选项。这些选项将根据你使用的主题而有所不同
