@@ -1211,14 +1211,14 @@ Object参数说明：
 
 <img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/c9fc4a6740a46f92808078b68ec3601a.png" />
 
-#### data
+### data
 
 * data 是页面第一次渲染使用的初始数据
 * 页面加载时，data  将会以 JSON 字符串的形式由逻辑层传至渲染层
 * 因此 data 中的数据必须是可以转成 JSON 的类型：字符串，数字，布尔值，对象，数组。
 * 渲染层可以通过 WXML 对数据进行绑定
 
-#### 生命周期函数
+### 生命周期函数
 
 - onLoad : 页面加载
   - 一个页面只会调用一次。
@@ -1233,7 +1233,7 @@ Object参数说明：
 - onUnload : 页面卸载
   - 当 redirectTo 或 navigateBack 的时候调用。
 
-#### 页面相关事件处理函数
+### 页面相关事件处理函数
 
 * onPullDownRefresh : 下拉刷新
 
@@ -1241,7 +1241,7 @@ Object参数说明：
 - 需要在 config 的 window 选项中开启 enablePullDownRefresh 。
 - 当处理完数据刷新后，wx.stopPullDownRefresh 可以停止当前页面的下拉刷新。
 
-#### 应用的生命周期对页面生命周期的影响
+### 应用的生命周期对页面生命周期的影响
 
 <img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/09/29/d74a049240d1d536804c4bf37c149159.png" />
 
@@ -1699,7 +1699,7 @@ https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=J
 
 :::tip
 
-**开发之前记住一点：**
+**开发之前记住一点：unionid有时候获取不到，有时候获取的到**
 
 :::
 
