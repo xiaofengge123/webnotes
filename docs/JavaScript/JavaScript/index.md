@@ -11,7 +11,7 @@
 ## 参考资料
 
 [阮一峰ES6入门](http://es6.ruanyifeng.com/)
-
+[JavaScript常用数组操作方法，包含ES6方法](https://segmentfault.com/a/1190000016503330)
 ## 数组
 
 ### 数组定义
