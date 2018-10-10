@@ -2,9 +2,9 @@
 
 :::tip
 
-**最后更新时间：2018年09月10日**
+**最后更新时间：2018年10月10日**
 
-**字数：687**
+**字数：962**
 
 :::
 
@@ -20,10 +20,14 @@
 
 * CommandJS
     * 特点
+    * module对象
+        * module.parent
+        * module.exports
     * 定义模块
     * 输出模块
     * 加载模块
     * 示例代码
+    * module.exports和exports
 
 * AMD
     * require.js
@@ -35,6 +39,7 @@
         * 局部配置
         * 注意事项
     * 第三方模块
+    * AMD VS CommonJS
 
 * CMD
     * 示例代码
@@ -49,7 +54,14 @@
 
 * ES modules
     * 模块化现状
-    * 优点
+    * ES6模块化优点
+    * ES6模块化特点
+    * 严格模式
+    * 命名导出(named exports)
+    * 默认导出(default exports)
+    * 导入命名导出
+    * 导入默认导出
+    * 仅导入模块
 
 * webpack
 * webpack开发配置

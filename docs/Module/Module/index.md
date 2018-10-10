@@ -2,9 +2,9 @@
 
 :::tip
 
-**最后更新时间：2018年09月15日**
+**最后更新时间：2018年10月10日**
 
-**字数：13149**
+**字数：18368**
 
 :::
 
@@ -58,10 +58,62 @@
 
 ### 特点
 
-* Nodejs规范
+* **Nodejs规范，所以是module.exports和require**
+* **require是Node中少数几个同步I/O操作之一**
 * 同步，require（同步）
-* 仅适用于后端，因为同步的原因，在前端使用会阻塞
+* 仅适用于后端，因为同步的原因，在前端使用会阻塞，**下面AMD VS CommonJS有解答**
 * 总共四个步骤：**定义 -> 输出 -> 加载 -> 使用**
+* 所有代码都运行在模块作用域，不会污染全局作用域。
+* **模块可以多次加载，但是只会在第一次加载时运行一次，然后运行结果就被缓存了，以后再加载，就直接读取缓存结果。要想让模块再次运行，必须清除缓存**。
+* 模块加载的顺序，按照其在代码中出现的顺序
+
+### module对象
+
+* Node内部提供一个`Module`构建函数。所有模块都是`Module`的实例。
+* 每个模块内部，都有一个`module`对象，代表当前模块。
+
+```javascript
+// Module 实例
+function Module(id, parent) {
+  this.id = id;
+  this.exports = {};
+  this.parent = parent;
+  // ...
+  
+}
+
+// module属性
+module.id 模块的识别符，通常是带有绝对路径的模块文件名。
+module.filename 模块的文件名，带有绝对路径。
+module.loaded 返回一个布尔值，表示模块是否已经完成加载。
+module.parent 返回一个对象，表示调用该模块的模块。
+module.children 返回一个数组，表示该模块要用到的其他模块。
+module.exports 表示模块对外输出的值。
+```
+
+#### module.parent
+
+* 返回一个对象，表示调用该模块的模块。
+* 如果在命令行下调用某个模块，比如`node xxx.js`，那么`module.parent`就是`null`。
+* 如果是在脚本之中调用，比如`require('./xxx.js')`，那么`module.parent`就是调用它的模块。
+* 利用这一点，可以判断当前模块是否为入口脚本
+
+```javascript
+if (!module.parent) {
+    // ran with `node xxx.js`
+    app.listen(8088, function() {
+        console.log('app listening on port 8080');
+    })
+} else {
+    // used with `require('/.xxx.js')`
+    module.exports = app;
+}
+```
+
+#### module.exports
+
+* 属性表示当前模块对外输出的接口，其他文件加载该模块，实际上就是读取`module.exports`变量
+* 如果一个模块的对外接口，就是一个单一的值，不能使用`exports`输出，只能使用`module.exports`输出
 
 ### 定义模块
 
@@ -109,6 +161,26 @@ module.test2(); // "test2"
 ::: tip
 
 **CommonJS由于require是同步加载的，所以仅仅适用于后端，浏览器端同步加载页面会造成阻塞**
+
+:::
+
+### module.exports和exports
+
+- module.exports
+  - CommonJS规范规定，每个模块内部，module变量代表当前模块。
+  - 这个变量是一个对象，它的exports属性（即module.exports）是对外的接口。
+  - 加载某个模块，其实是加载该模块的module.exports属性。
+- exports
+  - 为了方便，Node为每个模块提供一个exports变量，指向module.exports。
+  - 这等同在每个模块头部，有一行这样的命令
+  - 于是我们可以直接在 exports 对象上添加方法，表示对外输出的接口，如同在module.exports上添加一样。
+  - **注意，不能直接将exports变量指向一个值，因为这样等于切断了exports与module.exports的联系。**
+
+:::tip
+
+**如果你觉得，`exports`与`module.exports`之间的区别很难分清，一个简单的处理方法，就是放弃使用`exports`，只使用`module.exports`**
+
+**结论：不论任何时候都推荐用module.exports**
 
 :::
 
@@ -345,6 +417,19 @@ require.config(["jquery", "jquery.form"], function($){
 
 :::
 
+### AMD VS CommonJS
+
+* CommonJS规范加载模块是同步的，也就是说，只有加载完成，才能执行后面的操作。
+* AMD规范则是非同步加载模块，允许指定回调函数。
+* **由于Node.js主要用于服务器编程，模块文件一般都已经存在于本地硬盘，所以加载起来比较快，不用考虑非同步加载的方式，所以CommonJS规范比较适用**。
+* 但是，如果是浏览器环境，要从服务器端加载模块，这时就必须采用非同步模式，因此浏览器端一般采用AMD规范。
+
+:::tip
+
+**这也是CommonJS仅适用于服务器的一个原因之一**
+
+:::
+
 ## CMD
 
 * **Common Module Definition，通用定义模块**
@@ -475,6 +560,7 @@ define(function(require, exports, module) {
 
 * UMD的实现很简单，先判断是否支持Node.js模块格式（exports是否存在），存在则使用Node.js模块格式
 * 再判断是否支持AMD（define是否存在），存在则使用AMD方式加载模块。
+* define(factory)是一个全局函数，用来定义模块，存在就是AMD或者CMD环境
 * 前两个都不存在，则将模块公开到全局（window或global）。
 
 ```javascript
@@ -487,7 +573,8 @@ define(function(require, exports, module) {
         //AMD 环境或 CMD 环境
         define(definition);
     } else if (hasExports) {
-        // 定义为普通的node模块
+        // 定义为普通的node模块或者CommonJS规范
+        // CommonJS也就是nodejs规范
         module.exports = definition();
     } else {
         //将模块的执行结果挂在 window 变量中，在浏览器中 this 指向 window 对象
@@ -539,17 +626,18 @@ define(function(require, exports, module) {
 
 :::
 
-## 严格模式
+### 严格模式
 
 ES6 Module要求严格模式
 
 严格模式介绍连接：
 
-[严格模式]()
+[严格模式](http://www.xuefeng666.com/jQuery/jQuerySrc/#%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F)
 
-## 命名导出(named exports)
+### 命名导出(named exports)
 
-* 可以直接在任何变量或者函数前面加上一个 `export` 关键字，就可以将它导出
+* 一个模块通过`export`声明来导出多个，需要导出的变量或函数只需要在声明最前面加上export关键词即可
+* 在需要用的地方使用`import`导入。
 * 这种写法非常简洁，和平时几乎没有区别，唯一的区别就是在需要导出的地方加上一个 export 关键字。
 
 ```javascript
@@ -569,4 +657,116 @@ import { name, getName, count } from './a.js';
 console.log(getName()); // zhangsan
 console.log(count(4, 3)); // 7
 ```
+
+### 默认导出(default exports)
+
+* 使用 **export default** 导出模块默认的内容
+* 每个模块只能有一个 export default
+* 导入默认导出的模块时，需要指定模块名称
+
+```javascript
+/*------ str.js ------*/
+let version = "1.0.1"
+function trim () {
+    console.log('trim方法')
+}
+// 不需要指定变量名
+// 导出一个对象
+export default  {
+    trim: trim,
+    version: version
+}
+
+
+/*------ index.js ------*/
+// 导入默认导出的模块时，需要指定模块名称str
+import str from './str.js'
+
+str.trim()  // 打印trim方法
+console.log(str.version) // 打印1.0.1
+```
+
+:::tip
+
+**默认导出的时候不需要指定一个变量名，它默认就是文件名。**
+
+:::
+
+* 其实这个默认导出只是一个特殊的名字叫default , 你也可以直接用他的名字，把它当做命名导出来用
+
+```javascript
+// 这两个是等价的
+import { default as foo } from 'lib';
+import foo from 'lib';
+
+
+// 也可以通过显示指定 default 名字来做默认导出
+export default 'zhangsan';
+
+const name = 'zhangsan';
+export { name as default };
+```
+
+### 导入命名导出
+
+* 导入模块时可使用**大括号包含指定命名成员**
+* 也可以用  *** as moduleName** 的形式把此模块的所有命名导出作为某个对象的成员。
+
+```javascript
+// math.js 导出
+export function add(a, b) {
+    return a + b;
+}
+ 
+// app.js：指定使用math模块的add命名导出
+import { add } from './math.js';
+console.log(add(1, 2)); // => 3
+ 
+// 导入所有的命名导出作为math对象的成员
+import * as math from './math.js';
+console.log(math.add(1, 2)); // => 3
+```
+
+### 导入默认导出
+
+* 导入默认导出的模块时，需要指定模块名称
+
+```javascript
+// math.js
+export default function add(x,y) {
+    return x + y;
+}
+ 
+// app.js：导入默认导出的模块时，需要指定模块名称
+import add from './math.js';
+console.log(add(4,6)); // => 10
+```
+
+### 仅导入模块
+
+* 仅导入模块时，只会执行模块的全局函数，不会导入任何成员。
+
+```javascript
+// math.js
+export function add(a, b) {
+    return a + b;
+}
+(function() {
+    console.log('hello math.js');
+})();
+ 
+// app.js
+import { add } from './math.js'; // => import的时候就会默认运行 hello math.js
+// 可以调用add()
+add(1,2) // => 3
+```
+
+:::tip
+
+**import性能超过require**
+
+- require：要把这个模块中的所有内容引入
+- import：可以只把需要使用的引入到文件
+
+:::
 

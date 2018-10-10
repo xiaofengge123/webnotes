@@ -10,8 +10,9 @@
 
 ## 参考资料
 
-[阮一峰ES6入门](http://es6.ruanyifeng.com/)
-[JavaScript常用数组操作方法，包含ES6方法](https://segmentfault.com/a/1190000016503330)
+* [阮一峰ES6入门](http://es6.ruanyifeng.com/)
+* [JavaScript常用数组操作方法，包含ES6方法](https://segmentfault.com/a/1190000016503330)
+
 ## 数组
 
 ### 数组定义
@@ -73,7 +74,7 @@ var arr3 =  new Array(5,4,3,2,1)；//创建数组并初始化，添加数组
 // 功能：获取数组对应下标的那个值，如果下标不存在，则返回undefined。
 var arr = ['tom', 'marry', 'bob'];
 arr[0];	// tom
-arr[2]; // marry
+arr[2]; // bob
 arr[3]; // undefined，因为数组的最大下标为2,访问3数组越界了，别的编程语言有些会报错
 
 
@@ -91,12 +92,12 @@ arr[0];//xiaofengge  这个时候数据就变了
 ```javascript
 var x  
 var arr = new Array()  
-mycars[0] = "hello"  
-mycars[1] = "world"  
-mycars[2] = "!"  
+arr[0] = "hello"  
+arr[1] = "world"  
+arr[2] = "!"  
   
 for (x in arr)  {  
-    document.write(arr[x] + "<br />")  
+    console.log(arr[x])
 } 
 
 // 结果
