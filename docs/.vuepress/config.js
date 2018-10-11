@@ -42,6 +42,14 @@ module.exports = {
                 ], 
             },
             {
+                title: '浏览器',
+                collapsable:true,
+                children:[
+                    ['Browser/','核心内容'],
+                    ['Browser/Browser/','浏览器'],
+                ], 
+            },
+            {
                 title: 'CSS',
                 collapsable:true,
                 children:[
