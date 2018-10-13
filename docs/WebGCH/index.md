@@ -21,6 +21,11 @@
 
 * 前端模块化
     * 模块化概述
+    * CommandJS（nodejs）
+    * AMD
+    * CMD
+    * UMD
+    * ES modules
     * webpack
     * parcel
     * rollup
@@ -31,10 +36,12 @@
 
 * 前端自动化部署
     * pm2
+    * forever
 
 * 前端自动构建
     * gulp
     * grunt
+    * webpack
 
 * 前端自动化测试
     * 自动化测试概述
