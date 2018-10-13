@@ -159,6 +159,10 @@ ReactDOM.render(dv, document.getElementById('app'))
 - 创建项目：create-react-app my-app
 - 开启项目：npm start
 
+:::tip
+**如果create-react-app my-app报错，可能是nodejs版本的问题，小峰哥试过，nodejs8.9报错了，升级nodejs到10.11.0就可以正常运行了**
+:::
+
 ## React组件
 
 - 组件是由一个个的HTML元素组成的
