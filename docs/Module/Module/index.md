@@ -2,7 +2,7 @@
 
 :::tip
 
-**最后更新时间：2018年10月10日**
+**最后更新时间：2018年10月14日**
 
 **字数：18368**
 
@@ -20,6 +20,8 @@
 * webpack开发配置
 * webpack打包配置
 * **vue-cli中webpack逐行解析**
+* parcel
+* rollup
 
 ## 学习资源
 
@@ -45,6 +47,11 @@
 * 提高代码复用率
 * 提高维护性
 
+### 前端模块化发展
+
+* 一个js文件一个模块，用script引入
+* 后期就是各种方案了
+
 ### 主流模块化方案
 
 * **CommonJS**
@@ -52,7 +59,18 @@
 * **CMD**
 * **UMD**
 * **ES modules**
-* 模块化打包工具
+* **模块化打包工具**
+  * **webpack**
+  * **parcel**
+  * **rollup**
+
+:::tip
+
+**前端模块化要解决的核心问题：**
+
+**模块的定义，依赖和导出**
+
+:::
 
 ## CommonJS规范
 
@@ -770,3 +788,85 @@ add(1,2) // => 3
 
 :::
 
+## webpack
+
+### 学习资料
+
+* [webpack官网](https://webpack.github.io/)
+* [webpack中文官网（中文文档）](https://www.webpackjs.com/)
+
+* [Webpack 中文指南](https://zhaoda.net/webpack-handbook/)
+
+### 什么是webpack
+
+* 官方描述：A bundler for javascript and friends. Packs many modules into a few bundled assets. Code Splitting allows to load parts for the application on demand. Through "loaders," modules can be CommonJs, AMD, ES6 modules, CSS, Images, JSON, Coffeescript, LESS, ... and your custom stuff. 
+* 大致意思：一个模块化打包工具，可以打包模块。并且通过代码拆分，可以拆分出按需加载的部分。通过loaders加载器，可以解析的模块包括CommonJs，AMD，ES modules，CSS，Images，JSON，Coffeescript, LESS等等以及你自己定制的部分
+
+:::tip
+
+* **简单来说就是一个模块化打包工具，它做的事情是，分析你的项目结构，然后将许多松散的模块按照依赖和规则打包成符合生产环境部署的前端资源。**
+
+* **还可以将按需加载的模块进行代码分隔，等到实际需要的时候再异步加载。**
+* **通过 loader 的转换，任何形式的资源都可以视作模块，比如 CommonJs 模块、 AMD 模块、 ES6 模块、CSS、图片、 JSON、Coffeescript、 LESS 等**
+
+:::
+
+### 安装webpack
+
+#### 全局安装
+
+```bash
+# sudo npm i -g webpack
+
+# sudo npm i -g webpack-cli
+```
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/10/14/4f2289c6406a255180ddd31321f0f505.png" />
+
+:::tip
+
+**安装webpack4版本后，必须安装webpack-cli**
+
+**不推荐全局安装 webpack。**
+
+**这会将你项目中的 webpack 锁定到指定版本，并且在使用不同的 webpack 版本的项目中，可能会导致构建失败。**
+
+:::
+
+#### 本地安装
+
+* webpack最新版本[v4.20.2](https://github.com/webpack/webpack/releases)
+
+```bash
+// 要安装最新版本或特定版本
+# npm install --save-dev webpack
+# npm install --save-dev webpack@<version>
+```
+
+:::tip
+
+**对于大多数项目，我们建议本地安装。**
+
+**如果全局安装，目前如果安装4+，必须安装webpack-cli，不安装，运行webpack会提示的**
+
+:::
+
+#### 安装体验版
+
+* 体验版是直接从 webpack 的仓库中安装
+
+```bash
+# npm install webpack@beta
+# npm install webpack/webpack#<tagname/branchname>
+```
+
+:::tip
+
+**最新体验版本可能仍然包含 bug，因此不应该用于生产环境**
+
+:::
+
+### 运行方式
+
+* 命令行运行
+* 配置文件
