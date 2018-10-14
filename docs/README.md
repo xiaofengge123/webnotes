@@ -12,9 +12,9 @@
 
 :::tip
 
-**最后更新时间：2018年10月14日**
+**最后更新时间：2018年10月15日**
 
-**全站总字数：344663**
+**全站总字数：349510**
 
 **每天都在更新中...**
 
@@ -30,6 +30,7 @@
 * **web**
     * [**前端开发环境搭建**](http://www.xuefeng666.com/WebSDE/index.html)
     * html（5）
+    * [**浏览器**](http://www.xuefeng666.com/Browser/index.html)
     * [**CSS**](http://www.xuefeng666.com/CSS/index.html)
         * [**Flex**](http://www.xuefeng666.com/CSS/Flex/index.html)
     * [**JavaScript**](http://www.xuefeng666.com/JavaScript/index.html)
@@ -44,7 +45,6 @@
     * [**web安全渗透**](http://www.xuefeng666.com/WebSRC/index.html)
     * [**Vue**](http://www.xuefeng666.com/Vue/index.html)
         * [**Vue 源码**](http://www.xuefeng666.com/Vue/VueSrc/index.html)
-    * webpack
     * [**React**](http://www.xuefeng666.com/React/index.html)
     * Angular
     

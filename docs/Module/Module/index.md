@@ -2,9 +2,9 @@
 
 :::tip
 
-**最后更新时间：2018年10月14日**
+**最后更新时间：2018年10月15日**
 
-**字数：18368**
+**字数：23215**
 
 :::
 
@@ -866,7 +866,114 @@ add(1,2) // => 3
 
 :::
 
+### 核心概念
+
+* 入口(entry)
+* 输出(output)
+* loader
+* 插件(plugins)
+
+#### 入口（entry）
+
+#### 输出（output）
+
+#### loader
+
+#### 插件（plugins）
+
 ### 运行方式
 
 * 命令行运行
 * 配置文件
+
+#### 命令行运行
+
+* Webpack 会分析入口文件，解析包含依赖关系的各个文件。这些文件（模块）都打包到 bundle.js 
+* Webpack 会给每个模块分配一个唯一的 id 并通过这个 id 索引和访问模块。
+* 在页面启动时，会先执行 entry.js 中的代码，其它模块会在运行 `require` 的时候再执行。
+
+```bash
+webpack <entry> [<entry>] -o <output>  --mode=development
+
+webpack 入口文件 -o 出口   --mode=开发模式
+```
+
+<img src="http://bmob-cdn-4908.b0.upaiyun.com/2018/10/14/6320b17340bb13d0809994f5439e7e23.png" />
+
+* 命令行使用loader
+
+```
+先安装loader
+npm install css-loader style-loader
+
+使用的时候可以这样写
+require("!style-loader!css-loader!./style.css") // 载入 style.css
+
+另一种写法，有时候单引号，有时候双引号
+webpack main.js bundle.js --module-bind "css=style-loader!css-loader"
+```
+
+#### entry
+
+* 构建项目的入口起点，可以是一个文件，也可以是一组文件
+* 如果传递一个形式为 `<name> = <request>` 的键值对，则可以创建一个额外的入口起点。它将被映射到配置选项(configuration option)的 `entry` 属性。
+
+#### output
+
+* 要保存的 bundled 文件的路径和文件名。
+* 它将映射到配置选项 `output.path` 和 `output.filename`。
+
+#### --config
+
+* webpack配置文件默认为 `webpack.config.js`，如果你想使用其它配置文件，可以加入这个参数。
+
+```bash
+webpack --config xxx.config.js
+```
+
+#### --env
+
+* 设置环境变量
+* 当配置文件是一个函数时，会将环境变量传给这个函数
+
+#### 输出相关参数
+
+* **--output-path：输出文件路径**
+
+* **--output-filename：输出文件名按照自己的格式输出**
+* **--output-source-map-filename：映射文件名，文件打包后与源文件有一个映射关系，可以通过map找到源文件**
+
+#### Debug配置
+
+* **--debug:**  打开debug模式，默认false
+* **--progress:** 打印编译的进度，默认false
+* **--devtool:** 定义[source map类型](https://webpack.js.org/configuration/devtool/)
+* **--display-error-details：** 显示错误详情，默认false
+
+#### Module 参数
+* **--module-bind**： 绑定一个拓展程序 如：--module-bind js=babel-loader
+
+#### watch参数
+* **--watch**：监听文件变化
+
+#### Optimize 参数
+* --optimize-max-chunks：设置代码块最大数量
+
+* --optimize-min-chunk-size：设置代码块最小值
+* --optimize-minimize：压缩js文件
+
+#### Stats 参数
+* **--display**： 显示打包信息，将具体信息可参考这里
+
+* **--color**和**--colors**：console里面显示颜色
+
+#### 高级参数
+* **--bail**:  如果编译过程一有error，立马停止编译
+
+* **--hot**： 热替换，在config文件中也可配置
+
+* **--provide**：提供一些模块，做全局使用 如：--provide jQuery=jquery
+
+* **--profile**: 提供每一步编译的具体时间
+
+#### 配置文件运行
